@@ -25,11 +25,14 @@ export default async function LocaleLayout({
    params: Promise<{ locale: string }>;
 }) {
    const { locale } = await params;
+   // Do not render <html> or <body> here — those must be rendered once in the root layout.
+   // Apply the font variables and other body-level classes on a top-level wrapper instead.
    return (
-      <html lang={locale}>
-         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            {children}
-         </body>
-      </html>
+      <div
+         data-locale={locale}
+         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+         {children}
+      </div>
    );
 }
