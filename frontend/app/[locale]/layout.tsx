@@ -17,15 +17,16 @@ export const metadata: Metadata = {
    description: "Site description",
 };
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
    children,
    params,
 }: {
    children: React.ReactNode;
-   params: { locale: string };
+   params: Promise<{ locale: string }>;
 }) {
+   const { locale } = await params;
    return (
-      <html lang={params.locale}>
+      <html lang={locale}>
          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             {children}
          </body>
