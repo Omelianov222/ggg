@@ -1,0 +1,41 @@
+.logo-fixed {
+   position: absolute;
+   top: 10px;
+   left: 24px;
+   width: 54px;
+   height: 54px;
+   z-index: 20;
+   display: none;
+   opacity: 0;
+   transition: opacity .7s;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   perspective: 100px;
+}
+
+.logo-flip-fixed {
+   width: 100%;
+   height: 100%;
+   position: relative;
+   transform-style: preserve-3d;
+   transition: transform .7s cubic-bezier(.5, 1.5, .5, 1);
+}
+
+.logo-fixed:hover .logo-flip-fixed {
+   transform: rotateY(180deg);
+}
+
+.logo-fixed .logo-main,
+.logo-fixed .logo-hover {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   border-radius: 50%;
+   backface-visibility: hidden;
+}
+
+.logo-fixed .logo-hover {
+   transform: rotateY(180deg);
+}

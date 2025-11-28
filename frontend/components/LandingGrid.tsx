@@ -109,22 +109,6 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
                   <img className={styles["logo-back"]} src="/ecoLogo.png" alt="Eco Logo" />
                </div>
             </div>
-
-            <div className={styles["logo-fixed"]} ref={logoFixedRef}>
-               <div className={styles["logo-flip-fixed"]}>
-                  <img className={styles["logo-main"]} src="/logo3.svg" alt="Logo" />
-                  <img className={styles["logo-hover"]} src="/ecoLogo.png" alt="Eco Logo" />
-               </div>
-            </div>
-
-            <nav className={styles["main-navbar"]} ref={navbarRef}>
-               <ul>
-                  <li>Головна</li>
-                  <li>Моделі</li>
-                  <li>Про нас</li>
-                  <li>Контакти</li>
-               </ul>
-            </nav>
          </div>
       </div>
    );

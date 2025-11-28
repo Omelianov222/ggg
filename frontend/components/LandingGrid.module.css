@@ -7,14 +7,14 @@
 
 
 
-.lg-body {
+/* .lg-body {
    background: #000;
    color: #111;
-}
+} */
 
 .wrap {
    width: 100%;
-   height: 100vh;
+   height: calc(100vh - var(--header-height));
    max-width: 100%;
    max-height: 100vh;
    padding: 0;
@@ -232,112 +232,4 @@
    bottom: 6%;
    left: 50%;
    transform: translateX(-50%)
-}
-
-.logo-fixed {
-   position: absolute;
-   top: 24px;
-   left: 24px;
-   width: 64px;
-   height: 64px;
-   z-index: 20;
-   display: none;
-   opacity: 0;
-   transition: opacity .7s;
-   align-items: center;
-   justify-content: center;
-   cursor: pointer;
-   perspective: 100px
-}
-
-.logo-flip-fixed {
-   width: 100%;
-   height: 100%;
-   position: relative;
-   transform-style: preserve-3d;
-   transition: transform .7s cubic-bezier(.5, 1.5, .5, 1)
-}
-
-.logo-fixed:hover .logo-flip-fixed {
-   transform: rotateY(180deg)
-}
-
-.logo-fixed .logo-main,
-.logo-fixed .logo-hover {
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   object-fit: contain;
-   border-radius: 50%;
-   backface-visibility: hidden
-}
-
-.logo-fixed .logo-hover {
-   transform: rotateY(180deg)
-}
-
-.main-navbar {
-   position: absolute;
-   top: 48px;
-   left: 50%;
-   transform: translateX(-50%);
-   z-index: 30;
-   display: flex;
-   align-items: center;
-   opacity: 0;
-   pointer-events: none;
-   transition: opacity .7s;
-   min-width: 340px;
-   max-width: 90vw;
-   justify-content: center
-}
-
-.main-navbar::before {
-   content: "";
-   position: absolute;
-   left: -32px;
-   right: -32px;
-   top: -12px;
-   bottom: -12px;
-   background: rgba(0, 0, 0, .45);
-   border-radius: 24px;
-   z-index: -1;
-   pointer-events: none;
-   min-width: calc(100% + 64px);
-   max-width: 100vw
-}
-
-.main-navbar ul {
-   display: flex;
-   gap: 32px;
-   list-style: none;
-   justify-content: center;
-   width: 100%
-}
-
-.main-navbar li {
-   opacity: 0;
-   transform: translateX(-40px);
-   font-size: 1.25em;
-   color: #fff;
-   font-weight: 500;
-   letter-spacing: .03em;
-   cursor: pointer;
-   transition: opacity .5s, transform .5s
-}
-
-.main-navbar li::after {
-   content: "";
-   position: absolute;
-   width: 100%;
-   height: 2px;
-   bottom: -4px;
-   left: 0;
-   background: #fff;
-   transform: scaleX(0);
-   transition: transform .3s
-}
-
-.main-navbar li:hover::after {
-   transform: scaleX(1)
 }

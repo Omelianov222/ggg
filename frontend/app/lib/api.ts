@@ -7,7 +7,7 @@ export async function fetchAPI(path: string, locale: string) {
    const res = await fetch(url, {
       cache: 'no-store'
    });
-   console.log(res)
+   console.log(res, locale, path)
    if (!res.ok) {
       throw new Error(`API error: ${res.status}`);
    }
