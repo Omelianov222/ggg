@@ -124,8 +124,13 @@
    align-items: center;
    justify-content: center;
    opacity: 0;
-   animation: logoAppear 1s cubic-bezier(.5, 1.5, .5, 1) forwards, logoFlipHide 3s linear 1.4s forwards;
    perspective: 600px
+}
+
+/* було в .logo-block – видаляємо звідти */
+.logo-anim {
+   animation: logoAppear 1s cubic-bezier(.5, 1.5, .5, 1) forwards,
+      logoFlipHide 3s linear 1.4s forwards;
 }
 
 .logo-flip {

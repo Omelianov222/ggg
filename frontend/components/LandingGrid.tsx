@@ -18,11 +18,54 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
    const navbarRef = useRef<HTMLElement | null>(null);
 
    useEffect(() => {
-      const baseCards = baseRef.current?.querySelectorAll<HTMLDivElement>("[data-card]") ?? [];
-      const middleCards = middleRef.current?.querySelectorAll<HTMLDivElement>("[data-card]") ?? [];
+      const baseCards =
+         baseRef.current?.querySelectorAll<HTMLDivElement>("[data-card]") ?? [];
+      const middleCards =
+         middleRef.current?.querySelectorAll<HTMLDivElement>("[data-card]") ?? [];
 
-      [...baseCards, ...middleCards].forEach((c) => {
+      const allCards = [...baseCards, ...middleCards];
+
+      const played = sessionStorage.getItem("lg-animation-played") === "1";
+
+      if (played) {
+         // фінальний стан без анімацій
+         allCards.forEach((c) => {
+            c.style.opacity = "1";
+            c.style.transform = "scale(1)";
+         });
+
+         if (logoFixedRef.current) {
+            logoFixedRef.current.style.display = "flex";
+            logoFixedRef.current.style.opacity = "1";
+         }
+
+         if (navbarRef.current) {
+            navbarRef.current.style.opacity = "1";
+            navbarRef.current.style.pointerEvents = "auto";
+            const items = navbarRef.current.querySelectorAll("li");
+            items.forEach((li) => {
+               const el = li as HTMLElement;
+               el.style.opacity = "1";
+               el.style.transform = "translateX(0)";
+            });
+         }
+
+         return;
+      } else {
+         sessionStorage.setItem("lg-animation-played", "1");
+
+         // додаємо клас анімації тільки вперше
+         const logoBlock = document.querySelector(`.${styles["logo-block"]}`);
+         if (logoBlock) {
+            logoBlock.classList.add(styles["logo-anim"]);
+         }
+      }
+      // перший запуск — анімація
+      // sessionStorage.setItem("lg-animation-played", "1");
+
+      allCards.forEach((c) => {
          c.style.opacity = "0";
+         c.style.transform = "scale(0.9)";
       });
 
       setTimeout(() => {
@@ -43,16 +86,10 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
          });
       }, 2000);
 
-      // show logo-fixed after ~4.4s
       setTimeout(() => {
          if (!logoFixedRef.current) return;
-         // Show element then force a reflow so the following opacity change
-         // triggers the transition defined in CSS.
          logoFixedRef.current.style.display = "flex";
-         // Force layout/read
-         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
          logoFixedRef.current.getBoundingClientRect();
-
          logoFixedRef.current.style.opacity = "1";
 
          if (navbarRef.current) {
@@ -62,7 +99,6 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
             items.forEach((li, i) => {
                setTimeout(() => {
                   const el = li as HTMLElement;
-                  // ensure the browser has the initial transform/opacity applied
                   el.getBoundingClientRect();
                   el.style.opacity = "1";
                   el.style.transform = "translateX(0)";
@@ -71,6 +107,7 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
          }
       }, 4400);
    }, []);
+
 
    return (
       <div className={styles["lg-body"]}>
