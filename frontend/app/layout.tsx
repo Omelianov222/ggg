@@ -10,8 +10,8 @@ export const metadata: Metadata = {
    description: "Site description",
 };
 
-export default async function RootLayout({ children, params }: { children: React.ReactNode; params?: { locale?: string } }) {
-   // params.locale is provided by the app router when using route segment '[locale]'
+export default function RootLayout({ children, params }: { children: React.ReactNode; params?: { locale?: string } }) {
+
    const lang = params?.locale ?? "en";
 
    return (
