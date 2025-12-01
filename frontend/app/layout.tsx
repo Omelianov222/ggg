@@ -10,12 +10,9 @@ export const metadata: Metadata = {
    description: "Site description",
 };
 
-export default function RootLayout({ children, params }: { children: React.ReactNode; params?: { locale?: string } }) {
-
-   const lang = params?.locale ?? "en";
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
    return (
-      <html lang={lang}>
+      <html>
          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             {children}
          </body>
