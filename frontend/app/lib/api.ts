@@ -2,7 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function fetchAPI(path: string, locale: string) {
    if (!API_URL) {
-      throw new Error("API_URL is not defined");
+      return new Error("API_URL is not defined");
    }
 
    const url = `${API_URL}${path}${path.includes("?") ? "&" : "?"}locale=${locale}&populate=*`;
@@ -13,19 +13,19 @@ export async function fetchAPI(path: string, locale: string) {
    } catch {
       // Лог лише на сервер
       console.error("Network failure when fetching", { path });
-      throw new Error("Failed to reach API");
+      return new Error("Failed to reach API");
    }
 
    if (!res.ok) {
       // Лог на сервер, без URL, без locale
       console.error("API returned non-OK status", { status: res.status, path });
-      throw new Error("API request failed");
+      return new Error("API request failed");
    }
 
    try {
       return await res.json();
    } catch {
       console.error("Failed to parse JSON", { path });
-      throw new Error("Invalid API response");
+      return new Error("Invalid API response");
    }
 }
