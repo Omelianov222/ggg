@@ -69,7 +69,7 @@ export default function Navbar({ locale }: NavbarProps) {
          <ul>
             {items.map(item => (
                <li key={item.label} style={{ opacity: 0, transform: 'translateX(-40px)', transition: 'opacity .5s, transform .5s' }}>
-                  <a href={item.link}>{item.label}</a>
+                  <a href={`/${locale}${item.link}`}>{item.label}</a>
                </li>
             ))}
          </ul>
