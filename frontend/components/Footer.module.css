@@ -6,11 +6,26 @@
    border-top: 1px solid rgba(0, 0, 0, 0.06);
    background: var(--footer-bg, transparent);
    color: var(--footer-color, inherit);
+   position: relative;
+}
+
+.footer::before {
+   content: "";
+   position: absolute;
+   left: 20px;
+   right: 20px;
+   top: 0;
+   height: 1px;
+   z-index: -1;
+   width: calc(100% - 40px);
+   pointer-events: none;
+   background: #ffffff23;
 }
 
 .links {
    display: flex;
    gap: 16px;
+   flex-direction: column;
 }
 
 .links a {

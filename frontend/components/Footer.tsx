@@ -44,9 +44,6 @@ export default function Footer({ locale }: FooterProps) {
    return (
       <footer className={styles.footer}>
          <div className={styles.left}>
-            <div className={styles.logoWrap} aria-hidden>
-               <Logo />
-            </div>
             <nav className={styles.links} aria-label="Footer navigation">
                {items.map(item => (
                   <a key={item.label} href={`/${locale}${item.link}`}>{item.label}</a>

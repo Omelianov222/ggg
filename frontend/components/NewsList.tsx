@@ -1,18 +1,7 @@
 import Link from "next/link";
 import styles from "./NewsList.module.css";
 
-function renderRichText(blocks: any[]): React.ReactNode {
-   return blocks.map((block, i) => {
-      if (block.type === "paragraph") {
-         return (
-            <p key={i}>
-               {block.children.map((child: any, j: number) => child.text)}
-            </p>
-         );
-      }
-      return null;
-   });
-}
+
 
 export default function NewsList({
    items,
@@ -36,7 +25,7 @@ export default function NewsList({
                      alt={item.Cover?.alternativeText || ""}
                   />
                </Link>
-               {renderRichText(item.Content)}
+
             </article>
          ))}
       </div>
