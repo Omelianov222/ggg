@@ -22,16 +22,10 @@
    transition: transform .7s cubic-bezier(.5, 1.5, .5, 1);
 }
 
-/* фліп лише на десктопах */
-@media (min-width: 1024px) {
-   .logo-fixed:hover .logo-flip-fixed {
-      transform: rotateY(180deg);
 
-   }
+.logo-fixed:hover .logo-flip-fixed {
+   transform: rotateY(180deg);
 
-   .logo-fixed .logo-hover {
-      transform: rotateY(180deg);
-   }
 }
 
 .logo-fixed .logo-main,
@@ -43,4 +37,8 @@
    border-radius: 50%;
    backface-visibility: hidden;
    /* властивість приховує задню сторону елемента */
+}
+
+.logo-fixed .logo-hover {
+   transform: rotateY(180deg);
 }
