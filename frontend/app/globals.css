@@ -20,9 +20,7 @@
    }
 }
 
-html {
-   overflow: hidden;
-}
+
 
 body {
    background: var(--background);
