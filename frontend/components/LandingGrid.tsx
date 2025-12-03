@@ -118,15 +118,12 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
                </div>
                <div className={styles.card} role="listitem" data-card>
                   <img src={resolveUrl(attributes?.card2Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2024/04/GALA-inflatable-boats-Home_1.png"} alt="" />
-                  <span className={`${styles["card-label"]} ${styles["top-right"]}`}>{attributes?.card2Label?.[locale] ?? attributes?.card2Label ?? "GALA"}</span>
                </div>
                <div className={styles.card} role="listitem" data-card>
                   <img src={resolveUrl(attributes?.card3Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2025/07/GALA-inflatable-boats-Home_12-scaled.jpg"} alt="" />
-                  <span className={`${styles["card-label"]} ${styles["bottom-left"]}`}>{attributes?.card3Label?.[locale] ?? attributes?.card3Label ?? "GALA"}</span>
                </div>
                <div className={styles.card} role="listitem" data-card>
                   <img src={resolveUrl(attributes?.card4Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2024/04/GALA-inflatable-boats-Home_3.png"} alt="" />
-                  <span className={`${styles["card-label"]} ${styles["bottom-right"]}`}>{attributes?.card4Label?.[locale] ?? attributes?.card4Label ?? "GALA"}</span>
                </div>
             </div>
 
@@ -136,7 +133,6 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
                </div>
                <div className={styles.card} role="listitem" data-card>
                   <img src={resolveUrl(attributes?.middle2Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2024/04/GALA-inflatable-boats-Home_4.png"} alt="" />
-                  <span className={`${styles["card-label"]} ${styles["middle-bottom"]}`}>{attributes?.middle2Label?.[locale] ?? attributes?.middle2Label ?? "GALA"}</span>
                </div>
             </div>
 
