@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useRef, useState } from 'react'
 import styles from './Navbar.module.css'
 import { fetchAPI } from '@/app/lib/api'
@@ -18,6 +17,7 @@ interface NavbarProps {
 
 export default function Navbar({ locale }: NavbarProps) {
    const [items, setItems] = useState<NavItem[]>([])
+   const [isMenuOpen, setIsMenuOpen] = useState(false)
    const navbarRef = useRef<HTMLElement>(null)
 
    useEffect(() => {
@@ -25,7 +25,6 @@ export default function Navbar({ locale }: NavbarProps) {
          try {
             const res = await fetchAPI('/api/navbars', locale)
             const data = res.data || []
-
             const localizedItems: NavItem[] = data.map((item: any) => {
                if (item.locale === locale) {
                   return { label: item.Label, link: item.Link }
@@ -33,49 +32,66 @@ export default function Navbar({ locale }: NavbarProps) {
                const loc = item.localizations?.find((l: any) => l.locale === locale)
                return loc ? { label: loc.Label, link: loc.Link } : { label: item.Label, link: item.Link }
             })
-
             setItems(localizedItems)
 
-            // Анімація після рендеру
             setTimeout(() => {
                if (navbarRef.current) {
-                  navbarRef.current.style.opacity = "1";
-                  navbarRef.current.style.pointerEvents = "auto";
-                  const liItems = navbarRef.current.querySelectorAll("li");
+                  navbarRef.current.style.opacity = "1"
+                  navbarRef.current.style.pointerEvents = "auto"
+                  const liItems = navbarRef.current.querySelectorAll("li")
                   liItems.forEach((li, i) => {
                      setTimeout(() => {
-                        const el = li as HTMLElement;
-                        // force browser to apply initial styles
-                        el.getBoundingClientRect();
-                        el.style.opacity = "1";
-                        el.style.transform = "translateX(0)";
-                     }, 200 * i);
-                  });
+                        const el = li as HTMLElement
+                        el.getBoundingClientRect()
+                        el.style.opacity = "1"
+                        el.style.transform = "translateX(0)"
+                     }, 200 * i)
+                  })
                }
             }, 50)
-
          } catch (err) {
             console.error(err)
          }
       }
-
       loadNav()
    }, [locale])
+
+   const toggleMenu = () => {
+      setIsMenuOpen(!isMenuOpen)
+   }
+
+   const closeMenu = () => {
+      setIsMenuOpen(false)
+   }
 
    return (
       <nav className={styles['main-navbar']} ref={navbarRef} style={{ opacity: 0, pointerEvents: 'none' }}>
          <Logo />
          <LocaleSwitch locale={locale} />
-         <ul>
+
+         <button
+            className={`${styles['burger-button']} ${isMenuOpen ? styles['burger-open'] : ''}`}
+            onClick={toggleMenu}
+            aria-label="Menu"
+         >
+            <span></span>
+            <span></span>
+            <span></span>
+         </button>
+
+         <ul className={`${styles['nav-menu']} ${isMenuOpen ? styles['menu-open'] : ''}`}>
             {items.map(item => (
-               <li key={item.label} style={{ opacity: 0, transform: 'translateX(-40px)', transition: 'opacity .5s, transform .5s' }}>
+               <li
+                  key={item.label}
+                  style={{ opacity: 0, transform: 'translateX(-40px)', transition: 'opacity .5s, transform .5s' }}
+                  onClick={closeMenu}
+               >
                   <a href={`/${locale}${item.link}`}>{item.label}</a>
                </li>
             ))}
          </ul>
+
+         {isMenuOpen && <div className={styles['overlay']} onClick={closeMenu}></div>}
       </nav>
    )
 }
-
-
-

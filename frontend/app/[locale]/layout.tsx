@@ -33,7 +33,7 @@ export default async function LocaleLayout({
       <div
          data-locale={locale}
          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-         style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+         style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflow: 'hidden' }}
       >
          <Navbar locale={locale} />
          <main style={{ flex: 1 }}>
