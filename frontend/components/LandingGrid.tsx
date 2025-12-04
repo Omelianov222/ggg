@@ -25,43 +25,11 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
 
       const allCards = [...baseCards, ...middleCards];
 
-      const played = sessionStorage.getItem("lg-animation-played") === "1";
-
-      if (played) {
-         // фінальний стан без анімацій
-         allCards.forEach((c) => {
-            c.style.opacity = "1";
-            c.style.transform = "scale(1)";
-         });
-
-         if (logoFixedRef.current) {
-            logoFixedRef.current.style.display = "flex";
-            logoFixedRef.current.style.opacity = "1";
-         }
-
-         if (navbarRef.current) {
-            navbarRef.current.style.opacity = "1";
-            navbarRef.current.style.pointerEvents = "auto";
-            const items = navbarRef.current.querySelectorAll("li");
-            items.forEach((li) => {
-               const el = li as HTMLElement;
-               el.style.opacity = "1";
-               el.style.transform = "translateX(0)";
-            });
-         }
-
-         return;
-      } else {
-         sessionStorage.setItem("lg-animation-played", "1");
-
-         // додаємо клас анімації тільки вперше
-         const logoBlock = document.querySelector(`.${styles["logo-block"]}`);
-         if (logoBlock) {
-            logoBlock.classList.add(styles["logo-anim"]);
-         }
+      // додаємо клас анімації логотипу
+      const logoBlock = document.querySelector(`.${styles["logo-block"]}`);
+      if (logoBlock) {
+         logoBlock.classList.add(styles["logo-anim"]);
       }
-      // перший запуск — анімація
-      // sessionStorage.setItem("lg-animation-played", "1");
 
       allCards.forEach((c) => {
          c.style.opacity = "0";
