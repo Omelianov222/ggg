@@ -16,6 +16,11 @@ interface FooterProps {
 
 export default function Footer({ locale }: FooterProps) {
    const [items, setItems] = useState<NavItem[]>([])
+   const COPYRIGHT_TEXT = {
+      en: "All rights reserved",
+      uk: "Всі права захищені",
+      fr: "Tous droits réservés"
+   };
 
    useEffect(() => {
       let mounted = true
@@ -51,7 +56,7 @@ export default function Footer({ locale }: FooterProps) {
             </nav>
          </div>
          <div className={styles.right}>
-            © {year} Всі права захищені
+            © {year} {COPYRIGHT_TEXT[locale]}
          </div>
       </footer>
    )

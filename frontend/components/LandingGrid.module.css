@@ -41,7 +41,7 @@
       top: 0;
       left: 0;
       width: 100vw;
-      height: 100vh;
+      height: calc(100svh - var(--header-height));
       pointer-events: none;
       z-index: 2;
       background: radial-gradient(circle at 50% 50%,
