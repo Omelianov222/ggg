@@ -8,12 +8,15 @@ import LocaleSwitch from './LocaleSwitch'
 interface NavItem {
    link: string
    label: string
-   id: string
+   id?: string
 }
 
 interface NavbarProps {
    locale: string
 }
+
+// Простий кеш для навігації по локалі
+const navCache: Record<string, NavItem[]> = {}
 
 export default function Navbar({ locale }: NavbarProps) {
    const [items, setItems] = useState<NavItem[]>([])
@@ -23,7 +26,15 @@ export default function Navbar({ locale }: NavbarProps) {
    useEffect(() => {
       async function loadNav() {
          try {
+            if (navCache[locale]) {
+               setItems(navCache[locale])
+               return
+            }
+
+            console.time('myBenchmark')
             const res = await fetchAPI('/api/navbars', locale)
+            console.timeEnd('myBenchmark')
+
             const data = res.data || []
             const localizedItems: NavItem[] = data.map((item: any) => {
                if (item.locale === locale) {
@@ -32,6 +43,9 @@ export default function Navbar({ locale }: NavbarProps) {
                const loc = item.localizations?.find((l: any) => l.locale === locale)
                return loc ? { label: loc.Label, link: loc.Link } : { label: item.Label, link: item.Link }
             })
+
+            // Зберігаємо у кеш
+            navCache[locale] = localizedItems
             setItems(localizedItems)
 
             setTimeout(() => {
@@ -45,7 +59,7 @@ export default function Navbar({ locale }: NavbarProps) {
                         el.getBoundingClientRect()
                         el.style.opacity = "1"
                         el.style.transform = "translateX(0)"
-                     }, 200 * i)
+                     }, 100 * i)
                   })
                }
             }, 50)
