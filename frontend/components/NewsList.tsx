@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./NewsList.module.css";
+import Image from "next/image";
 
 
 
@@ -10,7 +11,7 @@ export default function NewsList({
    items: any[];
    locale: string;
 }) {
-   console.log("items", items);
+   console.log("items", JSON.stringify(items));
    return (
       <div className={styles.newsGrid}>
          {items.map((item) => (
@@ -20,9 +21,11 @@ export default function NewsList({
                   <h2>{item.Title}</h2>
                </Link>
                <Link href={`/${locale}/news/${item.Slug}`}>
-                  <img
+                  <Image
                      src={item.Cover?.url || ""}
                      alt={item.Cover?.alternativeText || ""}
+                     width={500}
+                     height={500}
                   />
                </Link>
 
