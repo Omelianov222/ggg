@@ -5,13 +5,14 @@
    width: 54px;
    height: 54px;
    z-index: 20;
-   display: none;
+   display: flex;
    opacity: 0;
    transition: opacity .7s;
    align-items: center;
    justify-content: center;
    cursor: pointer;
    perspective: 100px;
+   transition: 0.4s;
 }
 
 .logo-flip-fixed {
