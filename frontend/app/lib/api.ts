@@ -9,7 +9,8 @@ export async function fetchAPI(path: string, locale: string) {
 
    let res;
    try {
-      res = await fetch(url, { cache: "no-store" });
+      res = await fetch(url, { next: { revalidate: 60 } }) // кеш 60 секунд
+
    } catch {
       // Лог лише на сервер
       console.error("Network failure when fetching", { path });
