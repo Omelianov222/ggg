@@ -1,24 +1,42 @@
+'use client';
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import styles from "./Gallery.module.css";
 
-export default function Gallery({ images }: { images: any[] }) {
+interface GalleryProps {
+   images: { id: string | number; url: string; alt?: string }[];
+}
+
+export default function Gallery({ images }: GalleryProps) {
+   const [loadedItems, setLoadedItems] = useState<Set<number>>(new Set());
+
+   const handleLoad = (index: number) => {
+      setLoadedItems(prev => new Set(prev).add(index));
+   };
+
    return (
-      <div className="masonry">
-         {images.map(img => {
-            const url = img.url;
+      <div className={styles.masonry}>
+         {images.map((img, index) => (
+            <div
+               key={img.id}
+               className={`${styles['masonry-item']} ${loadedItems.has(index) ? styles.loaded : ''
+                  }`}
+            >
+               <Image
+                  src={img.url}
+                  alt={img.alt || "Gallery image"}
+                  width={500}
+                  height={500}
+                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1400px) 33vw, 25vw"
+                  style={{ width: "100%", height: "auto" }}
+                  placeholder="blur"
+                  blurDataURL="/placeholder.png"
+                  onLoad={() => handleLoad(index)} // <-- замість onLoadingComplete
+               />
 
-            return (
-               <div key={img.id} className="masonry-item">
-                  <Image
-                     src={url.startsWith("http") ? url : API_URL + url}
-                     alt={img.name ?? ""}
-                     width={600}
-                     height={600}
-                     style={{ width: "100%", height: "auto" }}
-                  />
-               </div>
-            );
-         })}
+            </div>
+         ))}
       </div>
    );
 }
