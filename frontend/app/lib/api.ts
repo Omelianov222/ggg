@@ -10,7 +10,7 @@ export async function fetchAPI(path: string, locale: string) {
    let res;
    try {
       res = await fetch(url, { next: { revalidate: 60 } }) // кеш 60 секунд
-
+      console.log("Fetching URL:", url, "Response:", res); // Лог лише на сервер
    } catch {
       // Лог лише на сервер
       console.error("Network failure when fetching", { path });

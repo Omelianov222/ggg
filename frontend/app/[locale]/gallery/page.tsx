@@ -1,16 +1,77 @@
 import { fetchAPI } from "@/app/lib/api";
 import Gallery from "@/components/Gallery";
+import Link from "next/link";
 
-export default async function GalleryPage({ params }: { params: { locale: string } }) {
+interface Props {
+   params: Promise<{ locale: string }>;
+   searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+type MediaItem = {
+   id: number | string;
+   url: string;
+   alternativeText?: string | null;
+   name?: string | null;
+};
+
+type GalleryType = {
+   id: number | string;
+   Category?: string | null;
+   Images?: MediaItem[];
+};
+
+export default async function GalleryPage({ params, searchParams }: Props) {
    const { locale } = await params;
 
    const data = await fetchAPI("/api/galleries", locale);
 
-   if (!data?.data?.length) {
+   if (!data || !data.data || !data.data.length) {
       return <div>No gallery found</div>;
    }
 
-   const images = data.data[0].Images;
+   // Build categories from returned galleries
+   const galleries = data.data as GalleryType[];
+   const categories = Array.from(new Set(galleries.map(g => g.Category).filter(Boolean))) as string[];
 
-   return <Gallery images={images} />;
+   // `searchParams` may be a Promise in Next.js — await/unpack it before use
+   const _searchParams = (await searchParams) as { [key: string]: string | string[] | undefined } | undefined;
+   const selectedCategory = typeof _searchParams?.category === 'string' ? _searchParams.category : 'All';
+
+   // Determine images to show: if 'All' -> concat all Images, else find gallery with matching category
+   let images: MediaItem[] = [];
+   if (selectedCategory === 'All') {
+      images = galleries.flatMap(g => g.Images || []);
+   } else {
+      const found = galleries.find(g => g.Category === selectedCategory);
+      images = found ? (found.Images || []) : [];
+   }
+
+   // Simple UI: category links
+   return (
+      <div>
+         <div style={{ display: 'flex', gap: 8, padding: '0 1rem 1rem' }}>
+            <Link
+               href={`/${locale}/gallery`}
+               className={selectedCategory === 'All' ? 'active' : ''}
+            >
+               All
+            </Link>
+            {categories.map(cat => (
+               <Link
+                  key={cat}
+                  href={{ pathname: `/${locale}/gallery`, query: { category: cat } }}
+                  className={selectedCategory === cat ? 'active' : ''}
+               >
+                  {cat}
+               </Link>
+            ))}
+         </div>
+
+         {images.length === 0 ? (
+            <div style={{ padding: '0 1rem' }}>No images for this category</div>
+         ) : (
+            <Gallery images={images.map((img) => ({ id: img.id, url: img.url, alt: img.alternativeText || img.name || '' }))} />
+         )}
+      </div>
+   );
 }
