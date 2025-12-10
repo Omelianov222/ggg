@@ -101,3 +101,73 @@
 .masonry-item {
    cursor: pointer;
 }
+
+
+/* Category buttons (admin-provided categories) */
+.categoriesRow {
+   display: flex;
+   gap: 0.5rem;
+   /* small gap between buttons */
+   padding: 0 1rem 1rem;
+   flex-wrap: wrap;
+   margin-top: 6px;
+   justify-content: center;
+}
+
+.categoryLink {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   padding: 0.4rem 0.5rem;
+   border-radius: 9999px;
+   /* pill */
+   background: rgba(0, 0, 0, 0.04);
+   color: var(--foreground);
+   text-decoration: none;
+   font-size: 0.95rem;
+   transition: transform 160ms cubic-bezier(.2, .9, .2, 1),
+      box-shadow 180ms cubic-bezier(.2, .9, .2, 1),
+      background-color 180ms cubic-bezier(.2, .9, .2, 1),
+      opacity 140ms ease;
+   will-change: transform, box-shadow, background-color, opacity;
+   cursor: pointer;
+}
+
+.categoryLink:hover {
+   transform: translateY(-3px) scale(1.02);
+   box-shadow: 0 6px 18px rgba(10, 10, 10, 0.06);
+   background: rgba(0, 0, 0, 0.06);
+}
+
+.categoryLink:active {
+   transform: translateY(0) scale(0.98);
+   box-shadow: 0 2px 6px rgba(10, 10, 10, 0.06);
+}
+
+.categoryLink:focus {
+   outline: 3px solid rgba(0, 120, 210, 0.12);
+   outline-offset: 2px;
+}
+
+.categoryLink.active {
+   background: linear-gradient(90deg, rgba(0, 120, 210, 0.12), rgba(0, 120, 210, 0.08));
+   color: #0078d2;
+   transform: translateY(-2px);
+   box-shadow: 0 8px 22px rgba(0, 120, 210, 0.08);
+}
+
+.categoryLink.fade-in {
+   animation: catFadeIn 300ms ease both;
+}
+
+@keyframes catFadeIn {
+   from {
+      opacity: 0;
+      transform: translateY(6px);
+   }
+
+   to {
+      opacity: 1;
+      transform: translateY(0);
+   }
+}

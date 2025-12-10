@@ -1,8 +1,23 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./LandingGrid.module.css";
+import { fetchAPI } from "@/app/lib/api";
 
-type LandingGridProps = { attributes?: any; locale: string };
+type LandingGridProps = { attributes?: any; locale: string | Promise<string> };
+
+type BrandItem = {
+   id?: number;
+   BrandLabel?: string;
+   Brand?: {
+      url?: string;
+      formats?: { large?: { url?: string } };
+   };
+};
+
+type MainPageBrandsResponse = {
+   data?: BrandItem[];
+   meta?: Record<string, unknown>;
+};
 
 function resolveUrl(path?: string) {
    if (!path) return undefined;
@@ -12,12 +27,46 @@ function resolveUrl(path?: string) {
 }
 
 export default function LandingGrid({ attributes, locale }: LandingGridProps) {
+   const [brands, setBrands] = useState<BrandItem[] | null>(null);
    const baseRef = useRef<HTMLDivElement | null>(null);
    const middleRef = useRef<HTMLDivElement | null>(null);
    const logoFixedRef = useRef<HTMLDivElement | null>(null);
    const navbarRef = useRef<HTMLElement | null>(null);
 
    useEffect(() => {
+      // Resolve locale (it may be a Promise when coming from server components)
+      (async () => {
+         let resolvedLocale = typeof locale === "string" ? locale : undefined;
+         if (typeof locale !== "string") {
+            try {
+               resolvedLocale = await locale;
+            } catch (e) {
+               console.error("Failed to resolve locale promise", e);
+               resolvedLocale = undefined;
+            }
+         }
+
+         if (!resolvedLocale) {
+            console.warn("Locale not available for LandingGrid; skipping brands fetch");
+            return;
+         }
+
+         // fetch brands from API (client-side) using fetchAPI helper
+         try {
+            const res = await fetchAPI("/api/main-page-brands", resolvedLocale);
+            if (res instanceof Error) {
+               console.error('fetchAPI returned an Error', res.message);
+            } else {
+               // res should be parsed JSON already (see app/lib/api.fetchAPI)
+               const json = res as MainPageBrandsResponse;
+               setBrands(Array.isArray(json.data) ? json.data : (json.data ? [json.data] : null));
+            }
+         } catch (err) {
+            console.error('Error fetching brands', err);
+         }
+      })();
+
+
       const baseCards =
          baseRef.current?.querySelectorAll<HTMLDivElement>("[data-card]") ?? [];
       const middleCards =
@@ -74,34 +123,44 @@ export default function LandingGrid({ attributes, locale }: LandingGridProps) {
             });
          }
       }, 4400);
-   }, []);
+   }, [locale]);
 
 
    return (
       <div className={styles["lg-body"]}>
          <div className={styles.wrap}>
             <div className={styles["grid-base"]} role="list" ref={baseRef}>
-               <div className={styles.card} role="listitem" data-card>
-                  <img src={resolveUrl(attributes?.heroImage?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2025/08/VPelagalli_1584-scaled.jpg"} alt="" />
-               </div>
-               <div className={styles.card} role="listitem" data-card>
-                  <img src={resolveUrl(attributes?.card2Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2024/04/GALA-inflatable-boats-Home_1.png"} alt="" />
-               </div>
-               <div className={styles.card} role="listitem" data-card>
-                  <img src={resolveUrl(attributes?.card3Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2025/07/GALA-inflatable-boats-Home_12-scaled.jpg"} alt="" />
-               </div>
-               <div className={styles.card} role="listitem" data-card>
-                  <img src={resolveUrl(attributes?.card4Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2024/04/GALA-inflatable-boats-Home_3.png"} alt="" />
-               </div>
+               {/* If brands fetched, render first 4 brand images; otherwise fall back to attributes */}
+               {(brands && brands.length > 0 ? brands.slice(0, 4) : [null, null, null, null]).map((b, idx) => {
+                  const url = b?.Brand?.formats?.large?.url ?? b?.Brand?.url ?? (
+                     // fallbacks to attributes for backward compatibility
+                     idx === 0
+                        ? attributes?.heroImage?.data?.attributes?.url
+                        : idx === 1
+                           ? attributes?.card2Image?.data?.attributes?.url
+                           : idx === 2
+                              ? attributes?.card3Image?.data?.attributes?.url
+                              : attributes?.card4Image?.data?.attributes?.url
+                  );
+                  const resolved = resolveUrl(url);
+                  return (
+                     <div key={idx} className={styles.card} role="listitem" data-card>
+                        {resolved ? <img src={resolved} alt={b?.BrandLabel ?? attributes?.BrandLabel ?? ""} /> : null}
+                     </div>
+                  );
+               })}
             </div>
 
             <div className={styles["grid-middle"]} role="list" ref={middleRef}>
-               <div className={styles.card} role="listitem" data-card>
-                  <img src={resolveUrl(attributes?.middle1Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2024/04/GALA-inflatable-boats-Home_6.jpg"} alt="" />
-               </div>
-               <div className={styles.card} role="listitem" data-card>
-                  <img src={resolveUrl(attributes?.middle2Image?.data?.attributes?.url) ?? "https://gala.boats/wp-content/uploads/2024/04/GALA-inflatable-boats-Home_4.png"} alt="" />
-               </div>
+               {(brands && brands.length > 4 ? brands.slice(4, 6) : [null, null]).map((b, idx) => {
+                  const url = b?.Brand?.formats?.large?.url ?? b?.Brand?.url ?? (idx === 0 ? attributes?.middle1Image?.data?.attributes?.url : attributes?.middle2Image?.data?.attributes?.url);
+                  const resolved = resolveUrl(url);
+                  return (
+                     <div key={idx} className={styles.card} role="listitem" data-card>
+                        {resolved ? <img src={resolved} alt={b?.BrandLabel ?? ""} /> : null}
+                     </div>
+                  );
+               })}
             </div>
 
             <div className={styles["logo-block"]}>

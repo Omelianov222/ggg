@@ -1,7 +1,7 @@
 import { fetchAPI } from "@/app/lib/api";
 import Gallery from "@/components/Gallery";
 import Link from "next/link";
-
+import styles from "@/components/Gallery.module.css";
 interface Props {
    params: Promise<{ locale: string }>;
    searchParams?: { [key: string]: string | string[] | undefined };
@@ -46,13 +46,13 @@ export default async function GalleryPage({ params, searchParams }: Props) {
       images = found ? (found.Images || []) : [];
    }
 
-   // Simple UI: category links
+   // Simple UI: category links with animated styles
    return (
       <div>
-         <div style={{ display: 'flex', gap: 8, padding: '0 1rem 1rem' }}>
+         <div className={styles.categoriesRow}>
             <Link
                href={`/${locale}/gallery`}
-               className={selectedCategory === 'All' ? 'active' : ''}
+               className={`${styles.categoryLink} ${selectedCategory === 'All' ? styles.active : ''}`}
             >
                All
             </Link>
@@ -60,7 +60,7 @@ export default async function GalleryPage({ params, searchParams }: Props) {
                <Link
                   key={cat}
                   href={{ pathname: `/${locale}/gallery`, query: { category: cat } }}
-                  className={selectedCategory === cat ? 'active' : ''}
+                  className={`${styles.categoryLink} ${selectedCategory === cat ? styles.active : ''}`}
                >
                   {cat}
                </Link>
