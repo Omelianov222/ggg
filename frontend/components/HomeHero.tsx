@@ -11,8 +11,8 @@ export default function HomeHero({ data, locale }: { data: any; locale: string }
          </section>
          <AboutUs
             title={attrs?.aboutTitle}
-            subtitle={attrs?.aboutSubtitle}
             content={attrs?.aboutContent}
+            locale={locale}
          />
       </>
    );

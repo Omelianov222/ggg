@@ -1,6 +1,7 @@
 import styles from '@/components/NewsItem.module.css';
 import { fetchAPI } from "@/app/lib/api";
 import ReactMarkdown from "react-markdown";
+import Image from 'next/image';
 
 export default async function NewsItemPage({
    params,
@@ -18,7 +19,7 @@ export default async function NewsItemPage({
    }
 
    const item = res.data[0];
-   const markdown = convertStrapiBlocksToMarkdown(item.Content);
+
 
    return (
       <div className={styles.container}>
@@ -28,66 +29,20 @@ export default async function NewsItemPage({
 
          {item.Cover?.url && (
             <div className={styles.coverWrapper}>
-               <img
+               <Image
                   src={item.Cover.url}
                   alt={item.Cover.alternativeText || "cover"}
                   className={styles.cover}
+                  width={800}
+                  height={400}
                />
             </div>
          )}
 
          <div className={styles.content}>
-            <ReactMarkdown>{markdown}</ReactMarkdown>
+            <ReactMarkdown>{item.Paragraph}</ReactMarkdown>
          </div>
       </div>
    );
 }
 
-/* --------------------------- */
-/*  Конвертація Strapi → Markdown */
-/* --------------------------- */
-
-function convertStrapiBlocksToMarkdown(blocks: any[]): string {
-   return blocks
-      .map(block => {
-         if (block.type === "paragraph") {
-            const text = joinChildren(block.children);
-            return text.trim() === "" ? "" : text + "\n\n";
-         }
-
-         if (block.type === "heading") {
-            const text = joinChildren(block.children);
-            const prefix = "#".repeat(block.level);
-            return `${prefix} ${text}\n\n`;
-         }
-
-         if (block.type === "list") {
-            return block.children
-               .map((li: any, i: number) => {
-                  const t = joinChildren(li.children);
-                  return block.format === "ordered"
-                     ? `${i + 1}. ${t}`
-                     : `- ${t}`;
-               })
-               .join("\n") + "\n\n";
-         }
-
-         return "";
-      })
-      .join("");
-}
-
-function joinChildren(children: any[]): string {
-   return children
-      .map(child => {
-         if (child.type !== "text") return "";
-
-         let txt = child.text || "";
-
-         if (child.bold) txt = `**${txt}**`;
-         if (child.italic) txt = `*${txt}*`;
-
-         return txt;
-      })
-      .join("");
-}

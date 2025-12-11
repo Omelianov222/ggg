@@ -4,6 +4,16 @@
    margin: 0 auto;
 }
 
+.about ul,
+.about ol,
+.about li,
+.about p,
+.about h1,
+.about h2,
+.about h3 {
+   all: revert;
+}
+
 .container {
    display: flex;
    flex-direction: column;
@@ -31,9 +41,11 @@
 }
 
 .title {
-   font-size: 1.75rem;
+   /* font-size: 1.75rem; */
    font-weight: 700;
    margin-bottom: 0.5rem;
+   text-align: center !important;
+
 }
 
 .subtitle {
@@ -44,6 +56,20 @@
 .content {
    color: #ffffff;
    line-height: 1.6;
+}
+
+.ctaButton {
+   display: inline-block;
+   background: #0070f3;
+   color: #fff;
+   padding: 0.6rem 1rem;
+   border-radius: 6px;
+   text-decoration: none;
+   font-weight: 600;
+}
+
+.ctaButton:hover {
+   opacity: 0.95;
 }
 
 @media (min-width: 768px) {
