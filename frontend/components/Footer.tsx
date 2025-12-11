@@ -69,6 +69,7 @@ export default function Footer({ locale }: FooterProps) {
       async function loadSocials() {
          try {
             const res = await fetchAPI('/api/socials', locale)
+            console.log(res)
             const data = res.data || []
             if (mounted) setSocials(data)
          } catch (err) {
