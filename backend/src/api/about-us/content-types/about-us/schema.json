@@ -1,10 +1,10 @@
 {
-  "kind": "collectionType",
-  "collectionName": "news",
+  "kind": "singleType",
+  "collectionName": "about_uses",
   "info": {
-    "singularName": "new",
-    "pluralName": "news",
-    "displayName": "News"
+    "singularName": "about-us",
+    "pluralName": "about-uses",
+    "displayName": "AboutUs"
   },
   "options": {
     "draftAndPublish": true
@@ -15,15 +15,6 @@
     }
   },
   "attributes": {
-    "Slug": {
-      "type": "uid",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "targetField": "Title"
-    },
     "Title": {
       "type": "string",
       "pluginOptions": {
@@ -32,15 +23,7 @@
         }
       }
     },
-    "Content": {
-      "type": "blocks",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "Cover": {
+    "Background": {
       "type": "media",
       "pluginOptions": {
         "i18n": {
