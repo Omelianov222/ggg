@@ -34,7 +34,7 @@ export default function AboutUs({ title, content, locale }: AboutUsProps) {
 
             <div className={styles.text}>
                <h2 id="about-title" className={styles.title}>
-                  {data?.Title ?? title ?? "Про нас"}
+                  {data?.Title ?? title ?? (locale === 'uk' ? 'Про нас' : 'About Us')}
                </h2>
 
                <div className={styles.content}>
