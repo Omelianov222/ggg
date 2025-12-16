@@ -14,7 +14,7 @@
 .panel {
    position: relative;
    flex: 1;
-   transition: flex 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
    overflow: hidden;
    cursor: pointer;
    background-size: cover;
@@ -28,9 +28,6 @@
 .panel.hasClip {
    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 100%, 20px 100%);
    margin-left: -20px;
-   filter: brightness(0.21);
-   transition: 1s;
-
 }
 
 .panel.hasClip:first-child {
@@ -61,12 +58,6 @@
 
 .active {
    flex: 8;
-
-}
-
-.panel.hasClip.active {
-   filter: brightness(1);
-   transition: 1s;
 }
 
 .panel-content {
@@ -170,20 +161,161 @@
    }
 }
 
+/* Мобільні стилі */
 @media (max-width: 768px) {
+
+   /* Вертикальна орієнтація акордеону на мобільних */
+   .accordion {
+      flex-direction: column;
+   }
+
+   .panel {
+      flex: 1;
+      min-height: 0;
+      transform: translateY(100%);
+   }
+
+   /* Анімація зверху вниз для мобільних */
+   .panel.animate {
+      animation: slideInFromBottom 0.8s ease-out forwards;
+   }
+
+   @keyframes slideInFromBottom {
+      0% {
+         opacity: 0;
+         transform: translateY(100%);
+      }
+
+      100% {
+         opacity: 1;
+         transform: translateY(0);
+      }
+   }
+
+   /* Змінюємо clip-path для вертикального розташування */
+   .panel.hasClip {
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 0 100%);
+      margin-left: 0;
+      margin-top: -20px;
+   }
+
+   .panel.hasClip:first-child {
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 0 100%);
+      margin-top: 0;
+   }
+
+   .panel.hasClip:last-child {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 20px));
+   }
+
+   .active {
+      flex: 6;
+   }
+
+   /* Контент для мобільних */
+   .panel-content {
+      padding: 30px 20px;
+   }
+
    .panel-title {
-      font-size: 2rem;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
    }
 
    .panel.active .panel-title {
       font-size: 2rem;
+      transform: translateY(0) rotate(0deg);
    }
 
    .panel-description {
-      font-size: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      max-width: 100%;
+   }
+
+   /* Для вертикального акордеону змінюємо поведінку неактивних панелей */
+   .panel:not(.active) .panel-title {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      transform: rotate(0deg) translateY(0);
+   }
+
+   /* Loader трохи менший на мобільних */
+   .loader {
+      width: 50px;
+      height: 50px;
+      border-width: 3px;
+   }
+}
+
+/* Дуже маленькі екрани */
+@media (max-width: 480px) {
+   .panel-content {
+      padding: 20px 15px;
+   }
+
+   .panel-title {
+      font-size: 1.5rem;
+   }
+
+   .panel.active .panel-title {
+      font-size: 1.8rem;
+   }
+
+   .panel-description {
+      font-size: 0.85rem;
    }
 
    .panel:not(.active) .panel-title {
-      font-size: 1.2rem;
+      font-size: 1rem;
+   }
+}
+
+/* Ландшафтна орієнтація на мобільних */
+@media (max-width: 768px) and (orientation: landscape) {
+
+   /* Повертаємо горизонтальний акордеон в ландшафті */
+   .accordion {
+      flex-direction: row;
+   }
+
+   .panel {
+      transform: translateX(100%);
+   }
+
+   .panel.animate {
+      animation: slideInFromRight 0.8s ease-out forwards;
+   }
+
+   .panel.hasClip {
+      clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 100%, 15px 100%);
+      margin-left: -15px;
+      margin-top: 0;
+   }
+
+   .panel.hasClip:first-child {
+      clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 100%, 0 100%);
+      margin-left: 0;
+   }
+
+   .panel.hasClip:last-child {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%);
+   }
+
+   .panel-content {
+      padding: 20px 15px;
+   }
+
+   .panel-title {
+      font-size: 1.5rem;
+   }
+
+   .panel.active .panel-title {
+      font-size: 1.8rem;
+   }
+
+   .panel:not(.active) .panel-title {
+      font-size: 1rem;
+      transform: rotate(-90deg) translateY(0);
    }
 }

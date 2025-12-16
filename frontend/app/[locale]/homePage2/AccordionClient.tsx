@@ -21,9 +21,23 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
    const [resolvedLocale, setResolvedLocale] = useState<string | null>(null);
    const [imagesLoaded, setImagesLoaded] = useState(false);
    const [slideComplete, setSlideComplete] = useState(false);
+   const [isMobile, setIsMobile] = useState(false);
    const accordionRef = useRef<HTMLDivElement>(null);
    const hoverTimeout = useRef<number | null>(null);
    const HOVER_DELAY = 220;
+   const touchStartY = useRef<number | null>(null);
+
+   // Визначення мобільного пристрою
+   useEffect(() => {
+      const checkMobile = () => {
+         setIsMobile(window.innerWidth <= 768);
+      };
+
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+
+      return () => window.removeEventListener('resize', checkMobile);
+   }, []);
 
    useEffect(() => {
       (async () => {
@@ -43,7 +57,6 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
 
             const data = (res?.data ?? []) as BrandItem[];
 
-            // Якщо немає даних з API, використовуємо дефолтні значення
             if (data.length === 0) {
                const defaultItems = Array.from({ length: 7 }, (_, i) => ({
                   title: `Gala${i + 1}`,
@@ -54,7 +67,6 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
                return;
             }
 
-            // Створюємо масив елементів з даних API
             const itemsWithImages = data.map((b, i) => ({
                title: b.BrandLabel || `Gala${i + 1}`,
                desc: `${i + 1}`,
@@ -63,7 +75,6 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
 
             setItems(itemsWithImages);
 
-            // Завантажуємо всі зображення
             const imageUrls = itemsWithImages
                .map(item => item.image)
                .filter((url): url is string => !!url);
@@ -73,13 +84,12 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
                return;
             }
 
-            // Чекаємо поки всі зображення завантажаться
             const imagePromises = imageUrls.map(
                url =>
-                  new Promise((resolve, reject) => {
+                  new Promise((resolve) => {
                      const img = new Image();
                      img.onload = resolve;
-                     img.onerror = resolve; // Продовжуємо навіть якщо зображення не завантажилось
+                     img.onerror = resolve;
                      img.src = url;
                   })
             );
@@ -90,7 +100,6 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
                setImagesLoaded(true);
             }
          } catch {
-            // У випадку помилки показуємо дефолтні елементи
             if (!cancelled) {
                const defaultItems = Array.from({ length: 7 }, (_, i) => ({
                   title: `Gala${i + 1}`,
@@ -110,7 +119,6 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
    useEffect(() => {
       if (!imagesLoaded || items.length === 0) return;
 
-      // Додаємо анімацію до кожної панелі з затримкою
       const panels = accordionRef.current?.querySelectorAll(`.${styles.panel}`);
       panels?.forEach((panel, index) => {
          setTimeout(() => {
@@ -118,7 +126,6 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
          }, index * 100);
       });
 
-      // Розраховуємо загальний час анімації
       const totalAnimationTime = (items.length - 1) * 100 + 800;
 
       const timer = setTimeout(() => {
@@ -128,7 +135,7 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
       return () => clearTimeout(timer);
    }, [imagesLoaded, items.length]);
 
-   const handleMouseEnter = (i: number) => {
+   const handleInteraction = (i: number) => {
       if (!slideComplete) return;
 
       if (hoverTimeout.current) window.clearTimeout(hoverTimeout.current);
@@ -141,14 +148,36 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
                panel.classList.remove(styles.active);
             }
          });
-      }, HOVER_DELAY);
+      }, isMobile ? 0 : HOVER_DELAY);
    };
 
-   const handleMouseLeave = () => {
+   const handleInteractionEnd = () => {
       if (hoverTimeout.current) {
          window.clearTimeout(hoverTimeout.current);
          hoverTimeout.current = null;
       }
+   };
+
+   const handleTouchStart = (e: React.TouchEvent, i: number) => {
+      touchStartY.current = e.touches[0].clientY;
+      handleInteraction(i);
+   };
+
+   const handleTouchMove = (e: React.TouchEvent) => {
+      if (touchStartY.current === null) return;
+
+      const touchY = e.touches[0].clientY;
+      const diff = Math.abs(touchY - touchStartY.current);
+
+      // Якщо користувач скролить, скасовуємо взаємодію
+      if (diff > 10) {
+         handleInteractionEnd();
+         touchStartY.current = null;
+      }
+   };
+
+   const handleTouchEnd = () => {
+      touchStartY.current = null;
    };
 
    const hasMultiplePanels = items.length > 1;
@@ -161,8 +190,11 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
                <div
                   key={i}
                   className={`${styles.panel} ${hasMultiplePanels ? styles.hasClip : ''} ${i === 0 ? styles.active : ""}`}
-                  onMouseEnter={() => handleMouseEnter(i)}
-                  onMouseLeave={handleMouseLeave}
+                  onMouseEnter={() => !isMobile && handleInteraction(i)}
+                  onMouseLeave={() => !isMobile && handleInteractionEnd()}
+                  onTouchStart={(e) => isMobile && handleTouchStart(e, i)}
+                  onTouchMove={(e) => isMobile && handleTouchMove(e)}
+                  onTouchEnd={() => isMobile && handleTouchEnd()}
                   style={{ backgroundImage: item.image ? `url(${item.image})` : undefined }}
                >
                   <div className={styles["panel-content"]}>
