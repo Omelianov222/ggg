@@ -16,20 +16,11 @@ function resolveUrl(path?: string) {
    return base.replace(/\/$/, "") + path;
 }
 
-const DEFAULT_TITLES = [
-   { title: "GAla1", desc: "1" },
-   { title: "Gala2", desc: "2" },
-   { title: "Gala3", desc: "3" },
-   { title: "Gala4", desc: "4" },
-   { title: "Gala5", desc: "5" },
-   { title: "Gala6", desc: "6" },
-   { title: "Gala7", desc: "7" },
-];
-
 export default function AccordionClient({ locale }: { locale: string | Promise<string> }) {
-   const [images, setImages] = useState<(string | undefined)[]>([]);
+   const [items, setItems] = useState<{ title: string; desc: string; image?: string }[]>([]);
    const [resolvedLocale, setResolvedLocale] = useState<string | null>(null);
-   const [radarComplete, setRadarComplete] = useState(false);
+   const [imagesLoaded, setImagesLoaded] = useState(false);
+   const [slideComplete, setSlideComplete] = useState(false);
    const accordionRef = useRef<HTMLDivElement>(null);
    const hoverTimeout = useRef<number | null>(null);
    const HOVER_DELAY = 220;
@@ -44,37 +35,101 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
    useEffect(() => {
       if (!resolvedLocale) return;
       let cancelled = false;
+
       (async () => {
          try {
             const res = await fetchAPI("/api/main-page-brands", resolvedLocale);
             if (res instanceof Error || cancelled) return;
+
             const data = (res?.data ?? []) as BrandItem[];
-            const imgs = new Array(7).fill(undefined).map((_, i) => {
-               const b = data[i];
-               const url = b?.Brand?.formats?.large?.url ?? b?.Brand?.url;
-               return resolveUrl(url ?? undefined);
-            });
-            if (!cancelled) setImages(imgs);
+
+            // Якщо немає даних з API, використовуємо дефолтні значення
+            if (data.length === 0) {
+               const defaultItems = Array.from({ length: 7 }, (_, i) => ({
+                  title: `Gala${i + 1}`,
+                  desc: `${i + 1}`,
+               }));
+               setItems(defaultItems);
+               setImagesLoaded(true);
+               return;
+            }
+
+            // Створюємо масив елементів з даних API
+            const itemsWithImages = data.map((b, i) => ({
+               title: b.BrandLabel || `Gala${i + 1}`,
+               desc: `${i + 1}`,
+               image: resolveUrl(b?.Brand?.formats?.large?.url ?? b?.Brand?.url),
+            }));
+
+            setItems(itemsWithImages);
+
+            // Завантажуємо всі зображення
+            const imageUrls = itemsWithImages
+               .map(item => item.image)
+               .filter((url): url is string => !!url);
+
+            if (imageUrls.length === 0) {
+               setImagesLoaded(true);
+               return;
+            }
+
+            // Чекаємо поки всі зображення завантажаться
+            const imagePromises = imageUrls.map(
+               url =>
+                  new Promise((resolve, reject) => {
+                     const img = new Image();
+                     img.onload = resolve;
+                     img.onerror = resolve; // Продовжуємо навіть якщо зображення не завантажилось
+                     img.src = url;
+                  })
+            );
+
+            await Promise.all(imagePromises);
+
+            if (!cancelled) {
+               setImagesLoaded(true);
+            }
          } catch {
-            // ignore fetch errors
+            // У випадку помилки показуємо дефолтні елементи
+            if (!cancelled) {
+               const defaultItems = Array.from({ length: 7 }, (_, i) => ({
+                  title: `Gala${i + 1}`,
+                  desc: `${i + 1}`,
+               }));
+               setItems(defaultItems);
+               setImagesLoaded(true);
+            }
          }
       })();
+
       return () => {
          cancelled = true;
       };
    }, [resolvedLocale]);
 
    useEffect(() => {
-      // Запускаємо анімацію радара
+      if (!imagesLoaded || items.length === 0) return;
+
+      // Додаємо анімацію до кожної панелі з затримкою
+      const panels = accordionRef.current?.querySelectorAll(`.${styles.panel}`);
+      panels?.forEach((panel, index) => {
+         setTimeout(() => {
+            panel.classList.add(styles.animate);
+         }, index * 100);
+      });
+
+      // Розраховуємо загальний час анімації
+      const totalAnimationTime = (items.length - 1) * 100 + 800;
+
       const timer = setTimeout(() => {
-         setRadarComplete(true);
-      }, 3000); // 3 секунди - час анімації радара
+         setSlideComplete(true);
+      }, totalAnimationTime);
 
       return () => clearTimeout(timer);
-   }, []);
+   }, [imagesLoaded, items.length]);
 
    const handleMouseEnter = (i: number) => {
-      if (!radarComplete) return; // Блокуємо взаємодію під час анімації радара
+      if (!slideComplete) return;
 
       if (hoverTimeout.current) window.clearTimeout(hoverTimeout.current);
       hoverTimeout.current = window.setTimeout(() => {
@@ -96,21 +151,23 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
       }
    };
 
+   const hasMultiplePanels = items.length > 1;
+
    return (
-      <div className={`${styles.accordionWrapper} ${radarComplete ? styles.radarComplete : ''}`}>
-         <div className={styles.radarOrigin}></div>
+      <div className={`${styles.accordionWrapper} ${slideComplete ? styles.slideComplete : ''}`}>
+         {!imagesLoaded && <div className={styles.loader}></div>}
          <div className={styles.accordion} ref={accordionRef}>
-            {DEFAULT_TITLES.map((t, i) => (
+            {items.map((item, i) => (
                <div
                   key={i}
-                  className={`${styles.panel} ${i === 0 ? styles.active : ""}`}
+                  className={`${styles.panel} ${hasMultiplePanels ? styles.hasClip : ''} ${i === 0 ? styles.active : ""}`}
                   onMouseEnter={() => handleMouseEnter(i)}
                   onMouseLeave={handleMouseLeave}
-                  style={{ backgroundImage: images[i] ? `url(${images[i]})` : undefined }}
+                  style={{ backgroundImage: item.image ? `url(${item.image})` : undefined }}
                >
                   <div className={styles["panel-content"]}>
-                     <h2 className={styles["panel-title"]}>{t.title}</h2>
-                     <p className={styles["panel-description"]}>{t.desc}</p>
+                     <h2 className={styles["panel-title"]}>{item.title}</h2>
+                     <p className={styles["panel-description"]}>{item.desc}</p>
                   </div>
                </div>
             ))}
