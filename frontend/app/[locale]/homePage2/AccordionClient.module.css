@@ -1,7 +1,7 @@
 .accordionWrapper {
    position: relative;
    width: 100vw;
-   height: 100vh;
+   height: calc(100svh - var(--header-height));
    overflow: hidden;
 }
 
@@ -57,7 +57,15 @@
 }
 
 .active {
-   flex: 8;
+   flex: 0 0 80%;
+}
+
+.panel {
+   filter: brightness(0.3);
+}
+
+.panel.active {
+   filter: brightness(1);
 }
 
 .panel-content {
