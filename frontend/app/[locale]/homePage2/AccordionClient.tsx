@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./AccordionClient.module.css";
 import { fetchAPI } from "@/app/lib/api";
 
@@ -17,41 +17,38 @@ function resolveUrl(path?: string) {
 }
 
 const DEFAULT_TITLES = [
-   { title: "Творчість", desc: "Досліджуйте безмежні можливості творчого самовираження через мистецтво, музику та дизайн" },
-   { title: "Інновації", desc: "Впроваджуйте нові ідеї та технології для створення майбутнього" },
-   { title: "Природа", desc: "Насолоджуйтесь красою навколишнього світу та гармонією з природою" },
-   { title: "Технології", desc: "Розвивайте цифрові навички та досліджуйте світ сучасних технологій" },
-   { title: "Подорожі", desc: "Відкривайте нові горизонти та пізнавайте різні культури світу" },
-   { title: "Наука", desc: "Досліджуйте таємниці всесвіту через призму наукових відкриттів" },
-   { title: "Майбутнє", desc: "Створюйте власне майбутнє та втілюйте мрії в реальність" },
+   { title: "GAla1", desc: "1" },
+   { title: "Gala2", desc: "2" },
+   { title: "Gala3", desc: "3" },
+   { title: "Gala4", desc: "4" },
+   { title: "Gala5", desc: "5" },
+   { title: "Gala6", desc: "6" },
+   { title: "Gala7", desc: "7" },
 ];
 
 export default function AccordionClient({ locale }: { locale: string | Promise<string> }) {
-   const [active, setActive] = useState(0);
    const [images, setImages] = useState<(string | undefined)[]>([]);
+   const [resolvedLocale, setResolvedLocale] = useState<string | null>(null);
+   const [radarComplete, setRadarComplete] = useState(false);
+   const accordionRef = useRef<HTMLDivElement>(null);
+   const hoverTimeout = useRef<number | null>(null);
+   const HOVER_DELAY = 220;
 
    useEffect(() => {
+      (async () => {
+         const resolved = typeof locale === "string" ? locale : await locale;
+         setResolvedLocale(resolved);
+      })();
+   }, [locale]);
+
+   useEffect(() => {
+      if (!resolvedLocale) return;
       let cancelled = false;
       (async () => {
-         // resolve locale if it's a promise-like
-         let resolvedLocale: string | undefined = typeof locale === "string" ? locale : undefined;
-         if (typeof locale !== "string") {
-            try {
-               // locale can be a promise when passed from a server component
-               // await promise-like locale
-               resolvedLocale = await locale;
-            } catch {
-               resolvedLocale = undefined;
-            }
-         }
-
-         if (!resolvedLocale) return;
-
          try {
             const res = await fetchAPI("/api/main-page-brands", resolvedLocale);
-            if (res instanceof Error) return;
+            if (res instanceof Error || cancelled) return;
             const data = (res?.data ?? []) as BrandItem[];
-            // take up to 7 images for panels
             const imgs = new Array(7).fill(undefined).map((_, i) => {
                const b = data[i];
                const url = b?.Brand?.formats?.large?.url ?? b?.Brand?.url;
@@ -65,23 +62,59 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
       return () => {
          cancelled = true;
       };
-   }, [locale]);
+   }, [resolvedLocale]);
+
+   useEffect(() => {
+      // Запускаємо анімацію радара
+      const timer = setTimeout(() => {
+         setRadarComplete(true);
+      }, 3000); // 3 секунди - час анімації радара
+
+      return () => clearTimeout(timer);
+   }, []);
+
+   const handleMouseEnter = (i: number) => {
+      if (!radarComplete) return; // Блокуємо взаємодію під час анімації радара
+
+      if (hoverTimeout.current) window.clearTimeout(hoverTimeout.current);
+      hoverTimeout.current = window.setTimeout(() => {
+         const panels = accordionRef.current?.querySelectorAll(`.${styles.panel}`);
+         panels?.forEach((panel, index) => {
+            if (index === i) {
+               panel.classList.add(styles.active);
+            } else {
+               panel.classList.remove(styles.active);
+            }
+         });
+      }, HOVER_DELAY);
+   };
+
+   const handleMouseLeave = () => {
+      if (hoverTimeout.current) {
+         window.clearTimeout(hoverTimeout.current);
+         hoverTimeout.current = null;
+      }
+   };
 
    return (
-      <div className={styles.accordion}>
-         {DEFAULT_TITLES.map((t, i) => (
-            <div
-               key={i}
-               className={`${styles.panel} ${i === active ? styles.active : ""}`}
-               onMouseEnter={() => setActive(i)}
-               style={{ backgroundImage: images[i] ? `url(${images[i]})` : undefined }}
-            >
-               <div className={styles["panel-content"]}>
-                  <h2 className={styles["panel-title"]}>{t.title}</h2>
-                  <p className={styles["panel-description"]}>{t.desc}</p>
+      <div className={`${styles.accordionWrapper} ${radarComplete ? styles.radarComplete : ''}`}>
+         <div className={styles.radarOrigin}></div>
+         <div className={styles.accordion} ref={accordionRef}>
+            {DEFAULT_TITLES.map((t, i) => (
+               <div
+                  key={i}
+                  className={`${styles.panel} ${i === 0 ? styles.active : ""}`}
+                  onMouseEnter={() => handleMouseEnter(i)}
+                  onMouseLeave={handleMouseLeave}
+                  style={{ backgroundImage: images[i] ? `url(${images[i]})` : undefined }}
+               >
+                  <div className={styles["panel-content"]}>
+                     <h2 className={styles["panel-title"]}>{t.title}</h2>
+                     <p className={styles["panel-description"]}>{t.desc}</p>
+                  </div>
                </div>
-            </div>
-         ))}
+            ))}
+         </div>
       </div>
    );
 }
