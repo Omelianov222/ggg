@@ -1,57 +1,47 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import styles from "./AboutUs.module.css";
-import ReactMarkdown from "react-markdown";
-import Image from 'next/image';
-import Link from 'next/link';
-import { fetchAPI } from '@/app/lib/api';
+import { fetchAPI } from '@/app/lib/api'
+import React from 'react'
+import ReactMarkdown from 'react-markdown'
+import styles from './AboutUs.module.css'
 
-type AboutUsProps = {
-   title?: string;
-   content?: string;
-   locale: string;
-};
+type Props = {
+   locale: string
+}
 
-export default function AboutUs({ title, content, locale }: AboutUsProps) {
+function resolveUrl(path?: string) {
+   if (!path) return undefined
+   if (path.startsWith('http')) return path
+   const base = process.env.NEXT_PUBLIC_API_URL ?? ''
+   return base.replace(/\/$/, '') + path
+}
 
-   const [data, setData] = useState<{ Title?: string; Paragraph?: string } | null>(null);
-
-   useEffect(() => {
+export default async function AboutUs({ locale }: Props) {
 
 
-      (async () => {
-         const res = await fetchAPI('/api/About-us', locale);
-         setData({ Title: res?.data?.Title, Paragraph: res?.data?.Paragraph });
-      })();
+   const res = await fetchAPI('/api/About-us', locale)
 
-      return () => { };
-   }, []);
+   const item = res?.data ?? null
+
+   if (!item) {
+      return <div style={{ padding: '2rem' }}>No content</div>
+   }
+
+   const title = item.Title ?? ''
+   const paragraph = item.Paragraph ?? ''
+   // prefer original (highest quality) `url` from API, then fall back to formats
+   const bgRaw = item.Background?.url ?? item.Background?.formats?.large?.url ?? item.Background?.formats?.medium?.url ?? item.Background?.formats?.small?.url ?? undefined
+   const bgUrl = resolveUrl(bgRaw)
 
    return (
-      <section className={styles.about} aria-labelledby="about-title">
+      <div className={styles.hero} style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : undefined }}>
+         <div className={styles.overlay} />
          <div className={styles.container}>
-
-
-            <div className={styles.text}>
-               <h2 id="about-title" className={styles.title}>
-                  {data?.Title ?? title ?? (locale === 'uk' ? 'Про нас' : 'About Us')}
-               </h2>
-
+            <h1 className={styles.title}>{title}</h1>
+            <div className={styles.panel}>
                <div className={styles.content}>
-                  <ReactMarkdown>{data?.Paragraph ?? ""}</ReactMarkdown>
-               </div>
-
-               <div className={styles.content}>
-                  <ReactMarkdown>{content}</ReactMarkdown>
-               </div>
-
-               <div style={{ marginTop: '1rem' }}>
-                  <Link href={`/${locale}/about`} className={styles.ctaButton}>
-                     More info
-                  </Link>
+                  <ReactMarkdown>{paragraph}</ReactMarkdown>
                </div>
             </div>
          </div>
-      </section>
-   );
+      </div>
+   )
 }

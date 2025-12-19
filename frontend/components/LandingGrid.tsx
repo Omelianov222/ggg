@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./LandingGrid.module.css";
 import { fetchAPI } from "@/app/lib/api";
 
-type LandingGridProps = { attributes?: any; locale: string | Promise<string> };
+type LandingGridProps = { attributes?: unknown; locale: string | Promise<string> };
 
 type BrandItem = {
    id?: number;

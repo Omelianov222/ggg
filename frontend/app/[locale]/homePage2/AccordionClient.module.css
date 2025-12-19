@@ -1,7 +1,7 @@
 .accordionWrapper {
    position: relative;
    width: 100vw;
-   height: calc(100svh - var(--header-height));
+   height: calc(100svh);
    overflow: hidden;
 }
 

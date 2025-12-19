@@ -1,86 +1,73 @@
-.about {
-   padding: 3rem 1rem;
-   max-width: 1200px;
-   margin: 0 auto;
+.hero {
+   position: relative;
+   background-size: cover;
+   background-position: center center;
+   padding: 8rem 1rem;
+   color: #fff;
+   min-height: 60vh;
 }
 
-.about ul,
-.about ol,
-.about li,
-.about p,
-.about h1,
-.about h2,
-.about h3 {
-   all: revert;
+.overlay {
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.5) 100%);
 }
-
 
 .container {
-   display: flex;
-   flex-direction: column;
-   gap: 1rem;
-   align-items: center;
-}
-
-.imageWrap {
-   width: 100%;
-   max-width: 620px;
-   flex: 0 0 auto;
-}
-
-.image {
-   width: 100%;
-   height: auto;
-   display: block;
-   border-radius: 8px;
-   object-fit: cover;
-}
-
-.text {
-   flex: 1 1 auto;
-   text-align: center;
+   position: relative;
+   max-width: 1200px;
+   margin: 0 auto;
+   z-index: 2;
 }
 
 .title {
-   /* font-size: 1.75rem; */
-   font-weight: 700;
-   margin-bottom: 0.5rem;
-   text-align: center !important;
-   font-size: 4rem !important;
+   font-size: 5.25rem;
+   margin: 0 0 3rem 0;
+   line-height: 1.05;
+   text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+   text-align: center;
 }
 
-.subtitle {
-   color: #f0f0f0;
-   margin-bottom: 1rem;
+.panel {
+   backdrop-filter: blur(50px);
+   background: rgba(255, 255, 255, 0.06);
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   padding: 1.5rem 3.75rem;
+   border-radius: 12px;
 }
 
 .content {
-   color: #ffffff;
-   line-height: 1.6;
+   line-height: 1.7;
+   color: #f3f4f6;
 }
 
-.ctaButton {
-   display: inline-block;
-   background: #0070f3;
+/* make markdown lists and headings readable */
+.content h2,
+.content h3 {
    color: #fff;
-   padding: 0.6rem 1rem;
-   border-radius: 6px;
-   text-decoration: none;
-   font-weight: 600;
 }
 
-.ctaButton:hover {
-   opacity: 0.95;
+.content p,
+.content li {
+   color: #eaeef2;
 }
 
-@media (min-width: 768px) {
-   .container {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 2rem;
+.content ul,
+.content ol,
+.content li,
+.content p,
+.content h1,
+.content h2,
+.content h3 {
+   all: revert;
+}
+
+@media (max-width: 640px) {
+   .title {
+      font-size: 2rem
    }
 
-   .text {
-      text-align: left;
+   .hero {
+      padding: 4rem 0
    }
 }

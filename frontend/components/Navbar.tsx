@@ -101,10 +101,6 @@ export default function Navbar({ locale }: NavbarProps) {
          onMouseEnter={handleMouseEnter}
          onMouseLeave={handleMouseLeave}
       >
-         <div className={styles['logo-container']}>
-            <Logo />
-         </div>
-
          <div className={`${styles['navbar-dropdown']} ${isHovered ? styles['dropdown-visible'] : ''}`}>
             <ul className={styles['nav-menu']}>
                {items.map(item => (
@@ -117,8 +113,17 @@ export default function Navbar({ locale }: NavbarProps) {
                   </li>
                ))}
             </ul>
-            <LocaleSwitch locale={locale} />
+            <LocaleSwitch locale={locale} /></div>
+
+         <div
+            className={`${styles['logo-container']} ${isHovered ? styles['logo-moved'] : ''
+               }`}
+         >
+            <Logo />
          </div>
+
+
+
 
          {/* Мобільна версія */}
          <button

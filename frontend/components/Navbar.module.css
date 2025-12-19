@@ -16,6 +16,16 @@
    align-items: center;
    cursor: pointer;
    z-index: 1002;
+   position: relative;
+   transition: 0.4s;
+
+
+}
+
+/* коли дропдаун відкритий */
+.logo-moved {
+   transform: translateY(70px);
+   transition: 0.4s
 }
 
 /* Випадаюча панель з навбаром */
@@ -31,6 +41,7 @@
    padding: 20px 40px 16px;
    display: flex;
    align-items: center;
+   justify-content: space-between;
    gap: 32px;
    opacity: 0;
    pointer-events: none;

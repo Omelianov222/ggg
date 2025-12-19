@@ -9,11 +9,7 @@ export default function HomeHero({ data, locale }: { data: any; locale: string }
          <section>
             <LandingGrid attributes={attrs} locale={locale} />
          </section>
-         <AboutUs
-            title={attrs?.aboutTitle}
-            content={attrs?.aboutContent}
-            locale={locale}
-         />
+
       </>
    );
 }
