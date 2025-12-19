@@ -21,7 +21,9 @@ const navCache: Record<string, NavItem[]> = {}
 export default function Navbar({ locale }: NavbarProps) {
    const [items, setItems] = useState<NavItem[]>([])
    const [isMenuOpen, setIsMenuOpen] = useState(false)
+   const [isHovered, setIsHovered] = useState(false)
    const navbarRef = useRef<HTMLElement>(null)
+   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
    useEffect(() => {
       async function loadNav() {
@@ -34,8 +36,8 @@ export default function Navbar({ locale }: NavbarProps) {
             console.time('myBenchmark')
             const res = await fetchAPI('/api/navbars', locale)
             console.timeEnd('myBenchmark')
-
             const data = res.data || []
+
             const localizedItems: NavItem[] = data.map((item: any) => {
                if (item.locale === locale) {
                   return { label: item.Label, link: item.Link }
@@ -70,6 +72,19 @@ export default function Navbar({ locale }: NavbarProps) {
       loadNav()
    }, [locale])
 
+   const handleMouseEnter = () => {
+      if (timeoutRef.current) {
+         clearTimeout(timeoutRef.current)
+      }
+      setIsHovered(true)
+   }
+
+   const handleMouseLeave = () => {
+      timeoutRef.current = setTimeout(() => {
+         setIsHovered(false)
+      }, 200)
+   }
+
    const toggleMenu = () => {
       setIsMenuOpen(!isMenuOpen)
    }
@@ -79,10 +94,33 @@ export default function Navbar({ locale }: NavbarProps) {
    }
 
    return (
-      <nav className={styles['main-navbar']} ref={navbarRef} style={{ opacity: 0, pointerEvents: 'none' }}>
-         <Logo />
-         <LocaleSwitch locale={locale} />
+      <nav
+         className={styles['main-navbar']}
+         ref={navbarRef}
+         style={{ opacity: 0, pointerEvents: 'none' }}
+         onMouseEnter={handleMouseEnter}
+         onMouseLeave={handleMouseLeave}
+      >
+         <div className={styles['logo-container']}>
+            <Logo />
+         </div>
 
+         <div className={`${styles['navbar-dropdown']} ${isHovered ? styles['dropdown-visible'] : ''}`}>
+            <ul className={styles['nav-menu']}>
+               {items.map(item => (
+                  <li
+                     key={item.label}
+                     style={{ opacity: 0, transform: 'translateX(-40px)', transition: 'opacity .5s, transform .5s' }}
+                     onClick={closeMenu}
+                  >
+                     <a href={`/${locale}${item.link}`}>{item.label}</a>
+                  </li>
+               ))}
+            </ul>
+            <LocaleSwitch locale={locale} />
+         </div>
+
+         {/* Мобільна версія */}
          <button
             className={`${styles['burger-button']} ${isMenuOpen ? styles['burger-open'] : ''}`}
             onClick={toggleMenu}
@@ -93,17 +131,20 @@ export default function Navbar({ locale }: NavbarProps) {
             <span></span>
          </button>
 
-         <ul className={`${styles['nav-menu']} ${isMenuOpen ? styles['menu-open'] : ''}`}>
+         <ul className={`${styles['nav-menu-mobile']} ${isMenuOpen ? styles['menu-open'] : ''}`}>
             {items.map(item => (
                <li
                   key={item.label}
-                  style={{ opacity: 0, transform: 'translateX(-40px)', transition: 'opacity .5s, transform .5s' }}
                   onClick={closeMenu}
                >
                   <a href={`/${locale}${item.link}`}>{item.label}</a>
                </li>
             ))}
          </ul>
+
+         <div className={styles['locale-switch-mobile']}>
+            <LocaleSwitch locale={locale} />
+         </div>
 
          {isMenuOpen && <div className={styles['overlay']} onClick={closeMenu}></div>}
       </nav>
