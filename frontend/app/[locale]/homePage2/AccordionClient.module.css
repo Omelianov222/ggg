@@ -11,7 +11,6 @@
    width: 100vw;
 }
 
-/* Ховаємо радіо-кнопки */
 .panelRadio {
    position: absolute;
    opacity: 0;
@@ -22,12 +21,7 @@
    position: relative;
    flex: 1;
    cursor: pointer;
-   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-   margin-left: -60px;
-}
-
-.panelLabel:first-child {
-   margin-left: 0;
+   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .panel {
@@ -36,25 +30,25 @@
    height: 100%;
    transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
    overflow: hidden;
-   background-size: cover;
-   background-position: center;
    will-change: flex;
    opacity: 0;
    transform: translateX(100%);
    filter: brightness(0.3);
 }
 
-/* Стилі для панелей з кліп-шляхом */
-.panel.hasClip {
-   clip-path: polygon(60px 0, 100% 0, 100% 100%, 0 calc(100% - 60px));
+/* Нахил через skew */
+.panel.hasSkew {
+   transform: skewX(-3deg) translateX(100%);
 }
 
-.panelLabel:first-child .panel.hasClip {
-   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 60px));
+.panelLabel:first-child .panel.hasSkew {
+   border-top-left-radius: 10px;
+   border-bottom-left-radius: 10px;
 }
 
-.panelLabel:last-child .panel.hasClip {
-   clip-path: polygon(60px 0, 100% 0, 100% 100%, 0 100%);
+.panelLabel:last-child .panel.hasSkew {
+   border-top-right-radius: 10px;
+   border-bottom-right-radius: 10px;
 }
 
 .panel.animate {
@@ -64,19 +58,36 @@
 @keyframes slideInFromRight {
    0% {
       opacity: 0;
-      transform: translateX(100%);
+      transform: skewX(-3deg) translateX(100%);
    }
 
    100% {
       opacity: 1;
-      transform: translateX(0);
+      transform: skewX(-3deg) translateX(0);
    }
 }
 
-/* Активна панель через :has() */
+/* Фон з компенсацією нахилу */
+.panelBackground {
+   position: absolute;
+   top: -10%;
+   left: -15%;
+   right: -15%;
+   bottom: -10%;
+   transform-origin: center;
+   background-size: cover;
+   background-position: center;
+}
+
+/* Особливі стилі для першого елемента */
+.panelLabel:first-child .panelBackground {
+   left: 0;
+   right: -15%;
+}
+
 .panelLabel:has(.panelRadio:checked) {
    flex: 0 0 80%;
-   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .panelLabel:has(.panelRadio:checked) .panel {
@@ -97,6 +108,8 @@
    padding: 60px 40px;
    color: white;
    pointer-events: none;
+   transform: skewX(3deg);
+   z-index: 1;
 }
 
 .panel-title {
@@ -125,7 +138,6 @@
    will-change: opacity, transform;
 }
 
-/* Активна панель */
 .panelLabel:has(.panelRadio:checked) .panel-title {
    opacity: 1;
    transform: translateY(0) rotate(0deg);
@@ -138,7 +150,6 @@
    display: block;
 }
 
-/* Неактивні панелі */
 .panelLabel:not(:has(.panelRadio:checked)) .panel-title {
    font-size: 1.5rem;
    opacity: 0.9;
@@ -153,7 +164,6 @@
    opacity: 0;
 }
 
-/* Лоадер */
 .loader {
    position: absolute;
    top: 50%;
@@ -181,17 +191,15 @@
    }
 
    .panelLabel {
-      margin-left: 0;
-      margin-top: -60px;
-      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-   }
-
-   .panelLabel:first-child {
-      margin-top: 0;
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
    }
 
    .panel {
       transform: translateY(100%);
+   }
+
+   .panel.hasSkew {
+      transform: skewY(-3deg) translateY(100%);
    }
 
    .panel.animate {
@@ -201,34 +209,36 @@
    @keyframes slideInFromBottom {
       0% {
          opacity: 0;
-         transform: translateY(100%);
+         transform: skewY(-3deg) translateY(100%);
       }
 
       100% {
          opacity: 1;
-         transform: translateY(0);
+         transform: skewY(-3deg) translateY(0);
       }
    }
 
-   .panel.hasClip {
-      clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 100%);
+   .panelBackground {
+      top: -15%;
+      left: -15%;
+      right: -15%;
+      bottom: -15%;
+      transform: skewY(3deg);
    }
 
-   .panelLabel:first-child .panel.hasClip {
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+   .panelLabel:first-child .panelBackground {
+      top: 0;
+      bottom: -15%;
    }
 
-   .panelLabel:last-child .panel.hasClip {
-      clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 calc(100% - 60px));
+   .panel-content {
+      transform: skewY(3deg);
+      padding: 30px 20px;
    }
 
    .panelLabel:has(.panelRadio:checked) {
       flex: 6;
-      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-   }
-
-   .panel-content {
-      padding: 30px 20px;
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
    }
 
    .panel-title {
@@ -260,7 +270,6 @@
    }
 }
 
-/* Дуже маленькі екрани */
 @media (max-width: 480px) {
    .panel-content {
       padding: 20px 15px;
@@ -283,47 +292,38 @@
    }
 }
 
-/* Ландшафтна орієнтація на мобільних */
 @media (max-width: 768px) and (orientation: landscape) {
    .accordion {
       flex-direction: row;
-   }
-
-   .panelLabel {
-      margin-left: -45px;
-      margin-top: 0;
-      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-   }
-
-   .panelLabel:first-child {
-      margin-left: 0;
    }
 
    .panel {
       transform: translateX(100%);
    }
 
+   .panel.hasSkew {
+      transform: skewX(-3deg) translateX(100%);
+   }
+
    .panel.animate {
       animation: slideInFromRight 0.8s ease-out forwards;
    }
 
-   .panel.hasClip {
-      clip-path: polygon(45px 0, 100% 0, 100% 100%, 0 calc(100% - 45px));
+   .panelBackground {
+      top: -15%;
+      left: -15%;
+      right: -15%;
+      bottom: -15%;
+      transform: skewX(3deg);
    }
 
-   .panelLabel:first-child .panel.hasClip {
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 45px));
-   }
-
-   .panelLabel:last-child .panel.hasClip {
-      clip-path: polygon(45px 0, 100% 0, 100% 100%, 0 100%);
-   }
-
-   .panelLabel:has(.panelRadio:checked) {
-      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+   .panelLabel:first-child .panelBackground {
+      left: 0;
+      right: -15%;
    }
 
    .panel-content {
+      transform: skewX(3deg);
       padding: 20px 15px;
    }
 

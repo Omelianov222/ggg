@@ -23,7 +23,6 @@ export default function AccordionClient({ locale }: { locale: Promise<string> })
    const [isMobile, setIsMobile] = useState(false);
    const accordionRef = useRef<HTMLDivElement>(null);
 
-   // Визначення мобільного пристрою
    useEffect(() => {
       const checkMobile = () => {
          setIsMobile(window.innerWidth <= 768);
@@ -66,7 +65,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> })
             const itemsWithImages = data.map((b, i) => ({
                title: b.BrandLabel || `Gala${i + 1}`,
                desc: `${i + 1}`,
-               image: resolveUrl(b?.Brand?.formats?.large?.url ?? b?.Brand?.url),
+               image: resolveUrl(b?.Brand?.url),
             }));
 
             setItems(itemsWithImages);
@@ -137,24 +136,24 @@ export default function AccordionClient({ locale }: { locale: Promise<string> })
                      className={styles.panelRadio}
                      defaultChecked={i === 0}
                   />
-                  <div
-                     className={`${styles.panel} ${hasMultiplePanels ? styles.hasClip : ''}`}
-                     style={{ backgroundImage: i === 0 ? undefined : item.image ? `url(${item.image})` : undefined }}
-                  >
-                     {i === 0 && (
-                        <video
-                           src="/record-2025-12-19_15.33.57.mp4"
-                           autoPlay
-                           muted
-                           loop
-                           playsInline
-                           aria-hidden="true"
-                           style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                        />
-                     )}
+                  <div className={`${styles.panel} ${hasMultiplePanels ? styles.hasSkew : ''}`}>
+                     {i === 0 ? (
+                        <div className={styles.panelBackground}>
+                           <video
+                              src="/record-2025-12-19_15.33.57.mp4"
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              aria-hidden="true"
+                              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                           />
+                        </div>
+                     ) : item.image ? (
+                        <div className={styles.panelBackground} style={{ backgroundImage: `url(${item.image})` }} />
+                     ) : null}
                      <div className={styles["panel-content"]}>
-                        <h2 className={styles["panel-title"]}>{item.title}</h2>
-                        <p className={styles["panel-description"]}>{item.desc}</p>
+
                      </div>
                   </div>
                </label>
