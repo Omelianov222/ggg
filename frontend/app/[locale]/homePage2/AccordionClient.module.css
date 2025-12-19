@@ -11,35 +11,52 @@
    width: 100vw;
 }
 
-.panel {
+/* Ховаємо радіо-кнопки */
+.panelRadio {
+   position: absolute;
+   opacity: 0;
+   pointer-events: none;
+}
+
+.panelLabel {
    position: relative;
    flex: 1;
-   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-   overflow: hidden;
    cursor: pointer;
+   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+   margin-left: -60px;
+}
+
+.panelLabel:first-child {
+   margin-left: 0;
+}
+
+.panel {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+   overflow: hidden;
    background-size: cover;
    background-position: center;
    will-change: flex;
    opacity: 0;
    transform: translateX(100%);
+   filter: brightness(0.3);
 }
 
-/* Стилі для панелей з кліп-шляхом (тільки якщо панелей більше 1) */
+/* Стилі для панелей з кліп-шляхом */
 .panel.hasClip {
-   clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 100%, 20px 100%);
-   margin-left: -20px;
+   clip-path: polygon(60px 0, 100% 0, 100% 100%, 0 calc(100% - 60px));
 }
 
-.panel.hasClip:first-child {
-   clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 100%, 0 100%);
-   margin-left: 0;
+.panelLabel:first-child .panel.hasClip {
+   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 60px));
 }
 
-.panel.hasClip:last-child {
-   clip-path: polygon(0 0, 100% 0, 100% 100%, 20px 100%);
+.panelLabel:last-child .panel.hasClip {
+   clip-path: polygon(60px 0, 100% 0, 100% 100%, 0 100%);
 }
 
-/* Анімація появи панелей */
 .panel.animate {
    animation: slideInFromRight 0.8s ease-out forwards;
 }
@@ -56,16 +73,15 @@
    }
 }
 
-.active {
+/* Активна панель через :has() */
+.panelLabel:has(.panelRadio:checked) {
    flex: 0 0 80%;
+   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.panel {
-   filter: brightness(0.3);
-}
-
-.panel.active {
+.panelLabel:has(.panelRadio:checked) .panel {
    filter: brightness(1);
+   transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .panel-content {
@@ -89,8 +105,8 @@
    margin-bottom: 1rem;
    opacity: 0;
    transform: translateY(20px);
-   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
-      transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
+   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
       font-size 0.8s cubic-bezier(0.4, 0, 0.2, 1);
    text-align: center;
    will-change: opacity, transform;
@@ -100,9 +116,8 @@
    font-size: 1.2rem;
    opacity: 0;
    transform: translateY(20px);
-   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
-      transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
-      display 0s 0.8s;
+   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
    text-align: center;
    max-width: 600px;
    line-height: 1.6;
@@ -111,21 +126,20 @@
 }
 
 /* Активна панель */
-.panel.active .panel-title {
+.panelLabel:has(.panelRadio:checked) .panel-title {
    opacity: 1;
    transform: translateY(0) rotate(0deg);
    font-size: 3rem;
 }
 
-.panel.active .panel-description {
+.panelLabel:has(.panelRadio:checked) .panel-description {
    opacity: 1;
    transform: translateY(0);
    display: block;
-   transition-delay: 0.2s, 0.2s, 0s;
 }
 
 /* Неактивні панелі */
-.panel:not(.active) .panel-title {
+.panelLabel:not(:has(.panelRadio:checked)) .panel-title {
    font-size: 1.5rem;
    opacity: 0.9;
    transform: rotate(-90deg) translateY(0);
@@ -134,18 +148,9 @@
       font-size 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.panel:not(.active) .panel-description {
+.panelLabel:not(:has(.panelRadio:checked)) .panel-description {
    display: none;
    opacity: 0;
-}
-
-/* Дозволяємо взаємодію тільки після завершення анімації */
-.accordionWrapper:not(.slideComplete) .panel {
-   pointer-events: none;
-}
-
-.accordionWrapper.slideComplete .panel {
-   pointer-events: auto;
 }
 
 /* Лоадер */
@@ -171,19 +176,24 @@
 
 /* Мобільні стилі */
 @media (max-width: 768px) {
-
-   /* Вертикальна орієнтація акордеону на мобільних */
    .accordion {
       flex-direction: column;
    }
 
+   .panelLabel {
+      margin-left: 0;
+      margin-top: -60px;
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+   }
+
+   .panelLabel:first-child {
+      margin-top: 0;
+   }
+
    .panel {
-      flex: 1;
-      min-height: 0;
       transform: translateY(100%);
    }
 
-   /* Анімація зверху вниз для мобільних */
    .panel.animate {
       animation: slideInFromBottom 0.8s ease-out forwards;
    }
@@ -200,27 +210,23 @@
       }
    }
 
-   /* Змінюємо clip-path для вертикального розташування */
    .panel.hasClip {
-      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 0 100%);
-      margin-left: 0;
-      margin-top: -20px;
+      clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 100%);
    }
 
-   .panel.hasClip:first-child {
-      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 0 100%);
-      margin-top: 0;
+   .panelLabel:first-child .panel.hasClip {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
    }
 
-   .panel.hasClip:last-child {
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 20px));
+   .panelLabel:last-child .panel.hasClip {
+      clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 calc(100% - 60px));
    }
 
-   .active {
+   .panelLabel:has(.panelRadio:checked) {
       flex: 6;
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.6s cubic-bezier(0.4, 0, 0.2, 1);
    }
 
-   /* Контент для мобільних */
    .panel-content {
       padding: 30px 20px;
    }
@@ -230,7 +236,7 @@
       margin-bottom: 0.5rem;
    }
 
-   .panel.active .panel-title {
+   .panelLabel:has(.panelRadio:checked) .panel-title {
       font-size: 2rem;
       transform: translateY(0) rotate(0deg);
    }
@@ -241,14 +247,12 @@
       max-width: 100%;
    }
 
-   /* Для вертикального акордеону змінюємо поведінку неактивних панелей */
-   .panel:not(.active) .panel-title {
+   .panelLabel:not(:has(.panelRadio:checked)) .panel-title {
       font-size: 1.2rem;
       opacity: 0.9;
       transform: rotate(0deg) translateY(0);
    }
 
-   /* Loader трохи менший на мобільних */
    .loader {
       width: 50px;
       height: 50px;
@@ -266,7 +270,7 @@
       font-size: 1.5rem;
    }
 
-   .panel.active .panel-title {
+   .panelLabel:has(.panelRadio:checked) .panel-title {
       font-size: 1.8rem;
    }
 
@@ -274,17 +278,25 @@
       font-size: 0.85rem;
    }
 
-   .panel:not(.active) .panel-title {
+   .panelLabel:not(:has(.panelRadio:checked)) .panel-title {
       font-size: 1rem;
    }
 }
 
 /* Ландшафтна орієнтація на мобільних */
 @media (max-width: 768px) and (orientation: landscape) {
-
-   /* Повертаємо горизонтальний акордеон в ландшафті */
    .accordion {
       flex-direction: row;
+   }
+
+   .panelLabel {
+      margin-left: -45px;
+      margin-top: 0;
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+   }
+
+   .panelLabel:first-child {
+      margin-left: 0;
    }
 
    .panel {
@@ -296,18 +308,19 @@
    }
 
    .panel.hasClip {
-      clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 100%, 15px 100%);
-      margin-left: -15px;
-      margin-top: 0;
+      clip-path: polygon(45px 0, 100% 0, 100% 100%, 0 calc(100% - 45px));
    }
 
-   .panel.hasClip:first-child {
-      clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 100%, 0 100%);
-      margin-left: 0;
+   .panelLabel:first-child .panel.hasClip {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 45px));
    }
 
-   .panel.hasClip:last-child {
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 15px 100%);
+   .panelLabel:last-child .panel.hasClip {
+      clip-path: polygon(45px 0, 100% 0, 100% 100%, 0 100%);
+   }
+
+   .panelLabel:has(.panelRadio:checked) {
+      transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
    }
 
    .panel-content {
@@ -318,11 +331,11 @@
       font-size: 1.5rem;
    }
 
-   .panel.active .panel-title {
+   .panelLabel:has(.panelRadio:checked) .panel-title {
       font-size: 1.8rem;
    }
 
-   .panel:not(.active) .panel-title {
+   .panelLabel:not(:has(.panelRadio:checked)) .panel-title {
       font-size: 1rem;
       transform: rotate(-90deg) translateY(0);
    }

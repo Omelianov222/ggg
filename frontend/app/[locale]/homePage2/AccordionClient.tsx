@@ -16,16 +16,12 @@ function resolveUrl(path?: string) {
    return base.replace(/\/$/, "") + path;
 }
 
-export default function AccordionClient({ locale }: { locale: string | Promise<string> }) {
+export default function AccordionClient({ locale }: { locale: Promise<string> }) {
    const [items, setItems] = useState<{ title: string; desc: string; image?: string }[]>([]);
    const [resolvedLocale, setResolvedLocale] = useState<string | null>(null);
    const [imagesLoaded, setImagesLoaded] = useState(false);
-   const [slideComplete, setSlideComplete] = useState(false);
    const [isMobile, setIsMobile] = useState(false);
    const accordionRef = useRef<HTMLDivElement>(null);
-   const hoverTimeout = useRef<number | null>(null);
-   const HOVER_DELAY = 220;
-   const touchStartY = useRef<number | null>(null);
 
    // Визначення мобільного пристрою
    useEffect(() => {
@@ -125,83 +121,43 @@ export default function AccordionClient({ locale }: { locale: string | Promise<s
             panel.classList.add(styles.animate);
          }, index * 100);
       });
-
-      const totalAnimationTime = (items.length - 1) * 100 + 800;
-
-      const timer = setTimeout(() => {
-         setSlideComplete(true);
-      }, totalAnimationTime);
-
-      return () => clearTimeout(timer);
    }, [imagesLoaded, items.length]);
-
-   const handleInteraction = (i: number) => {
-      if (!slideComplete) return;
-
-      if (hoverTimeout.current) window.clearTimeout(hoverTimeout.current);
-      hoverTimeout.current = window.setTimeout(() => {
-         const panels = accordionRef.current?.querySelectorAll(`.${styles.panel}`);
-         panels?.forEach((panel, index) => {
-            if (index === i) {
-               panel.classList.add(styles.active);
-            } else {
-               panel.classList.remove(styles.active);
-            }
-         });
-      }, isMobile ? 0 : HOVER_DELAY);
-   };
-
-   const handleInteractionEnd = () => {
-      if (hoverTimeout.current) {
-         window.clearTimeout(hoverTimeout.current);
-         hoverTimeout.current = null;
-      }
-   };
-
-   const handleTouchStart = (e: React.TouchEvent, i: number) => {
-      touchStartY.current = e.touches[0].clientY;
-      handleInteraction(i);
-   };
-
-   const handleTouchMove = (e: React.TouchEvent) => {
-      if (touchStartY.current === null) return;
-
-      const touchY = e.touches[0].clientY;
-      const diff = Math.abs(touchY - touchStartY.current);
-
-      // Якщо користувач скролить, скасовуємо взаємодію
-      if (diff > 10) {
-         handleInteractionEnd();
-         touchStartY.current = null;
-      }
-   };
-
-   const handleTouchEnd = () => {
-      touchStartY.current = null;
-   };
 
    const hasMultiplePanels = items.length > 1;
 
    return (
-      <div className={`${styles.accordionWrapper} ${slideComplete ? styles.slideComplete : ''}`}>
+      <div className={styles.accordionWrapper}>
          {!imagesLoaded && <div className={styles.loader}></div>}
          <div className={styles.accordion} ref={accordionRef}>
             {items.map((item, i) => (
-               <div
-                  key={i}
-                  className={`${styles.panel} ${hasMultiplePanels ? styles.hasClip : ''} ${i === 0 ? styles.active : ""}`}
-                  onMouseEnter={() => !isMobile && handleInteraction(i)}
-                  onMouseLeave={() => !isMobile && handleInteractionEnd()}
-                  onTouchStart={(e) => isMobile && handleTouchStart(e, i)}
-                  onTouchMove={(e) => isMobile && handleTouchMove(e)}
-                  onTouchEnd={() => isMobile && handleTouchEnd()}
-                  style={{ backgroundImage: item.image ? `url(${item.image})` : undefined }}
-               >
-                  <div className={styles["panel-content"]}>
-                     <h2 className={styles["panel-title"]}>{item.title}</h2>
-                     <p className={styles["panel-description"]}>{item.desc}</p>
+               <label key={i} className={styles.panelLabel}>
+                  <input
+                     type="radio"
+                     name="accordion"
+                     className={styles.panelRadio}
+                     defaultChecked={i === 0}
+                  />
+                  <div
+                     className={`${styles.panel} ${hasMultiplePanels ? styles.hasClip : ''}`}
+                     style={{ backgroundImage: i === 0 ? undefined : item.image ? `url(${item.image})` : undefined }}
+                  >
+                     {i === 0 && (
+                        <video
+                           src="/record-2025-12-19_15.33.57.mp4"
+                           autoPlay
+                           muted
+                           loop
+                           playsInline
+                           aria-hidden="true"
+                           style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
+                     )}
+                     <div className={styles["panel-content"]}>
+                        <h2 className={styles["panel-title"]}>{item.title}</h2>
+                        <p className={styles["panel-description"]}>{item.desc}</p>
+                     </div>
                   </div>
-               </div>
+               </label>
             ))}
          </div>
       </div>
