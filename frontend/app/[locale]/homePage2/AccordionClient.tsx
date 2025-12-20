@@ -36,7 +36,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> })
 
    useEffect(() => {
       (async () => {
-         const resolved = typeof locale === "string" ? locale : await locale;
+         const resolved = await locale;
          setResolvedLocale(resolved);
       })();
    }, [locale]);
@@ -129,7 +129,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> })
          {!imagesLoaded && <div className={styles.loader}></div>}
          <div className={styles.accordion} ref={accordionRef}>
             {items.map((item, i) => (
-               <label key={i} className={styles.panelLabel}>
+               <label key={i} className={styles.panelLabel} style={{ zIndex: 100 - i }}>
                   <input
                      type="radio"
                      name="accordion"
