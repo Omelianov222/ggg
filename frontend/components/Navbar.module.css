@@ -16,36 +16,32 @@
    align-items: center;
    cursor: pointer;
    z-index: 1002;
+
 }
 
 /* Випадаюча панель з навбаром */
 .navbar-dropdown {
    position: absolute;
-   top: 0;
+   top: 10px;
    left: 50%;
-   transform: translateX(-50%) translateY(-100%);
-   background: rgba(10, 10, 10, 0.85);
-   backdrop-filter: blur(12px);
-   -webkit-backdrop-filter: blur(12px);
-   border-radius: 0 0 24px 24px;
-   padding: 20px 40px 16px;
+   transform: translateX(-50%);
+   background: rgba(31, 31, 31, 0.692);
+   backdrop-filter: blur(22px);
+   border-radius: 34px;
+   padding: 10px 30px;
    display: flex;
    align-items: center;
    gap: 32px;
-   opacity: 0;
-   pointer-events: none;
+   opacity: 1;
+   pointer-events: auto;
    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
       opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
    min-width: 600px;
    z-index: 1001;
+   justify-content: space-between;
 }
 
-.navbar-dropdown.dropdown-visible {
-   transform: translateX(-50%) translateY(0);
-   opacity: 1;
-   pointer-events: auto;
-}
 
 .nav-menu {
    display: flex;
