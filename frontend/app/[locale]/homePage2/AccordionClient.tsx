@@ -16,7 +16,7 @@ function resolveUrl(path?: string) {
    return base.replace(/\/$/, "") + path;
 }
 
-export default function AccordionClient({ locale }: { locale: Promise<string> }) {
+export default function AccordionClient({ locale }: { locale: Promise<string> | string }) {
    const [items, setItems] = useState<{ title: string; desc: string; image?: string }[]>([]);
    const [resolvedLocale, setResolvedLocale] = useState<string | null>(null);
    const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -36,7 +36,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> })
 
    useEffect(() => {
       (async () => {
-         const resolved = await locale;
+         const resolved = typeof locale === "string" ? locale : await locale;
          setResolvedLocale(resolved);
       })();
    }, [locale]);
