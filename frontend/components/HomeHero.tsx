@@ -1,5 +1,4 @@
-import LandingGrid from "./LandingGrid";
-import AboutUs from "./AboutUs";
+import AccordionClient from "@/app/[locale]/homePage2/AccordionClient";
 
 export default function HomeHero({ data, locale }: { data: any; locale: string }) {
    // Expect `data` to be the Strapi response node; pass attributes to LandingGrid
@@ -7,7 +6,7 @@ export default function HomeHero({ data, locale }: { data: any; locale: string }
    return (
       <>
          <section>
-            <LandingGrid attributes={attrs} locale={locale} />
+            <AccordionClient locale={locale} />
          </section>
 
       </>
