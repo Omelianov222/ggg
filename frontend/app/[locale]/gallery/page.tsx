@@ -48,7 +48,7 @@ export default async function GalleryPage({ params, searchParams }: Props) {
 
    // Simple UI: category links with animated styles
    return (
-      <div>
+      <div style={{ marginTop: 'var(--header-height)' }}>
          <div className={styles.categoriesRow}>
             <Link
                href={`/${locale}/gallery`}

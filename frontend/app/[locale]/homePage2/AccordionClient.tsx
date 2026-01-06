@@ -20,19 +20,12 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
    const [items, setItems] = useState<{ title: string; desc: string; image?: string }[]>([]);
    const [resolvedLocale, setResolvedLocale] = useState<string | null>(null);
    const [imagesLoaded, setImagesLoaded] = useState(false);
-   const [isMobile, setIsMobile] = useState(false);
+   const [introFinished, setIntroFinished] = useState(false);
    const accordionRef = useRef<HTMLDivElement>(null);
+   const introRef = useRef<HTMLDivElement | null>(null);
+   const introStartedRef = useRef(false);
 
-   useEffect(() => {
-      const checkMobile = () => {
-         setIsMobile(window.innerWidth <= 768);
-      };
-
-      checkMobile();
-      window.addEventListener('resize', checkMobile);
-
-      return () => window.removeEventListener('resize', checkMobile);
-   }, []);
+   // (removed mobile listener — not used in this component)
 
    useEffect(() => {
       (async () => {
@@ -53,7 +46,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
             const data = (res?.data ?? []) as BrandItem[];
 
             if (data.length === 0) {
-               const defaultItems = Array.from({ length: 7 }, (_, i) => ({
+               const defaultItems = Array.from({ length: 4 }, (_, i) => ({
                   title: `Gala${i + 1}`,
                   desc: `${i + 1}`,
                }));
@@ -68,7 +61,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
                image: resolveUrl(b?.Brand?.url),
             }));
 
-            setItems(itemsWithImages);
+            setItems(itemsWithImages.splice(0, 5));
 
             const imageUrls = itemsWithImages
                .map(item => item.image)
@@ -122,11 +115,41 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
       });
    }, [imagesLoaded, items.length]);
 
+   // Run intro animation once on mount and always let it finish (~4.4s)
+   useEffect(() => {
+      if (introStartedRef.current) return;
+      const el = introRef.current
+      if (!el) return
+      introStartedRef.current = true
+
+      const logoBlock = el.querySelector(`.${styles['logo-block']}`)
+      if (logoBlock) {
+         logoBlock.classList.add(styles['logo-anim'])
+      }
+
+      const timer = setTimeout(() => {
+         window.dispatchEvent(new Event('introComplete'))
+         setIntroFinished(true)
+      }, 4400)
+
+      return () => clearTimeout(timer)
+   }, [])
+
    const hasMultiplePanels = items.length > 1;
 
    return (
       <div className={styles.accordionWrapper}>
-         {!imagesLoaded && <div className={styles.loader}></div>}
+         {/* Intro overlay: show until introFinished — independent from image loading */}
+         {!introFinished && (
+            <div className={styles['intro-overlay']} ref={introRef} aria-hidden="true">
+               <div className={styles['logo-block']}>
+                  <div className={styles['logo-flip']}>
+                     <img className={styles['logo-front']} src="/logo3.svg" alt="Logo" />
+                     <img className={styles['logo-back']} src="/ecoLogo.png" alt="Eco Logo" />
+                  </div>
+               </div>
+            </div>
+         )}
          <div className={styles.accordion} ref={accordionRef}>
             {items.map((item, i) => (
                <label key={i} className={styles.panelLabel} style={{ zIndex: 100 - i }}>
@@ -159,6 +182,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
                </label>
             ))}
          </div>
+
       </div>
    );
 }

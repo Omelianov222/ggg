@@ -13,64 +13,40 @@ interface NavItem {
 
 interface NavbarProps {
    locale: string
+   initialItems: NavItem[]
 }
+
 
 // Простий кеш для навігації по локалі
 const navCache: Record<string, NavItem[]> = {}
 
-export default function Navbar({ locale }: NavbarProps) {
-   const [items, setItems] = useState<NavItem[]>([])
+export default function Navbar({ locale, initialItems }: NavbarProps) {
+   const [items, setItems] = useState<NavItem[]>(initialItems)
    const [isMenuOpen, setIsMenuOpen] = useState(false)
    const [isHovered, setIsHovered] = useState(false)
    const navbarRef = useRef<HTMLElement>(null)
    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
+   const isInitialRender = useRef(true)
    useEffect(() => {
-      async function loadNav() {
-         try {
-            if (navCache[locale]) {
-               setItems(navCache[locale])
-               return
-            }
+      if (!items.length || !navbarRef.current) return
 
-            console.time('myBenchmark')
-            const res = await fetchAPI('/api/navbars', locale)
-            console.timeEnd('myBenchmark')
-            const data = res.data || []
+      const liItems = navbarRef.current.querySelectorAll('li')
 
-            const localizedItems: NavItem[] = data.map((item: any) => {
-               if (item.locale === locale) {
-                  return { label: item.Label, link: item.Link }
-               }
-               const loc = item.localizations?.find((l: any) => l.locale === locale)
-               return loc ? { label: loc.Label, link: loc.Link } : { label: item.Label, link: item.Link }
-            })
-
-            // Зберігаємо у кеш
-            navCache[locale] = localizedItems
-            setItems(localizedItems)
-
+      // ПЕРШИЙ РЕНДЕР — без анімації
+      if (isInitialRender.current) {
+         liItems.forEach((li, i) => {
             setTimeout(() => {
-               if (navbarRef.current) {
-                  navbarRef.current.style.opacity = "1"
-                  navbarRef.current.style.pointerEvents = "auto"
-                  const liItems = navbarRef.current.querySelectorAll("li")
-                  liItems.forEach((li, i) => {
-                     setTimeout(() => {
-                        const el = li as HTMLElement
-                        el.getBoundingClientRect()
-                        el.style.opacity = "1"
-                        el.style.transform = "translateX(0)"
-                     }, 100 * i)
-                  })
-               }
-            }, 50)
-         } catch (err) {
-            console.error(err)
-         }
+               const el = li as HTMLElement
+               el.style.opacity = '1'
+               el.style.transform = 'translateX(0)'
+            }, 100 * i)
+         })
+
+         isInitialRender.current = false
+         return
       }
-      loadNav()
-   }, [locale])
+   }, [items])
+
 
    const handleMouseEnter = () => {
       if (timeoutRef.current) {
@@ -97,7 +73,7 @@ export default function Navbar({ locale }: NavbarProps) {
       <nav
          className={styles['main-navbar']}
          ref={navbarRef}
-         style={{ opacity: 0, pointerEvents: 'none' }}
+         // style={{ opacity: 0, pointerEvents: 'none' }}
          onMouseEnter={handleMouseEnter}
          onMouseLeave={handleMouseLeave}
       >

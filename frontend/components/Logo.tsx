@@ -12,6 +12,7 @@ export default function LogoFixed() {
          setTimeout(() => {
             logoFixedRef.current!.style.display = 'flex'
             logoFixedRef.current!.style.opacity = '1'
+            logoFixedRef.current!.style.transition = "1s"
          }, 1100) // невелика затримка після mount
       }
    }, [])

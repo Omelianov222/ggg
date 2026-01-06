@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { fetchAPI } from "../lib/api";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -27,6 +28,17 @@ export default async function LocaleLayout({
    params: Promise<{ locale: string }>;
 }) {
    const { locale } = await params;
+
+   const res = await fetchAPI('/api/navbars', locale)
+   const data = res.data || []
+
+   const items = data.map(item => {
+      if (item.locale === locale) {
+         return { label: item.Label, link: item.Link }
+      }
+      const loc = item.localizations?.find(l => l.locale === locale)
+      return loc ? { label: loc.Label, link: loc.Link } : { label: item.Label, link: item.Link }
+   })
    // Do not render <html> or <body> here — those must be rendered once in the root layout.
    // Apply the font variables and other body-level classes on a top-level wrapper instead.
    return (
@@ -35,7 +47,7 @@ export default async function LocaleLayout({
          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
          style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflow: 'hidden' }}
       >
-         <Navbar locale={locale} />
+         <Navbar locale={locale} initialItems={items} />
          <main style={{ flex: 1 }}>
             {children}
          </main>
