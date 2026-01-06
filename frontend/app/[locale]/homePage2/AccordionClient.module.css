@@ -47,9 +47,6 @@
    border-bottom-left-radius: 10px;
 }
 
-.panelLabel:hover {
-   flex: 1 0 20vw;
-}
 
 .panelLabel:last-child .panel.hasSkew {
    border-top-right-radius: 10px;
@@ -100,7 +97,7 @@
 }
 
 .panelLabel:not(:has(.panelRadio:checked)):hover {
-   flex-grow: 1;
+   flex-grow: 3;
 }
 
 .panelLabel:has(.panelRadio:checked) .panel {
