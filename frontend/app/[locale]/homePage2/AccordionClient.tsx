@@ -105,7 +105,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
    }, [resolvedLocale]);
 
    useEffect(() => {
-      if (!imagesLoaded || items.length === 0) return;
+      if (!imagesLoaded || items.length === 0 || !introFinished) return;
 
       const panels = accordionRef.current?.querySelectorAll(`.${styles.panel}`);
       panels?.forEach((panel, index) => {
@@ -113,7 +113,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
             panel.classList.add(styles.animate);
          }, index * 100);
       });
-   }, [imagesLoaded, items.length]);
+   }, [imagesLoaded, items.length, introFinished]);
 
    // Run intro animation once on mount and always let it finish (~4.4s)
    useEffect(() => {
@@ -128,9 +128,8 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
       }
 
       const timer = setTimeout(() => {
-         window.dispatchEvent(new Event('introComplete'))
          setIntroFinished(true)
-      }, 4400)
+      }, 3400)
 
       return () => clearTimeout(timer)
    }, [])

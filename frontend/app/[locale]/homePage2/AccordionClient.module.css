@@ -45,7 +45,10 @@
 .panelLabel:first-child .panel.hasSkew {
    border-top-left-radius: 10px;
    border-bottom-left-radius: 10px;
+}
 
+.panelLabel:hover {
+   flex: 1 0 20vw;
 }
 
 .panelLabel:last-child .panel.hasSkew {
@@ -88,8 +91,16 @@
 }
 
 .panelLabel:has(.panelRadio:checked) {
-   flex: 0 0 80%;
+   flex-grow: 6;
    transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion:has(.panelLabel:not(:has(.panelRadio:checked)):hover) .panelLabel:has(.panelRadio:checked) {
+   flex-grow: 3;
+}
+
+.panelLabel:not(:has(.panelRadio:checked)):hover {
+   flex-grow: 1;
 }
 
 .panelLabel:has(.panelRadio:checked) .panel {
@@ -188,6 +199,8 @@
    place-items: center;
    z-index: 1200;
    pointer-events: none;
+   /* border: 2px solid red; */
+   /* background: #1b1b1b; */
 }
 
 .logo-block {
@@ -204,7 +217,7 @@
 
 .logo-anim {
    animation: logoAppear 1s cubic-bezier(.5, 1.5, .5, 1) forwards,
-      logoFlipHide 3s linear 1.4s forwards;
+      logoFlipHide 2s linear 1s forwards;
 }
 
 .logo-flip {
