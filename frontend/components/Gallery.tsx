@@ -48,29 +48,57 @@ export default function Gallery({ images }: GalleryProps) {
 
    return (
       <div className={styles.masonry}>
-         {images.map((img, index) => (
-            <div
-               key={index}
-               className={`${styles['masonry-item']} ${loadedItems.has(index) ? styles.loaded : ''}`}
-               onClick={() => openAt(index)}
-               role="button"
-               tabIndex={0}
-               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openAt(index); }}
-            >
-               <Image
-                  src={img.url}
-                  alt={img.alt || "Gallery image"}
-                  width={500}
-                  height={500}
-                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1400px) 33vw, 25vw"
-                  style={{ width: "100%", height: "auto", cursor: 'zoom-in' }}
-                  placeholder="blur"
-                  blurDataURL="/placeholder.png"
-                  onLoad={() => handleLoad(index)}
-               />
+         {images.map((img, index) => {
+            // Кожне друге зображення (непарні індекси: 1, 3, 5...)
+            const shouldCrop = index % 2 === 1;
 
-            </div>
-         ))}
+            return (
+               <div
+                  key={index}
+                  className={`${styles['masonry-item']} ${loadedItems.has(index) ? styles.loaded : ''} ${shouldCrop ? styles.cropped : ''}`}
+                  onClick={() => openAt(index)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                     if (e.key === 'Enter' || e.key === ' ') openAt(index);
+                  }}
+               >
+                  <div
+                     style={shouldCrop ? {
+                        width: '100%',
+                        paddingBottom: '56.25%', // 16:9 = 9/16 = 0.5625 = 56.25%
+                        position: 'relative',
+                        overflow: 'hidden'
+                     } : {}}
+                  >
+                     <Image
+                        src={img.url}
+                        alt={img.alt || "Gallery image"}
+                        width={500}
+                        height={500}
+                        sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1400px) 33vw, 25vw"
+                        style={shouldCrop ? {
+                           position: 'absolute',
+                           top: '50%',
+                           left: '50%',
+                           transform: 'translate(-50%, -50%)',
+                           width: '100%',
+                           height: '100%',
+                           objectFit: 'cover',
+                           cursor: 'zoom-in'
+                        } : {
+                           width: "100%",
+                           height: "auto",
+                           cursor: 'zoom-in'
+                        }}
+                        placeholder="blur"
+                        blurDataURL="/placeholder.png"
+                        onLoad={() => handleLoad(index)}
+                     />
+                  </div>
+               </div>
+            );
+         })}
 
          {isOpen && currentIndex !== null && (
             <div className={styles.modalOverlay} onClick={close} role="dialog" aria-modal="true">
