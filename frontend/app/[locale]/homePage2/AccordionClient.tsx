@@ -104,6 +104,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
       };
    }, [resolvedLocale]);
 
+
    useEffect(() => {
       if (!imagesLoaded || items.length === 0 || !introFinished) return;
 
@@ -135,6 +136,8 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
    }, [])
 
    const hasMultiplePanels = items.length > 1;
+
+
 
    return (
       <div className={styles.accordionWrapper}>

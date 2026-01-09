@@ -6,6 +6,9 @@
    margin: -2vw -2svh 0 -2vw;
 }
 
+
+
+
 .accordion {
    display: flex;
    height: 100%;
@@ -98,6 +101,7 @@
 
 .panelLabel:not(:has(.panelRadio:checked)):hover {
    flex-grow: 3;
+   transition-delay: 200ms;
 }
 
 .panelLabel:has(.panelRadio:checked) .panel {

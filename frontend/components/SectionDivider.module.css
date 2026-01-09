@@ -1,0 +1,23 @@
+.divider {
+   position: relative;
+   width: 100%;
+   pointer-events: none;
+   z-index: 10;
+}
+
+.blurLayer {
+   position: absolute;
+   inset: 0;
+   backdrop-filter: blur(16px);
+   -webkit-backdrop-filter: blur(16px);
+   mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+}
+
+.overlayLayer {
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+   mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+}

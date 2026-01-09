@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import styles from './Footer.module.css'
 import Logo from './Logo'
 import { fetchAPI } from '@/app/lib/api'
+import Image from 'next/image'
 
 interface NavItem {
    link: string
@@ -86,9 +87,9 @@ export default function Footer({ locale }: FooterProps) {
       <footer className={styles.footer}>
          <div className={styles.container}>
             <div className={styles.col}>
-               <div className={styles.logoWrap}>
-                  <Logo />
-               </div>
+               <Image src={`/GELEX-GLOBAL-GROUP-LOGO.png`} alt={`GELEX`} objectFit="cover" width={250} height={200} style={{ height: "auto" }} />
+
+
                <p className={styles.description}>
                   {locale === 'uk' ? 'Місце для короткого опису компанії.' : 'GALA boats have been produced since 2015 and represent a combination of aesthetics, comfort, and unique technologies, providing excellent maneuverability, high-speed performance, and safety'}
                </p>
@@ -156,11 +157,12 @@ export default function Footer({ locale }: FooterProps) {
                   })}
                </div>
             </div>
+            <div className={styles.copyright}>
+               {year} {COPYRIGHT_TEXT[locale as keyof typeof COPYRIGHT_TEXT]}
+            </div>
          </div>
 
-         <div className={styles.copyright}>
-            {year} {COPYRIGHT_TEXT[locale as keyof typeof COPYRIGHT_TEXT]}
-         </div>
+
       </footer>
    )
 }

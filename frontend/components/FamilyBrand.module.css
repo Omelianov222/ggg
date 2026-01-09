@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+.brands,
+.contact {
+   padding: 60px 20px;
+   text-align: center;
+   color: white;
+   font-family: 'Montserrat', sans-serif;
+   font-weight: 600;
+}
+
+.contact {
+   margin-bottom: 100px;
+}
+
+.brands h2,
+.contact h2 {
+   font-size: clamp(28px, 5vw, 42px);
+   margin: 0 0 16px;
+   letter-spacing: 2px;
+   font-family: 'Montserrat', sans-serif;
+   font-weight: 600;
+}
+
+.subtitle {
+   opacity: 0.8;
+   margin-bottom: 40px;
+   font-size: clamp(14px, 2vw, 16px);
+}
+
+.grid {
+   display: grid;
+   grid-template-columns: repeat(5, 1fr);
+   gap: 20px;
+   max-width: 1200px;
+   margin: 0 auto;
+}
+
+.card {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: flex-start;
+   background: rgba(255, 255, 255, 0.08);
+   border-radius: 12px;
+   padding: 40px 20px;
+   transition: all 0.3s;
+   height: 100%;
+   font-weight: 100;
+}
+
+.card.main {
+   grid-column: span 2;
+   justify-content: center;
+}
+
+.textWrapper {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   flex-grow: 1;
+   width: 100%;
+   text-align: center;
+}
+
+.textWrapper strong {
+   margin-bottom: 8px;
+   font-size: clamp(16px, 2vw, 18px);
+}
+
+.textWrapper p {
+   margin: 0;
+   font-size: clamp(13px, 1.5vw, 15px);
+}
+
+.logoWrapper {
+   width: 100%;
+   max-width: 180px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 100px;
+}
+
+.card:hover {
+   transform: translateY(-5px);
+   background: rgba(255, 255, 255, 0.12);
+}
+
+.emails {
+   display: flex;
+   gap: 40px;
+   justify-content: center;
+   flex-wrap: wrap;
+   margin-top: 30px;
+}
+
+.emails a {
+   color: white;
+   text-decoration: none;
+   font-size: clamp(16px, 2vw, 18px);
+   transition: all 0.3s;
+}
+
+.emails a:hover {
+   opacity: 0.8;
+}
+
+.contact p {
+   font-size: clamp(14px, 2vw, 16px);
+}
+
+@media (max-width: 1024px) {
+   .grid {
+      grid-template-columns: repeat(3, 1fr);
+   }
+
+   .card.main {
+      grid-column: span 3;
+   }
+}
+
+@media (max-width: 768px) {
+   .grid {
+      grid-template-columns: repeat(3, 1fr);
+   }
+
+   .card.main {
+      grid-column: span 3;
+   }
+
+   .card {
+      padding: 30px 15px;
+   }
+
+   .logoWrapper {
+      max-width: 120px;
+      min-height: 80px;
+   }
+
+   .brands,
+   .contact {
+      padding: 40px 15px;
+   }
+}

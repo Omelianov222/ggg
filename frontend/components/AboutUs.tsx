@@ -32,7 +32,7 @@ export default async function AboutUs({ locale }: Props) {
    const bgUrl = resolveUrl(bgRaw)
 
    return (
-      <div className={styles.hero} style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : undefined }}>
+      <div className={styles.hero} >
          <div className={styles.overlay} />
          <div className={styles.container}>
             <h1 className={styles.title}>{title}</h1>
