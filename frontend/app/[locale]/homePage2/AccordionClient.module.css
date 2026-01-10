@@ -37,7 +37,18 @@
    will-change: flex;
    opacity: 0;
    transform: translateX(100%);
+   transition: 200ms;
+   /* filter: brightness(0.3); */
+}
+
+.panel:not(:has(.panelRadio:checked)):not(:hover) {
    filter: brightness(0.3);
+   transition: 200ms;
+}
+
+.panel:not(:has(.panelRadio:checked)):has(:hover) {
+   filter: brightness(0.7);
+   transition: 200ms;
 }
 
 /* Нахил через skew */
@@ -97,12 +108,16 @@
 
 .accordion:has(.panelLabel:not(:has(.panelRadio:checked)):hover) .panelLabel:has(.panelRadio:checked) {
    flex-grow: 3;
+
 }
 
 .panelLabel:not(:has(.panelRadio:checked)):hover {
    flex-grow: 3;
    transition-delay: 200ms;
+
 }
+
+
 
 .panelLabel:has(.panelRadio:checked) .panel {
    filter: brightness(1);
