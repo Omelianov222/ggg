@@ -3,7 +3,7 @@
 import styles from './ContactForm.module.css';
 
 export default function ContactForm() {
-   const handleSubmit = (e) => {
+   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       // Handle form submission
    };

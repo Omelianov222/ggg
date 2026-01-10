@@ -50,12 +50,32 @@ export default function Gallery({ images }: GalleryProps) {
       <div className={styles.masonry}>
          {images.map((img, index) => {
             // Кожне друге зображення (непарні індекси: 1, 3, 5...)
-            const shouldCrop = index % 2 === 1;
+            const shouldCrop16x9 = index % 2 === 1;
+            const shouldCrop191x1 = index % 3 === 0 && index !== 0;
 
+            // Визначаємо пропорцію для обрізки
+            let cropStyle = {};
+            if (shouldCrop191x1) {
+               cropStyle = {
+                  width: '100%',
+                  paddingBottom: `${(1 / 1.91) * 100}%`, // 1/1.91 = 52.36%
+                  position: 'relative',
+                  overflow: 'hidden'
+               };
+            } else if (shouldCrop16x9) {
+               cropStyle = {
+                  width: '100%',
+                  paddingBottom: '56.25%', // 16:9
+                  position: 'relative',
+                  overflow: 'hidden'
+               };
+            }
+
+            const shouldApplyCrop = shouldCrop16x9 || shouldCrop191x1;
             return (
                <div
                   key={index}
-                  className={`${styles['masonry-item']} ${loadedItems.has(index) ? styles.loaded : ''} ${shouldCrop ? styles.cropped : ''}`}
+                  className={`${styles['masonry-item']} ${loadedItems.has(index) ? styles.loaded : ''} ${shouldApplyCrop ? styles.cropped : ''}`}
                   onClick={() => openAt(index)}
                   role="button"
                   tabIndex={0}
@@ -63,21 +83,14 @@ export default function Gallery({ images }: GalleryProps) {
                      if (e.key === 'Enter' || e.key === ' ') openAt(index);
                   }}
                >
-                  <div
-                     style={shouldCrop ? {
-                        width: '100%',
-                        paddingBottom: '56.25%', // 16:9 = 9/16 = 0.5625 = 56.25%
-                        position: 'relative',
-                        overflow: 'hidden'
-                     } : {}}
-                  >
+                  <div style={cropStyle}>
                      <Image
                         src={img.url}
                         alt={img.alt || "Gallery image"}
                         width={500}
                         height={500}
                         sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1400px) 33vw, 25vw"
-                        style={shouldCrop ? {
+                        style={shouldApplyCrop ? {
                            position: 'absolute',
                            top: '50%',
                            left: '50%',

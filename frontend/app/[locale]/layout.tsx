@@ -32,11 +32,11 @@ export default async function LocaleLayout({
    const res = await fetchAPI('/api/navbars', locale)
    const data = res.data || []
 
-   const items = data.map(item => {
+   const items = data.map((item: any) => {
       if (item.locale === locale) {
          return { label: item.Label, link: item.Link }
       }
-      const loc = item.localizations?.find(l => l.locale === locale)
+      const loc = item.localizations?.find((l: any) => l.locale === locale)
       return loc ? { label: loc.Label, link: loc.Link } : { label: item.Label, link: item.Link }
    })
    // Do not render <html> or <body> here — those must be rendered once in the root layout.
