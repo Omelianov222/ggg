@@ -114,6 +114,7 @@
    .main-navbar {
       background: #0a0a0a;
       justify-content: center;
+      /* height: 64px; */
    }
 
    .main-navbar::before {
@@ -153,6 +154,7 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
+      top: 25px;
    }
 
    .burger-button span {
