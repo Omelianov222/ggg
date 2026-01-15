@@ -16,13 +16,14 @@ export default function LogoFixed() {
 
 
    useEffect(() => {
-      if (logoFixedRef.current) {
-         setTimeout(() => {
-            logoFixedRef.current.style.display = 'flex'
-            logoFixedRef.current.style.opacity = '1'
-            logoFixedRef.current.style.transition = '1s'
-         }, 1100)
-      }
+      const el = logoFixedRef.current
+      if (!el) return
+
+      setTimeout(() => {
+         el.style.display = 'flex'
+         el.style.opacity = '1'
+         el.style.transition = '1s'
+      }, 1100)
    }, [])
 
 
