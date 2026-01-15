@@ -83,7 +83,7 @@
 }
 
 .card:hover {
-   transform: translateY(-5px);
+   /* transform: translateY(-5px); */
    background: rgba(255, 255, 255, 0.12);
 }
 
@@ -109,6 +109,12 @@
 .contact p {
    font-size: clamp(14px, 2vw, 16px);
 }
+
+.animated {
+   will-change: transform;
+   backface-visibility: hidden;
+}
+
 
 @media (max-width: 1024px) {
    .grid {

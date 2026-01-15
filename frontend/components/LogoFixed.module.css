@@ -13,11 +13,11 @@
    cursor: pointer;
    perspective: 100px;
    transition: 0.4s;
-   background: #3d3d3d42;
+   /* background: #3d3d3d42; */
    border-radius: 50%;
-   padding: 6px;
-   backdrop-filter: blur(30px);
-   background: rgba(68, 68, 68, 0.212);
+   /* padding: 6px; */
+   /* backdrop-filter: blur(30px); */
+   /* background: rgba(68, 68, 68, 0.212); */
 }
 
 .logo-flip-fixed {

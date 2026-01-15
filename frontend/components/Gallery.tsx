@@ -9,6 +9,8 @@ interface GalleryProps {
 }
 
 export default function Gallery({ images }: GalleryProps) {
+   const MAX_ITEMS_PER_COLUMN = 4; // Максимум фото в одному стовпці
+   const TOTAL_COLUMNS = 4;
    const [loadedItems, setLoadedItems] = useState<Set<number>>(new Set());
    const [isOpen, setIsOpen] = useState(false);
    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
@@ -45,20 +47,44 @@ export default function Gallery({ images }: GalleryProps) {
       window.addEventListener('keydown', onKey);
       return () => window.removeEventListener('keydown', onKey);
    }, [isOpen, showNext, showPrev]);
-
+   // Функція для визначення, до якого стовпчика потрапить зображення
+   const getColumnIndex = (imageIndex: number, totalColumns: number = TOTAL_COLUMNS) => {
+      return imageIndex % totalColumns;
+   };
+   // Функція для визначення позиції зображення у своєму стовпчику
+   const getPositionInColumn = (imageIndex: number, totalColumns: number = 4) => {
+      return Math.floor(imageIndex / totalColumns);
+   };
+   // Обмеження кількості зображень
+   const maxImages = MAX_ITEMS_PER_COLUMN * TOTAL_COLUMNS;
+   const displayImages = images.slice(0, maxImages);
    return (
       <div className={styles.masonry}>
-         {images.map((img, index) => {
-            // Кожне друге зображення (непарні індекси: 1, 3, 5...)
-            const shouldCrop16x9 = index % 2 === 1;
-            const shouldCrop191x1 = index % 3 === 0 && index !== 0;
+         {displayImages.map((img, index) => {
+            const columnIndex = getColumnIndex(index);
+            const positionInColumn = getPositionInColumn(index);
+
+            // Визначаємо пропорцію залежно від стовпчика та позиції
+            // Парні стовпчики (0, 2): починають з 16:9, потім 1.91:1
+            // Непарні стовпчики (1, 3): починають з 1.91:1, потім 16:9
+            let shouldCrop16x9, shouldCrop191x1;
+
+            if (columnIndex % 2 === 0) {
+               // Парні стовпчики: 16:9 на парних позиціях, 1.91:1 на непарних
+               shouldCrop16x9 = positionInColumn % 2 === 0;
+               shouldCrop191x1 = positionInColumn % 2 === 1;
+            } else {
+               // Непарні стовпчики: 1.91:1 на парних позиціях, 16:9 на непарних
+               shouldCrop16x9 = positionInColumn % 2 === 1;
+               shouldCrop191x1 = positionInColumn % 2 === 0;
+            }
 
             // Визначаємо пропорцію для обрізки
             let cropStyle = {};
             if (shouldCrop191x1) {
                cropStyle = {
                   width: '100%',
-                  paddingBottom: `${(1 / 1.91) * 100}%`, // 1/1.91 = 52.36%
+                  paddingBottom: `${(1 / 2.1) * 100}%`, // 1/1.91 = 52.36%
                   position: 'relative',
                   overflow: 'hidden'
                };

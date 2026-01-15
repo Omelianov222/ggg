@@ -104,18 +104,18 @@
 
 /* активний ПЕРШИЙ елемент */
 .panelLabel:first-child:has(.panelRadio:checked) {
-   flex-grow: 4;
+   flex-grow: 13;
    transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* активний НЕ перший елемент */
 .panelLabel:not(:first-child):has(.panelRadio:checked) {
-   flex-grow: 5;
+   flex-grow: 8;
    transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .accordion:has(.panelLabel:not(:has(.panelRadio:checked)):hover) .panelLabel:has(.panelRadio:checked) {
-   flex-grow: 3;
+   flex-grow: 2;
 }
 
 .panelLabel:not(:has(.panelRadio:checked)):hover {

@@ -87,7 +87,15 @@ export default function Footer({ locale }: FooterProps) {
       <footer className={styles.footer}>
          <div className={styles.container}>
             <div className={styles.col}>
-               <Image src={`/GELEX-GLOBAL-GROUP-LOGO.png`} alt={`GELEX`} objectFit="cover" width={250} height={200} style={{ height: "auto" }} />
+               <div style={{ display: "flex", alignItems: "center", position: "relative", gap: "30px" }}>
+                  <div style={{ flex: "0 0 30%", minHeight: "100%", left: "-34px" }}>
+                     <Logo />
+                  </div>
+                  <div style={{ flex: "0 0 70%" }}>
+
+                     <Image src={`/GELEX-GLOBAL-GROUP-LOGO.png`} alt={`GELEX`} objectFit="cover" width={125} height={64} style={{ height: "auto" }} />
+                  </div>
+               </div>
 
 
                <p className={styles.description}>
