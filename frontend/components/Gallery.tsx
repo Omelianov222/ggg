@@ -9,18 +9,27 @@ interface GalleryProps {
 }
 
 export default function Gallery({ images }: GalleryProps) {
-   const MAX_ITEMS_PER_COLUMN = 4; // Максимум фото в одному стовпці
-   const TOTAL_COLUMNS = 4;
+   const ITEMS_PER_PAGE = 16;
+   const totalPages = Math.ceil(images.length / ITEMS_PER_PAGE);
+
+   const [page, setPage] = useState(1);
    const [loadedItems, setLoadedItems] = useState<Set<number>>(new Set());
    const [isOpen, setIsOpen] = useState(false);
    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+   const [isLoading, setIsLoading] = useState(false);
 
-   const handleLoad = (index: number) => {
-      setLoadedItems(prev => new Set(prev).add(index));
+   const start = (page - 1) * ITEMS_PER_PAGE;
+   const end = start + ITEMS_PER_PAGE;
+   const displayImages = images.slice(start, end);
+
+   const handlePageChange = (newPage: number) => {
+      setIsLoading(true);
+      setPage(newPage);
+      setTimeout(() => setIsLoading(false), 300);
    };
 
    const openAt = (index: number) => {
-      setCurrentIndex(index);
+      setCurrentIndex(start + index);
       setIsOpen(true);
    };
 
@@ -47,61 +56,46 @@ export default function Gallery({ images }: GalleryProps) {
       window.addEventListener('keydown', onKey);
       return () => window.removeEventListener('keydown', onKey);
    }, [isOpen, showNext, showPrev]);
-   // Функція для визначення, до якого стовпчика потрапить зображення
-   const getColumnIndex = (imageIndex: number, totalColumns: number = TOTAL_COLUMNS) => {
-      return imageIndex % totalColumns;
+
+   const getAspectRatio = (index: number) => {
+      const col = index % 4;
+      const row = Math.floor(index / 4);
+      const isEvenCol = col % 2 === 0;
+      const isEvenRow = row % 2 === 0;
+
+      return (isEvenCol && isEvenRow) || (!isEvenCol && !isEvenRow)
+         ? { paddingBottom: '56.25%' } // 16:9
+         : { paddingBottom: '47.62%' }; // 1.91:1
    };
-   // Функція для визначення позиції зображення у своєму стовпчику
-   const getPositionInColumn = (imageIndex: number, totalColumns: number = 4) => {
-      return Math.floor(imageIndex / totalColumns);
+
+   const getPaginationRange = () => {
+      const delta = 2;
+      const range = [];
+      const rangeWithDots = [];
+
+      for (let i = 1; i <= totalPages; i++) {
+         if (i === 1 || i === totalPages || (i >= page - delta && i <= page + delta)) {
+            range.push(i);
+         }
+      }
+
+      let prev = 0;
+      for (const i of range) {
+         if (i - prev > 1) rangeWithDots.push('...');
+         rangeWithDots.push(i);
+         prev = i;
+      }
+
+      return rangeWithDots;
    };
-   // Обмеження кількості зображень
-   const maxImages = MAX_ITEMS_PER_COLUMN * TOTAL_COLUMNS;
-   const displayImages = images.slice(0, maxImages);
+
    return (
-      <div className={styles.masonry}>
-         {displayImages.map((img, index) => {
-            const columnIndex = getColumnIndex(index);
-            const positionInColumn = getPositionInColumn(index);
-
-            // Визначаємо пропорцію залежно від стовпчика та позиції
-            // Парні стовпчики (0, 2): починають з 16:9, потім 1.91:1
-            // Непарні стовпчики (1, 3): починають з 1.91:1, потім 16:9
-            let shouldCrop16x9, shouldCrop191x1;
-
-            if (columnIndex % 2 === 0) {
-               // Парні стовпчики: 16:9 на парних позиціях, 1.91:1 на непарних
-               shouldCrop16x9 = positionInColumn % 2 === 0;
-               shouldCrop191x1 = positionInColumn % 2 === 1;
-            } else {
-               // Непарні стовпчики: 1.91:1 на парних позиціях, 16:9 на непарних
-               shouldCrop16x9 = positionInColumn % 2 === 1;
-               shouldCrop191x1 = positionInColumn % 2 === 0;
-            }
-
-            // Визначаємо пропорцію для обрізки
-            let cropStyle = {};
-            if (shouldCrop191x1) {
-               cropStyle = {
-                  width: '100%',
-                  paddingBottom: `${(1 / 2.1) * 100}%`, // 1/1.91 = 52.36%
-                  position: 'relative',
-                  overflow: 'hidden'
-               };
-            } else if (shouldCrop16x9) {
-               cropStyle = {
-                  width: '100%',
-                  paddingBottom: '56.25%', // 16:9
-                  position: 'relative',
-                  overflow: 'hidden'
-               };
-            }
-
-            const shouldApplyCrop = shouldCrop16x9 || shouldCrop191x1;
-            return (
+      <>
+         <div className={`${styles.masonry} ${isLoading ? styles.loading : ''}`}>
+            {displayImages.map((img, index) => (
                <div
                   key={index}
-                  className={`${styles['masonry-item']} ${loadedItems.has(index) ? styles.loaded : ''} ${shouldApplyCrop ? styles.cropped : ''}`}
+                  className={`${styles['masonry-item']} ${loadedItems.has(index) ? styles.loaded : ''}`}
                   onClick={() => openAt(index)}
                   role="button"
                   tabIndex={0}
@@ -109,35 +103,55 @@ export default function Gallery({ images }: GalleryProps) {
                      if (e.key === 'Enter' || e.key === ' ') openAt(index);
                   }}
                >
-                  <div style={cropStyle}>
+                  <div style={{ ...getAspectRatio(index), position: 'relative', overflow: 'hidden' }}>
                      <Image
                         src={img.url}
                         alt={img.alt || "Gallery image"}
-                        width={500}
-                        height={500}
+                        fill
                         sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1400px) 33vw, 25vw"
-                        style={shouldApplyCrop ? {
-                           position: 'absolute',
-                           top: '50%',
-                           left: '50%',
-                           transform: 'translate(-50%, -50%)',
-                           width: '100%',
-                           height: '100%',
-                           objectFit: 'cover',
-                           cursor: 'zoom-in'
-                        } : {
-                           width: "100%",
-                           height: "auto",
-                           cursor: 'zoom-in'
-                        }}
+                        style={{ objectFit: 'cover', cursor: 'zoom-in' }}
                         placeholder="blur"
                         blurDataURL="/placeholder.png"
-                        onLoad={() => handleLoad(index)}
+                        onLoad={() => setLoadedItems(prev => new Set(prev).add(index))}
                      />
                   </div>
                </div>
-            );
-         })}
+            ))}
+         </div>
+
+         <div className={styles.pagination}>
+            <button
+               className={styles.pageBtn}
+               disabled={page === 1}
+               onClick={() => handlePageChange(page - 1)}
+               aria-label="Previous page"
+            >
+               ‹
+            </button>
+
+            {getPaginationRange().map((item, idx) => (
+               item === '...' ? (
+                  <span key={`dots-${idx}`} className={styles.dots}>…</span>
+               ) : (
+                  <button
+                     key={item}
+                     className={`${styles.pageBtn} ${page === item ? styles.active : ''}`}
+                     onClick={() => handlePageChange(item as number)}
+                  >
+                     {item}
+                  </button>
+               )
+            ))}
+
+            <button
+               className={styles.pageBtn}
+               disabled={page === totalPages}
+               onClick={() => handlePageChange(page + 1)}
+               aria-label="Next page"
+            >
+               ›
+            </button>
+         </div>
 
          {isOpen && currentIndex !== null && (
             <div className={styles.modalOverlay} onClick={close} role="dialog" aria-modal="true">
@@ -157,6 +171,6 @@ export default function Gallery({ images }: GalleryProps) {
                </div>
             </div>
          )}
-      </div>
+      </>
    );
 }

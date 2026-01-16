@@ -59,6 +59,50 @@
    }
 }
 
+.pagination {
+   display: flex;
+   gap: 8px;
+   justify-content: center;
+   align-items: center;
+   margin: 40px 0;
+}
+
+.pageBtn {
+   min-width: 40px;
+   height: 40px;
+   border: 1px solid #ddd;
+   background: #0071f31c;
+   border-radius: 6px;
+   cursor: pointer;
+   transition: all 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+   border-color: #08264981;
+   color: #0070f3;
+}
+
+.pageBtn:disabled {
+   opacity: 0.5;
+   cursor: not-allowed;
+}
+
+.pageBtn.active {
+   background: #0071f31c;
+   color: white;
+   border-color: #0d213879;
+}
+
+.dots {
+   padding: 0 4px;
+   color: #999;
+}
+
+.masonry.loading {
+   opacity: 0.6;
+   transition: opacity 0.3s;
+}
+
 /* Modal styles */
 .modalOverlay {
    position: fixed;
