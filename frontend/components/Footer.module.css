@@ -5,9 +5,10 @@
    border-top: 1px solid rgba(0, 0, 0, 0.06);
    color: var(--footer-color, inherit);
    position: relative;
-   background: var(--bg-footer, transparent);
+   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), var(--bg-footer, transparent);
    background-size: cover;
    background-position: center center;
+   backdrop-filter: brightness(0.5);
 }
 
 .footer::before {
