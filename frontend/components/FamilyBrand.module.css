@@ -15,7 +15,7 @@
 
 .brands {
    padding: 0 0 100px 0;
-   background: var(--bg-brands, transparent);
+   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), var(--bg-brands, transparent);
    background-size: cover;
    background-position: center center;
 }

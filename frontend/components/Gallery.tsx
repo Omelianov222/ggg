@@ -63,7 +63,7 @@ export default function Gallery({ images }: GalleryProps) {
       const isFirstInColumn = row === 0;
       const isEvenColumn = col % 2 === 0;
 
-      return (isFirstInColumn && isEvenColumn)
+      return (isFirstInColumn && !isEvenColumn)
          ? { paddingBottom: '46.62%' } // 16:9
          : { paddingBottom: '57%' }; // 1.91:1
    };

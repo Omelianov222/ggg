@@ -41,6 +41,7 @@ export async function getSectionBackgrounds(locale: string) {
       '/api/section-backgrounds?populate[Background][fields][0]=url',
       locale
    );
+   console.log("Section Backgrounds API Response:", data);
    return mapSectionNameToUrl(data);
 }
 
