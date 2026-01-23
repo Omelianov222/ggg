@@ -15,7 +15,7 @@ export default function HomeHero({ data, locale }: { data: any; locale: string }
             {/* <SectionDivider /> */}
             <AboutUs locale={locale} />
             <BrandFamily />
-            <MailInfo />
+            {/* <MailInfo /> */}
          </section>
 
       </>

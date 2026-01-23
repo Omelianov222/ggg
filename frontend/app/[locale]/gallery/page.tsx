@@ -2,6 +2,8 @@ import { fetchAPI } from "@/app/lib/api";
 import Gallery from "@/components/Gallery";
 import Link from "next/link";
 import styles from "@/components/Gallery.module.css";
+import { SectionHeader } from "@/components/UI/SectionHeader";
+import { PageHeader } from "@/components/UI/PageHeader";
 interface Props {
    params: Promise<{ locale: string }>;
    searchParams?: { [key: string]: string | string[] | undefined };
@@ -48,7 +50,8 @@ export default async function GalleryPage({ params, searchParams }: Props) {
 
    // Simple UI: category links with animated styles
    return (
-      <div style={{ marginTop: 'var(--header-height)' }}>
+      <div >
+         <PageHeader title="Gallery" />
          <div className={styles.categoriesRow}>
             <Link
                href={`/${locale}/gallery`}

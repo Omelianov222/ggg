@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './FamilyBrand.module.css';
+import { SectionHeader } from './UI/SectionHeader';
 
 type Brand = {
    name: string;
@@ -129,7 +130,7 @@ export default function FamilyBrand() {
 
    return (
       <section ref={sectionRef} className={styles.brands}>
-         <h2>OUR BRAND FAMILY</h2>
+         <SectionHeader title="OUR BRAND FAMILY" />
          <p className={styles.subtitle}>
             The GELEX GLOBAL GROUP factory produces boats under three brands
          </p>

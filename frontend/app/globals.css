@@ -4,6 +4,7 @@
    --background: #0a0a0a;
    --foreground: #ededed;
    --header-height: 72px;
+   --footer-bg: url(https://res.cloudinary.com/dopkzbxj2/image/upload/v1768465707/GALA_inflatable_boats_Home_3_ae37d3c5e6.png);
 }
 
 @theme inline {
@@ -13,6 +14,25 @@
    --font-mono: var(--font-geist-mono);
 }
 
+<<<<<<< HEAD
+=======
+@media (prefers-color-scheme: dark) {
+   :root {
+      --background: #0a0a0a;
+      --foreground: #ededed;
+   }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   font-size: inherit;
+   font-weight: initial;
+}
+>>>>>>> de8fd9e (design fixes)
 
 body {
    background: var(--background);

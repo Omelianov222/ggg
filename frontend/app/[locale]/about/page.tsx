@@ -2,6 +2,7 @@ import { fetchAPI } from '@/app/lib/api'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import styles from './About.module.css'
+import { PageHeader } from '@/components/UI/PageHeader'
 
 type Props = {
    params: Promise<{ locale: string }>
@@ -35,7 +36,7 @@ export default async function AboutPage({ params }: Props) {
       <div className={styles.hero} style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : undefined }}>
          <div className={styles.overlay} />
          <div className={styles.container}>
-            <h1 className={styles.title}>{title}</h1>
+            <PageHeader title={title} />
             <div className={styles.panel}>
                <div className={styles.content}>
                   <ReactMarkdown>{paragraph}</ReactMarkdown>

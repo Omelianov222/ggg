@@ -4,9 +4,10 @@
    display: flex;
    align-items: center;
    opacity: 1;
-   /* height: var(--header-height); */
+   height: var(--header-height);
    justify-content: center;
-   position: relative;
+   position: absolute;
+   width: 100%
 }
 
 /* Десктоп: Логотип посередині */
@@ -59,6 +60,7 @@
    letter-spacing: .03em;
    cursor: pointer;
    position: relative;
+   white-space: nowrap;
 }
 
 .main-navbar li::after {
@@ -112,9 +114,10 @@
 /* Мобільні стилі */
 @media (max-width: 768px) {
    .main-navbar {
-      background: #0a0a0a;
+      /* background: #0a0a0a; */
       justify-content: center;
-      /* height: 64px; */
+      height: 64px;
+
    }
 
    .main-navbar::before {

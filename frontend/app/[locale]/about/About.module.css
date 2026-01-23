@@ -2,10 +2,9 @@
    position: relative;
    background-size: cover;
    background-position: center center;
-   padding: 8rem 1rem;
    color: #fff;
-   min-height: 60vh;
-
+   min-height: 100vh;
+   padding: 0.1rem;
 }
 
 .overlay {

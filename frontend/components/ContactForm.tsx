@@ -1,6 +1,8 @@
 // ContactForm.jsx
 'use client'
+import Page from '@/app/[locale]/homePage2/page';
 import styles from './ContactForm.module.css';
+import { PageHeader } from './UI/PageHeader';
 
 export default function ContactForm() {
    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -11,7 +13,8 @@ export default function ContactForm() {
    return (
       <section className={styles.contact}>
          <div className={styles.container}>
-            <h2 className={styles.title}>HAVE A QUESTION?</h2>
+            <PageHeader title="HAVE A QUESTION?" />
+
 
             <form className={styles.form} onSubmit={handleSubmit}>
                <input

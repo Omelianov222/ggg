@@ -1,0 +1,7 @@
+.title {
+   font-size: 3rem;
+   margin: calc(3rem + var(--header-height)) 0 2rem 0;
+   line-height: 1.05;
+   text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+   text-align: center;
+}

@@ -2,6 +2,7 @@ import { fetchAPI } from '@/app/lib/api'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import styles from './AboutUs.module.css'
+import { SectionHeader } from './UI/SectionHeader'
 
 type Props = {
    locale: string
@@ -35,7 +36,7 @@ export default async function AboutUs({ locale }: Props) {
       <div className={styles.hero} >
          <div className={styles.overlay} />
          <div className={styles.container}>
-            <h1 className={styles.title}>{title}</h1>
+            <SectionHeader title={title} />
             <div className={styles.panel}>
                <div className={styles.content}>
                   <ReactMarkdown>{paragraph}</ReactMarkdown>

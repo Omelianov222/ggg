@@ -58,14 +58,14 @@ export default function Gallery({ images }: GalleryProps) {
    }, [isOpen, showNext, showPrev]);
 
    const getAspectRatio = (index: number) => {
-      const col = index % 4;
-      const row = Math.floor(index / 4);
-      const isEvenCol = col % 2 === 0;
-      const isEvenRow = row % 2 === 0;
+      const col = index / 4;
+      const row = index % 4;
+      const isFirstInColumn = row === 0;
+      const isEvenColumn = col % 2 === 0;
 
-      return (isEvenCol && isEvenRow) || (!isEvenCol && !isEvenRow)
-         ? { paddingBottom: '56.25%' } // 16:9
-         : { paddingBottom: '47.62%' }; // 1.91:1
+      return (isFirstInColumn && isEvenColumn)
+         ? { paddingBottom: '46.62%' } // 16:9
+         : { paddingBottom: '57%' }; // 1.91:1
    };
 
    const getPaginationRange = () => {

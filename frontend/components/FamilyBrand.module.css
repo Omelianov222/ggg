@@ -2,7 +2,7 @@
 
 .brands,
 .contact {
-   padding: 60px 20px;
+   padding: 0 20px;
    text-align: center;
    color: white;
    font-family: 'Montserrat', sans-serif;
@@ -13,7 +13,7 @@
    margin-bottom: 100px;
 }
 
-.brands h2,
+
 .contact h2 {
    font-size: clamp(28px, 5vw, 42px);
    margin: 0 0 16px;
