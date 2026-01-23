@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { fetchAPI } from "../lib/api";
+import { fetchAPI, getSectionBackgrounds } from "../lib/api";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -29,6 +29,9 @@ export default async function LocaleLayout({
 }) {
    const { locale } = await params;
 
+   const sectionBackgrounds = await getSectionBackgrounds(locale);
+
+   console.log("Section Backgrounds:", JSON.stringify(sectionBackgrounds))
    const res = await fetchAPI('/api/navbars', locale)
    const data = res.data || []
 
@@ -45,7 +48,18 @@ export default async function LocaleLayout({
       <div
          data-locale={locale}
          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-         style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflow: 'hidden' }}
+         style={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh',
+            overflow: 'hidden',
+            ...Object.fromEntries(
+               Object.entries(sectionBackgrounds).map(([key, url]) => [
+                  `--bg-${key.toLowerCase()}`,
+                  `url(${url})`
+               ])
+            ),
+         }}
       >
          <Navbar locale={locale} initialItems={items} />
          <main style={{ flex: 1 }}>

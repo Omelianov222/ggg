@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "section_backgrounds",
+  "info": {
+    "singularName": "section-background",
+    "pluralName": "section-backgrounds",
+    "displayName": "Section backgrounds"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "SectionName": {
+      "type": "string"
+    },
+    "Background": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

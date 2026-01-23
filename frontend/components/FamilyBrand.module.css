@@ -13,6 +13,12 @@
    margin-bottom: 100px;
 }
 
+.brands {
+   padding: 0 0 100px 0;
+   background: var(--bg-brands, transparent);
+   background-size: cover;
+   background-position: center center;
+}
 
 .contact h2 {
    font-size: clamp(28px, 5vw, 42px);
@@ -42,6 +48,7 @@
    align-items: center;
    justify-content: flex-start;
    background: rgba(255, 255, 255, 0.08);
+   backdrop-filter: blur(5px);
    border-radius: 12px;
    padding: 40px 20px;
    transition: all 0.3s;

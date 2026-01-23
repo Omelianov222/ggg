@@ -1,6 +1,11 @@
 /* ContactForm.module.css */
 
 
+.contact {
+   background: var(--bg-contact, transparent);
+   background-size: cover;
+   background-position: center center;
+}
 
 .container {
    max-width: 600px;

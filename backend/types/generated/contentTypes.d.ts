@@ -704,6 +704,39 @@ export interface ApiNewNew extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiSectionBackgroundSectionBackground
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'section_backgrounds';
+  info: {
+    displayName: 'Section backgrounds';
+    pluralName: 'section-backgrounds';
+    singularName: 'section-background';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Background: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::section-background.section-background'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    SectionName: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiSocialSocial extends Struct.CollectionTypeSchema {
   collectionName: 'socials';
   info: {
@@ -1260,6 +1293,7 @@ declare module '@strapi/strapi' {
       'api::main-page-brand.main-page-brand': ApiMainPageBrandMainPageBrand;
       'api::navbar.navbar': ApiNavbarNavbar;
       'api::new.new': ApiNewNew;
+      'api::section-background.section-background': ApiSectionBackgroundSectionBackground;
       'api::social.social': ApiSocialSocial;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

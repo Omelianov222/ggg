@@ -5,8 +5,9 @@ export async function fetchAPI(path: string, locale: string) {
       return new Error("API_URL is not defined");
    }
 
-   const url = `${API_URL}${path}${path.includes("?") ? "&" : "?"}locale=${locale}&populate=*`;
+   const url = `${API_URL}${path}${path.includes("?") ? "&" : "?"}locale=${locale}${/populate/.test(path) ? "" : "&populate=*"}`
 
+   console.log("Built API URL:", url); // Лог лише на сервер
    let res;
    try {
       res = await fetch(url, { next: { revalidate: 60 } }) // кеш 60 секунд
@@ -29,4 +30,44 @@ export async function fetchAPI(path: string, locale: string) {
       console.error("Failed to parse JSON", { path });
       return new Error("Invalid API response");
    }
+}
+
+
+
+
+
+export async function getSectionBackgrounds(locale: string) {
+   const data = await fetchAPI(
+      '/api/section-backgrounds?populate[Background][fields][0]=url',
+      locale
+   );
+   return mapSectionNameToUrl(data);
+}
+
+type BackgroundItem = {
+   url?: string;
+};
+
+type SectionItem = {
+   SectionName?: string;
+   Background?: BackgroundItem[];
+};
+
+type ApiResponse = {
+   data?: SectionItem[];
+};
+
+export function mapSectionNameToUrl(input: ApiResponse): Record<string, string> {
+   if (!input.data) return {};
+
+   return input.data.reduce<Record<string, string>>((acc, item) => {
+      const sectionName = item.SectionName;
+      const url = item.Background?.[0]?.url;
+
+      if (sectionName && url) {
+         acc[sectionName] = url;
+      }
+
+      return acc;
+   }, {});
 }
