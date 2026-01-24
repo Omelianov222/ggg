@@ -430,6 +430,39 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAboutUsSectionAboutUsSection
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'about_us_sections';
+  info: {
+    displayName: 'about-us-sections';
+    pluralName: 'about-us-sections';
+    singularName: 'about-us-section';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::about-us-section.about-us-section'
+    > &
+      Schema.Attribute.Private;
+    Paragraph: Schema.Attribute.RichText;
+    Photo: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiAboutUsAboutUs extends Struct.SingleTypeSchema {
   collectionName: 'about_uses';
   info: {
@@ -1287,6 +1320,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::about-us-section.about-us-section': ApiAboutUsSectionAboutUsSection;
       'api::about-us.about-us': ApiAboutUsAboutUs;
       'api::gallery.gallery': ApiGalleryGallery;
       'api::home.home': ApiHomeHome;

@@ -1,0 +1,144 @@
+/* ===== LAYOUT ===== */
+.about-grid {
+   max-width: 1280px;
+   margin: 0 auto;
+   padding: 0rem 1.5rem 100px;
+   display: flex;
+   flex-direction: column;
+   gap: 3rem;
+}
+
+.about-row {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 4rem;
+   align-items: center;
+
+   opacity: 0;
+   transform: translateY(40px);
+   animation: fadeUp 0.8s ease forwards;
+}
+
+.about-row.reverse {
+   direction: rtl;
+}
+
+.about-row.reverse>* {
+   direction: ltr;
+}
+
+/* stagger */
+.about-row:nth-child(1) {
+   animation-delay: 0.1s;
+}
+
+.about-row:nth-child(2) {
+   animation-delay: 0.25s;
+}
+
+.about-row:nth-child(3) {
+   animation-delay: 0.4s;
+}
+
+/* ===== TEXT ===== */
+.about-text h3 {
+   font-size: 2rem;
+   font-weight: 600;
+   margin-bottom: 1.25rem;
+   position: relative;
+}
+
+.about-text h3::after {
+   content: "";
+   display: block;
+   width: 48px;
+   height: 3px;
+   margin-top: 0.75rem;
+   background: linear-gradient(90deg, #111, #777);
+   border-radius: 2px;
+}
+
+.about-text p {
+   font-size: 1.05rem;
+   line-height: 1.8;
+   color: #444;
+   max-width: 560px;
+}
+
+/* ===== IMAGE ===== */
+.about-image {
+   position: relative;
+   border-radius: 20px;
+   overflow: hidden;
+   box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.12),
+      0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.about-image::before {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(120deg,
+         rgba(255, 255, 255, 0.15),
+         rgba(255, 255, 255, 0));
+   opacity: 0;
+   transition: opacity 0.4s ease;
+   z-index: 1;
+}
+
+.about-image img {
+   width: 100%;
+   height: 100%;
+   max-height: 440px;
+   object-fit: cover;
+   transition:
+      transform 0.6s ease,
+      filter 0.6s ease;
+}
+
+/* hover */
+.about-row:hover .about-image img {
+   transform: scale(1.08);
+   filter: contrast(1.05) saturate(1.05);
+}
+
+.about-row:hover .about-image::before {
+   opacity: 1;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp {
+   from {
+      opacity: 0;
+      transform: translateY(40px);
+   }
+
+   to {
+      opacity: 1;
+      transform: translateY(0);
+   }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+
+   .about-row,
+   .about-row.reverse {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      direction: ltr;
+   }
+
+   .about-text h3 {
+      font-size: 1.6rem;
+   }
+
+   .about-text p {
+      max-width: 100%;
+   }
+
+   .about-image img {
+      max-height: 320px;
+   }
+}

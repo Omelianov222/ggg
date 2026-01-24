@@ -3,6 +3,7 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import styles from './About.module.css'
 import { PageHeader } from '@/components/UI/PageHeader'
+import AboutUsGrid from '@/components/AboutUsGrid'
 
 type Props = {
    params: Promise<{ locale: string }>
@@ -18,7 +19,7 @@ function resolveUrl(path?: string) {
 export default async function AboutPage({ params }: Props) {
    const { locale } = await params
 
-   const res = await fetchAPI('/api/About-us', locale)
+   const res = await fetchAPI('/api/about-us-sections?&fields[0]=Paragraph&populate[Photo][fields][0]=url', locale)
 
    const item = res?.data ?? null
 
@@ -34,15 +35,8 @@ export default async function AboutPage({ params }: Props) {
 
    return (
       <div className={styles.hero} style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : undefined }}>
-         <div className={styles.overlay} />
-         <div className={styles.container}>
-            <PageHeader title={title} />
-            <div className={styles.panel}>
-               <div className={styles.content}>
-                  <ReactMarkdown>{paragraph}</ReactMarkdown>
-               </div>
-            </div>
-         </div>
+         <PageHeader title={"About Us"} />
+         <AboutUsGrid data={item} />
       </div>
    )
 }
