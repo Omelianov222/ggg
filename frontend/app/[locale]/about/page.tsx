@@ -19,10 +19,10 @@ function resolveUrl(path?: string) {
 export default async function AboutPage({ params }: Props) {
    const { locale } = await params
 
-   const res = await fetchAPI('/api/about-us-sections?&fields[0]=Paragraph&populate[Photo][fields][0]=url', locale)
+   const res = await fetchAPI('/api/about-us-sections?fields[0]=Paragraph&populate[Photo][fields][0]=url', locale)
 
    const item = res?.data ?? null
-
+   console.log("ITEMMMM", item)
    if (!item) {
       return <div style={{ padding: '2rem' }}>No content</div>
    }
