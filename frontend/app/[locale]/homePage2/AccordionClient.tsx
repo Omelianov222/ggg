@@ -25,7 +25,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
    const introRef = useRef<HTMLDivElement | null>(null);
    const introStartedRef = useRef(false);
 
-   // (removed mobile listener — not used in this component)
+
 
    useEffect(() => {
       (async () => {
@@ -42,7 +42,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
          try {
             const res = await fetchAPI("/api/main-page-brands", resolvedLocale);
             if (res instanceof Error || cancelled) return;
-
+            console.log("API Response:", res);
             const data = (res?.data ?? []) as BrandItem[];
 
             if (data.length === 0) {

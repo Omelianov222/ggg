@@ -3,7 +3,6 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import styles from './AboutUs.module.css'
 import { SectionHeader } from './UI/SectionHeader'
-import AboutUsGrid from './AboutUsGrid'
 
 type Props = {
    locale: string
@@ -16,10 +15,10 @@ function resolveUrl(path?: string) {
    return base.replace(/\/$/, '') + path
 }
 
-export default async function AboutUs({ locale }: Props) {
+export default async function AboutUs(params: Props) {
 
-
-   const res = await fetchAPI('/api/about-us-sections?&fields[0]=Paragraph&populate[Photo][fields][0]=url', locale)
+   const { locale } = await params
+   const res = await fetchAPI('/api/About-us', locale)
 
    const item = res?.data ?? null
 
@@ -38,8 +37,15 @@ export default async function AboutUs({ locale }: Props) {
          <div className={styles.overlay} />
          <div className={styles.container}>
             <SectionHeader title={title} />
-            <AboutUsGrid data={item} />
+            <div className={styles.panel}>
+               <div className={styles.content}>
+                  <ReactMarkdown>{paragraph}</ReactMarkdown>
+               </div>
+            </div>
+
          </div>
       </div>
    )
 }
+
+

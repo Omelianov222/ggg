@@ -2,7 +2,7 @@
 .about-grid {
    max-width: 1280px;
    margin: 0 auto;
-   padding: 0rem 1.5rem 100px;
+   padding: 100px 1.5rem 100px;
    display: flex;
    flex-direction: column;
    gap: 3rem;
