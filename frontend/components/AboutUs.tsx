@@ -18,7 +18,7 @@ function resolveUrl(path?: string) {
 export default async function AboutUs(params: Props) {
 
    const { locale } = await params
-   const res = await fetchAPI('/api/About-us', locale)
+   const res = await fetchAPI('/api/about-us-content', locale)
 
    const item = res?.data ?? null
 
@@ -26,17 +26,14 @@ export default async function AboutUs(params: Props) {
       return <div style={{ padding: '2rem' }}>No content</div>
    }
 
-   const title = item.Title ?? ''
-   const paragraph = item.Paragraph ?? ''
-   // prefer original (highest quality) `url` from API, then fall back to formats
-   const bgRaw = item.Background?.url ?? item.Background?.formats?.large?.url ?? item.Background?.formats?.medium?.url ?? item.Background?.formats?.small?.url ?? undefined
-   const bgUrl = resolveUrl(bgRaw)
+
+   const paragraph = item.MainPageText ?? ''
 
    return (
       <div className={styles.hero} >
          <div className={styles.overlay} />
          <div className={styles.container}>
-            <SectionHeader title={title} />
+            <SectionHeader title="About Us" />
             <div className={styles.panel}>
                <div className={styles.content}>
                   <ReactMarkdown>{paragraph}</ReactMarkdown>

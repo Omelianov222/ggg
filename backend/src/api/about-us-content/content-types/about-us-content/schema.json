@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_us_contents",
+  "info": {
+    "singularName": "about-us-content",
+    "pluralName": "about-us-contents",
+    "displayName": "AboutUsContent"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "MainPageText": {
+      "type": "richtext"
+    },
+    "AboutUsPageText": {
+      "type": "richtext"
+    }
+  }
+}

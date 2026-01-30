@@ -20,7 +20,7 @@ export default async function AboutPage({ params }: Props) {
    const { locale } = await params
 
    const aboutUsGridResponse = await fetchAPI('/api/about-us-sections?fields[0]=Paragraph&populate[Photo][fields][0]=url', locale)
-   const aboutUsTextResponse = await fetchAPI('/api/About-us', locale)
+   const aboutUsTextResponse = await fetchAPI('/api/about-us-content', locale)
 
    const aboutUsGrid = aboutUsGridResponse?.data ?? null
    const aboutUsText = aboutUsTextResponse?.data ?? null
@@ -30,18 +30,17 @@ export default async function AboutPage({ params }: Props) {
    }
 
    const title = aboutUsText.Title ?? ''
-   const paragraph = aboutUsText.Paragraph ?? ''
+   const paragraph = aboutUsText.AboutUsPageText ?? ''
    // prefer original (highest quality) `url` from API, then fall back to formats
-   const bgRaw = aboutUsText.Background?.url ?? aboutUsText.Background?.formats?.large?.url ?? aboutUsText.Background?.formats?.medium?.url ?? aboutUsText.Background?.formats?.small?.url ?? undefined
-   const bgUrl = resolveUrl(bgRaw)
+
 
    return (
 
       <>
-         <div className={styles.hero} style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : undefined }}>
+         <div className={styles.hero}>
             <div className={styles.overlay} />
             <div className={styles.container}>
-               <PageHeader title={title} />
+               <PageHeader title="About Us" />
                <div className={styles.panel}>
                   <div className={styles.content}>
                      <ReactMarkdown>{paragraph}</ReactMarkdown>
