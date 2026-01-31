@@ -5,13 +5,13 @@
    padding: 100px 1.5rem 100px;
    display: flex;
    flex-direction: column;
-   gap: 3rem;
+   gap: 4rem;
 }
 
 .about-row {
    display: grid;
    grid-template-columns: 1fr 1fr;
-   gap: 4rem;
+   gap: 3rem;
    align-items: center;
 
    opacity: 0;
@@ -62,7 +62,6 @@
    font-size: 1.0rem;
    line-height: 1.8;
    color: #d1d0d0;
-   max-width: 560px;
 }
 
 /* ===== IMAGE ===== */
