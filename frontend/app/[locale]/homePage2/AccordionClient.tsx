@@ -165,7 +165,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
                      {i === 0 ? (
                         <div className={styles.panelBackground}>
                            <video
-                              src="/record-2025-12-19_15.33.57.mp4"
+                              src="/sait.mp4"
                               autoPlay
                               muted
                               loop
