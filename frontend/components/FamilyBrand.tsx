@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './FamilyBrand.module.css';
 import { SectionHeader } from './UI/SectionHeader';
+import GridBrands from './GridBrands';
 
 type Brand = {
    name: string;
@@ -134,6 +135,7 @@ export default function FamilyBrand() {
          <p className={styles.subtitle}>
             The GELEX GLOBAL GROUP factory produces boats under three brands
          </p>
+         <GridBrands />
 
          <div className={styles.grid}>
             <div className={`${styles.card} ${styles.main}`}>
@@ -169,6 +171,9 @@ export default function FamilyBrand() {
                   </div>
                </div>
             ))}
+
+
+
          </div>
       </section>
    );

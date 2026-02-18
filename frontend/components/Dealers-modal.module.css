@@ -1,0 +1,160 @@
+/* Dealers modal - pure CSS styles */
+:root {
+   --dmBgStart: #0f1724;
+   --dmBgEnd: #0b1220;
+   --dmAccent: #60a5fa;
+   --dmPanel: rgba(255, 255, 255, 0.04);
+   --dmText: #e6eef8;
+   --dmSub: #bcd3ee;
+}
+
+.dmRoot {
+   position: fixed;
+   inset: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 5000;
+   font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.dmBackdrop {
+   position: absolute;
+   inset: 0;
+   background: rgba(0, 0, 0, 0.6);
+   backdrop-filter: blur(0px) saturate(120%);
+}
+
+.dmPanel {
+   position: relative;
+   width: 100%;
+   max-width: 880px;
+   margin: 20px;
+   border-radius: 12px;
+   overflow: hidden;
+   box-shadow: 0 10px 40px rgba(2, 6, 23, 0.7);
+   transform: translateY(10px) scale(0.995);
+   animation: dmPop 220ms cubic-bezier(.2, .9, .2, 1) forwards;
+   backdrop-filter: blur(6px) saturate(120%);
+}
+
+@keyframes dmPop {
+   to {
+      transform: translateY(0) scale(1);
+   }
+}
+
+.dmHeader {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 12px;
+   padding: 18px 20px;
+   background: linear-gradient(90deg, var(--dmBgStart), var(--dmBgEnd));
+   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+   color: var(--dmText);
+}
+
+.dmTitle {
+   font-size: 20px;
+   font-weight: 700;
+}
+
+.dmRegion {
+   font-size: 13px;
+   color: var(--dmSub);
+   margin-top: 4px;
+}
+
+.dmCloseBtn {
+   background: transparent;
+   border: none;
+   color: var(--dmText);
+   width: 40px;
+   height: 40px;
+   border-radius: 8px;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+}
+
+.dmCloseBtn:hover {
+   background: rgba(255, 255, 255, 0.03);
+}
+
+.dmBody {
+   padding: 18px 20px;
+   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.02));
+}
+
+.dmContacts {
+   display: grid;
+   gap: 12px;
+}
+
+.dmCard {
+   display: flex;
+   gap: 12px;
+   align-items: flex-start;
+   padding: 12px;
+   border-radius: 10px;
+   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+   border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.dmAvatar {
+   width: 44px;
+   height: 44px;
+   border-radius: 10px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: rgba(255, 255, 255, 0.03);
+}
+
+.dmName {
+   color: var(--dmText);
+   font-weight: 600;
+}
+
+.dmPhone,
+.dmEmail {
+   color: var(--dmSub);
+   font-size: 13px;
+   margin-top: 4px;
+}
+
+.dmFooter {
+   padding: 14px 20px;
+   background: rgba(255, 255, 255, 0.01);
+   border-top: 1px solid rgba(255, 255, 255, 0.03);
+   text-align: right;
+}
+
+.dmCloseAction {
+   padding: 8px 14px;
+   border-radius: 8px;
+   background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+   color: var(--dmText);
+   border: none;
+   cursor: pointer;
+}
+
+.dmCloseAction:hover {
+   opacity: 0.95;
+}
+
+@media (max-width:520px) {
+   .dmPanel {
+      max-width: 92%;
+   }
+
+   .dmHeader {
+      padding: 14px;
+   }
+
+   .dmBody {
+      padding: 14px;
+   }
+}

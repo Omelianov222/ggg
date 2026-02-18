@@ -88,7 +88,7 @@ export default function Footer({ locale }: FooterProps) {
          <div className={styles.container}>
             <div className={styles.col}>
                <div style={{ display: "flex", alignItems: "center", position: "relative", gap: "30px", marginLeft: "-24px" }}>
-                  <div style={{ flex: "0 0 30%", minHeight: "100%", left: "-34px" }}>
+                  <div style={{ flex: "0 0 30%", minHeight: "100%", }}>
                      <Logo />
                   </div>
                   <div style={{ flex: "0 0 70%" }}>

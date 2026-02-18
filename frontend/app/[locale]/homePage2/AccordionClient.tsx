@@ -59,9 +59,14 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
                title: b.BrandLabel || `Gala${i + 1}`,
                desc: `${i + 1}`,
                image: resolveUrl(b?.Brand?.url),
-            }));
+            })).sort((a, b) => {
+               if (a.title === "Video") return -1;
+               if (b.title === "Video") return 1;
+               return 0;
+            });
+            ;
 
-            setItems(itemsWithImages.splice(0, 5));
+            setItems(itemsWithImages.splice(0, 6));
 
             const imageUrls = itemsWithImages
                .map(item => item.image)
@@ -136,6 +141,18 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
    }, [])
 
    const hasMultiplePanels = items.length > 1;
+
+   // Notify other parts of the app when intro finished so they can reveal UI (e.g. Navbar)
+   useEffect(() => {
+      if (!introFinished) return;
+      try {
+         // set a global flag for late listeners and dispatch an event for subscribers
+         ; (window as any).__introFinished = true;
+         window.dispatchEvent(new CustomEvent('introFinished'))
+      } catch (e) {
+         // ignore in non-browser contexts
+      }
+   }, [introFinished])
 
 
 

@@ -105,22 +105,22 @@
 
 /* активний ПЕРШИЙ елемент */
 .panelLabel:first-child:has(.panelRadio:checked) {
-   flex-grow: 19;
+   flex-grow: 25;
    transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* активний НЕ перший елемент */
 .panelLabel:not(:first-child):has(.panelRadio:checked) {
-   flex-grow: 19;
+   flex-grow: 25;
    transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .accordion:has(.panelLabel:not(:has(.panelRadio:checked)):hover) .panelLabel:has(.panelRadio:checked) {
-   flex-grow: 2;
+   flex-grow: 3;
 }
 
 .panelLabel:not(:has(.panelRadio:checked)):hover {
-   flex-grow: 2;
+   flex-grow: 3;
    transition-delay: 200ms;
 }
 

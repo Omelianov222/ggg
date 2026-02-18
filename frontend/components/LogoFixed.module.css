@@ -1,9 +1,8 @@
 .logo-fixed {
-   position: absolute;
    top: 10px;
    left: 24px;
-   width: 64px;
-   height: 64px;
+   width: 55px;
+   height: 55px;
    z-index: 20;
    display: flex;
    opacity: 0;

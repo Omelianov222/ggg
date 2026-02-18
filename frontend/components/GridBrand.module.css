@@ -1,0 +1,140 @@
+/*
+  GridClipPath.module.css
+
+  Шрифти підключи в app/layout.tsx через next/font/google:
+  Unbounded (weights: 400, 700, 900) + Martian_Mono (weights: 300, 400)
+  і передай їх як CSS-змінні: --font-display та --font-mono
+*/
+
+.wrapper {
+   background: #080808;
+   min-height: 100vh;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 40px;
+}
+
+.grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   grid-template-rows: auto auto;
+   gap: 6px;
+   width: 100%;
+   max-width: 960px;
+}
+
+/* ── Базовий блок ── */
+.block {
+   padding: 48px 40px;
+   color: #f0ece2;
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   min-height: 220px;
+}
+
+/* ── Верхній блок ── */
+.blockTop {
+   grid-column: 1 / -1;
+   background: #1a2e20;
+   min-height: 280px;
+   clip-path: polygon(0% 0%,
+         100% 0%,
+         100% calc(100% - 48px),
+         calc(67%) 100%,
+         33% 100%,
+         0% calc(100% - 48px));
+   z-index: 2;
+}
+
+/* ── Нижній лівий — зрізати правий верхній кут ── */
+.blockLeft {
+   background: #16213e;
+   clip-path: polygon(0% 0%,
+         100% 48px,
+         100% 100%,
+         0% 100%);
+   transform: translateY(-19%);
+}
+
+/* ── Нижній центральний — без зрізів ── */
+.blockCenter {
+   background: #0f3460;
+   /* transform: translateY(-19%); */
+   z-index: 1;
+   max-height: 50%;
+}
+
+/* ── Нижній правий — зрізати лівий верхній кут ── */
+.blockRight {
+   background: #16213e;
+   clip-path: polygon(0 48px,
+         100% 0%,
+         100% 100%,
+         0% 100%,
+         0% 48px);
+   transform: translateY(-19%);
+}
+
+/* ── Декоративна лінія (тільки у верхньому блоці) ── */
+.accentLine {
+   position: absolute;
+   top: 40px;
+   left: 40px;
+   width: 48px;
+   height: 3px;
+   background: #e94560;
+}
+
+/* ── Тег ── */
+.tag {
+   font-family: var(--font-mono, monospace);
+   font-size: 10px;
+   letter-spacing: 0.2em;
+   text-transform: uppercase;
+   color: #e94560;
+   margin-bottom: 12px;
+}
+
+/* ── Заголовок ── */
+.title {
+   font-family: var(--font-display, sans-serif);
+   font-weight: 900;
+   font-size: clamp(22px, 3vw, 36px);
+   line-height: 1.1;
+   letter-spacing: -0.02em;
+   margin-bottom: 12px;
+}
+
+.titleLarge {
+   font-size: clamp(28px, 4vw, 52px);
+}
+
+/* ── Опис ── */
+.desc {
+   font-family: var(--font-mono, monospace);
+   font-size: 12px;
+   line-height: 1.7;
+   opacity: 0.55;
+   max-width: 38ch;
+}
+
+.blockTop .desc {
+   max-width: 60ch;
+}
+
+/* ── Великий номер (фоновий) ── */
+.num {
+   position: absolute;
+   top: 32px;
+   right: 40px;
+   font-family: var(--font-display, sans-serif);
+   font-size: 72px;
+   font-weight: 900;
+   color: rgba(255, 255, 255, 0.04);
+   line-height: 1;
+   pointer-events: none;
+   user-select: none;
+}
