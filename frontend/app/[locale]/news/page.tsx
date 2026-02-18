@@ -10,7 +10,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
 
    return (
       <>
-         <NewsList items={data.data} locale={resolvedParams.locale} />;
+         <NewsList items={data.data} locale={resolvedParams.locale} />
          <FamilyBrand />
       </>
 

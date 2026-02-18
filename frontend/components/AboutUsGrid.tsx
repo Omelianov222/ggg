@@ -1,4 +1,6 @@
+import React from "react";
 import styles from "./AboutUsGrid.module.css";
+import ReactMarkdown from "react-markdown";
 
 
 type AboutItem = {
@@ -26,13 +28,7 @@ export default function AboutUsGrid({ data }: Props) {
                >
 
                   <div className={styles['about-text']}>
-                     {item.Paragraph.split("\n").map((line, i) =>
-                        line.startsWith("###") ? (
-                           <h3 key={i}>{line.replace("###", "").trim()}</h3>
-                        ) : (
-                           <p key={i}>{line}</p>
-                        )
-                     )}
+                     <ReactMarkdown>{item.Paragraph}</ReactMarkdown>
                   </div>
 
                   {imageUrl && (
