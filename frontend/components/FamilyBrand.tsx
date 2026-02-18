@@ -12,9 +12,9 @@ type Brand = {
 };
 
 const INITIAL_BRANDS: Brand[] = [
-   { name: 'GALA', desc: 'comfortable RIB boats designed for leisure' },
-   { name: 'GALAXY', desc: 'professional-grade boats' },
-   { name: 'GELEX', desc: 'versatile, multi-functional boats' },
+   { name: 'GALA', desc: 'Comfortable RIB boats designed for leisure' },
+   { name: 'GALAXY', desc: 'Professional-grade boats' },
+   { name: 'GELEX', desc: 'Versatile, multi-functional boats' },
 ];
 
 // Детермінований порядок перемішування
@@ -135,7 +135,7 @@ export default function FamilyBrand() {
          <p className={styles.subtitle}>
             The GELEX GLOBAL GROUP factory produces boats under three brands
          </p>
-         <GridBrands />
+
 
          <div className={styles.grid}>
             <div className={`${styles.card} ${styles.main}`}>
@@ -166,7 +166,6 @@ export default function FamilyBrand() {
                      />
                   </div>
                   <div className={styles.textWrapper}>
-                     <strong>{b.name}</strong>
                      <p>{b.desc}</p>
                   </div>
                </div>

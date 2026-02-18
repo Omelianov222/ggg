@@ -87,7 +87,7 @@ export default function Footer({ locale }: FooterProps) {
       <footer className={styles.footer}>
          <div className={styles.container}>
             <div className={styles.col}>
-               <div style={{ display: "flex", alignItems: "center", position: "relative", gap: "30px", marginLeft: "-24px" }}>
+               <div style={{ display: "flex", alignItems: "center", position: "relative" }}>
                   <div style={{ flex: "0 0 30%", minHeight: "100%", }}>
                      <Logo />
                   </div>
@@ -104,7 +104,6 @@ export default function Footer({ locale }: FooterProps) {
             </div>
 
             <div className={styles.col}>
-               <h4 className={styles.heading}>Navigation</h4>
                <nav className={styles.links} aria-label="Footer navigation">
                   {items.map(item => (
                      <a key={item.label} href={`/${locale}${item.link}`}>{item.label}</a>

@@ -1,4 +1,5 @@
 import { fetchAPI } from "@/app/lib/api";
+import FamilyBrand from "@/components/FamilyBrand";
 import NewsList from "@/components/NewsList";
 
 export default async function NewsPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -7,5 +8,12 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
 
    console.log("resolvedParams", resolvedParams);
 
-   return <NewsList items={data.data} locale={resolvedParams.locale} />;
+   return (
+      <>
+         <NewsList items={data.data} locale={resolvedParams.locale} />;
+         <FamilyBrand />
+      </>
+
+   )
+
 }
