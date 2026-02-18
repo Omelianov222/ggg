@@ -104,7 +104,7 @@ export default function Navbar({ locale, initialItems }: NavbarProps) {
          }}
       >
          <div style={{ display: "flex", alignItems: "center", position: "relative", gap: "30px" }}>
-            <div style={{ minHeight: "100%", }}>
+            <div style={{ minHeight: "100%", }} className={styles['logo-wrapper']}>
                <Logo />
             </div>
 

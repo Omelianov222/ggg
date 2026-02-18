@@ -115,6 +115,10 @@
 
    }
 
+   .logo-wrapper {
+      display: none;
+   }
+
    .main-navbar::before {
       content: "";
       position: absolute;
