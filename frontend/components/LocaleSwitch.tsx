@@ -12,9 +12,9 @@ export default function LocaleSwitch({ locale }: Props) {
       try {
          const currentPath = window.location.pathname || '/'
          const segments = currentPath.split('/').filter(Boolean)
-         const other = locale === 'uk' ? 'en' : 'uk'
+         const other = locale === 'pl' ? 'en' : 'pl'
 
-         const isLocaleSegment = segments[0] === 'uk' || segments[0] === 'en'
+         const isLocaleSegment = segments[0] === 'pl' || segments[0] === 'en'
          if (isLocaleSegment) {
             segments[0] = other
          } else {
@@ -31,7 +31,7 @@ export default function LocaleSwitch({ locale }: Props) {
    return (
       <div className={styles['locale-switch']}>
          <button onClick={handleSwitch} aria-label="Switch language" className={styles['locale-button']}>
-            {locale === 'uk' ? 'EN' : 'UA'}
+            {locale === 'pl' ? 'EN' : 'PL'}
          </button>
       </div>
    )

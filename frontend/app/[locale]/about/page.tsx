@@ -40,7 +40,7 @@ export default async function AboutPage({ params }: Props) {
          <div className={styles.hero}>
             <div className={styles.overlay} />
             <div className={styles.container}>
-               <PageHeader title={locale === 'en' ? 'About Us' : 'Про нас'} />
+               <PageHeader title={locale === 'en' ? 'About Us' : 'O nas'} />
                <div className={styles.panel}>
                   <div className={styles.content}>
                      <ReactMarkdown>{paragraph}</ReactMarkdown>
