@@ -36,7 +36,7 @@ h4,
 h5,
 h6 {
    font-size: inherit;
-   font-weight: initial;
+   font-weight: 600;
 }
 
 body {
