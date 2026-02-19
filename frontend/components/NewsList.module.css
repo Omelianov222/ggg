@@ -3,7 +3,8 @@
    gap: 24px;
    grid-template-columns: 1fr;
    padding: 16px;
-
+   max-width: 1200px;
+   margin: 0 auto;
 }
 
 .newsCard {
