@@ -139,6 +139,11 @@ html.light-theme {
    --gallery-btn-border: #999;
    --gallery-btn-hover-text: #0070f3;
    --gallery-dots-text: #666;
+   --gallery-gradient: linear-gradient(to bottom,
+         rgba(236, 236, 236, 0) 0%,
+         rgba(216, 213, 213, 0.788) 50%,
+         rgba(255, 255, 255, 0.842) 85%,
+         rgba(255, 255, 255, 0.582) 100%);
 
    /* HERO LIGHT */
    --hero-text: #1a1a1a;
