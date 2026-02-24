@@ -149,7 +149,7 @@
 
 .panelLabel:last-of-type:not(:has(.panelRadio:checked)) {
    flex-grow: 3;
-   margin-right: -100px;
+   margin-right: -6%;
 }
 
 .panelLabel:last-of-type:not(:has(.panelRadio:checked)):hover {
