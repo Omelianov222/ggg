@@ -2,31 +2,178 @@
 @import "../node_modules/leaflet/dist/leaflet.css";
 
 :root {
+   /* === BASE THEME COLORS === */
    --background: #0a0a0a;
    --foreground: #ededed;
    --header-height: 72px;
 
+   /* === NAVBAR COLORS === */
+   --navbar-bg: rgba(31, 31, 31, 0.425);
+   --navbar-text: #fff;
+   --navbar-border: rgba(255, 255, 255, 0.2);
+   --navbar-hover-bg: rgba(255, 255, 255, 0.03);
+
+   /* === FOOTER COLORS === */
+   --footer-bg: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+   --footer-text: inherit;
+   --footer-border-top: rgba(0, 0, 0, 0.06);
+   --footer-divider: #ffffffd8;
+   --footer-desc-text: rgba(255, 255, 255, 0.8);
+
+   /* === GALLERY COLORS === */
+   --gallery-gradient: linear-gradient(to bottom,
+         rgba(20, 20, 20, 0) 0%,
+         rgba(27, 27, 27, 0.788) 50%,
+         rgba(15, 15, 15, 0.808) 85%,
+         rgba(15, 15, 15, 0.226) 100%);
+   --gallery-btn-bg: #0071f31c;
+   --gallery-btn-border: #ddd;
+   --gallery-btn-hover-border: #08264981;
+   --gallery-btn-hover-text: #0070f3;
+   --gallery-btn-active-bg: #0071f31c;
+   --gallery-dots-text: #999;
+   --gallery-modal-overlay: rgba(0, 0, 0, 0.7);
+   --gallery-modal-btn-bg: rgba(0, 0, 0, 0.5);
+   --gallery-modal-btn-text: #fff;
+   --gallery-modal-btn-border: rgba(0, 0, 0, 0.4);
+
+   /* === HERO/LANDING COLORS === */
+   --hero-text: #fff;
+   --hero-text-secondary: #f3f4f6;
+   --hero-text-content: #eaeef2;
+   --hero-panel-bg: rgba(255, 255, 255, 0.06);
+   --hero-panel-border: rgba(255, 255, 255, 0.08);
+   --hero-text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+
+   /* === LANDING GRID COLORS === */
+   --grid-card-bg: #f3f4f6;
+   --grid-card-border: #e5e7eb;
+   --grid-radial-overlay: radial-gradient(circle at 50% 50%,
+         rgba(0, 0, 0, 0.6) 85px,
+         rgba(0, 0, 0, 0.36) 15%,
+         rgba(0, 0, 0, 0.15) 30%,
+         rgba(0, 0, 0, 0) 40%);
+
+   /* === GRID BRAND COLORS === */
+   --grid-brand-wrapper-bg: #080808;
+   --grid-brand-text: #f0ece2;
+   --grid-brand-top-bg: #1a2e20;
+   --grid-brand-left-bg: #16213e;
+   --grid-brand-center-bg: #0f3460;
+   --grid-brand-right-bg: #16213e;
+   --grid-brand-accent: #e94560;
+
+   /* === NEWS/ARTICLE COLORS === */
+   --news-title: #e0e0e0;
+   --news-text: #dddddd;
+   --news-heading-h1: #cfcfcf;
+   --news-heading-h2: #d8d8d8;
+   --news-heading-h3: #cecdcd;
+   --news-strong: #cccccc;
+   --news-content-bg: #ffffff1a;
+   --news-hr-color: #e5e7eb;
+   --news-notfound: #6b7280;
+
+   /* === DEALERS MODAL COLORS === */
+   --dm-bg-start: #0f1724;
+   --dm-bg-end: #0b1220;
+   --dm-accent: #60a5fa;
+   --dm-panel: rgba(255, 255, 255, 0.04);
+   --dm-text: #e6eef8;
+   --dm-sub: #bcd3ee;
+   --dm-backdrop: rgba(0, 0, 0, 0.6);
+   --dm-header-border: rgba(255, 255, 255, 0.04);
+   --dm-card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+   --dm-card-border: rgba(255, 255, 255, 0.03);
+   --dm-avatar-bg: rgba(255, 255, 255, 0.03);
+   --dm-footer-bg: rgba(255, 255, 255, 0.01);
+   --dm-footer-border: rgba(255, 255, 255, 0.03);
+   --dm-close-btn-bg: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+
+   /* === CONTACT FORM COLORS === */
+   --contact-text: white;
+   --contact-border: rgba(255, 255, 255, 0.3);
+   --contact-border-focus: rgba(255, 255, 255, 0.8);
+   --contact-placeholder: rgba(255, 255, 255, 0.6);
+   --contact-btn-bg: white;
+   --contact-btn-text: #1a3a4a;
+   --contact-btn-hover: rgba(255, 255, 255, 0.9);
+   --contact-email-hover: #4a9fd8;
+
+   /* === FAMILY BRAND COLORS === */
+   --family-text: white;
+   --family-card-bg: rgba(255, 255, 255, 0.08);
+   --family-card-hover-bg: rgba(255, 255, 255, 0.12);
+   --family-image-filter: none;
+
+   /* === ABOUT US COLORS === */
+   --about-heading: inherit;
+   --about-heading-line: linear-gradient(90deg, #111, #777);
 }
 
-@theme inline {
-   --color-background: var(--background);
-   --color-foreground: var(--foreground);
-   --font-sans: var(--font-geist-sans);
-   --font-mono: var(--font-geist-mono);
+/* === DARK THEME === */
+html.dark-theme {
+   --background: #0a0a0a;
+   --foreground: #ededed;
 }
 
-@media (prefers-color-scheme: dark) {
-   :root {
-      --background: #0a0a0a;
-      --foreground: #ededed;
-   }
-}
+/* === LIGHT THEME === */
+html.light-theme {
+   --background: #ffffff;
+   --foreground: #1a1a1a;
 
-@media (prefers-color-scheme: light) {
-   :root {
-      --background: #0a0a0a;
-      --foreground: #ededed;
-   }
+   /* NAVBAR LIGHT */
+   --navbar-bg: rgba(240, 240, 240, 0.849);
+   --navbar-text: #1a1a1a;
+   --navbar-border: rgba(0, 0, 0, 0.1);
+   --navbar-hover-bg: rgba(0, 0, 0, 0.05);
+
+   /* FOOTER LIGHT */
+   --footer-bg: #272727;
+   --footer-text: #ffffff;
+   --footer-border-top: rgba(0, 0, 0, 0.1);
+   --footer-divider: #00000033;
+   --footer-desc-text: rgba(255, 255, 255, 0.7);
+
+   /* GALLERY LIGHT */
+   --gallery-btn-border: #999;
+   --gallery-btn-hover-text: #0070f3;
+   --gallery-dots-text: #666;
+
+   /* HERO LIGHT */
+   --hero-text: #1a1a1a;
+   --hero-text-secondary: #333;
+   --hero-text-content: #444;
+   --hero-panel-bg: rgba(0, 0, 0, 0.04);
+   --hero-panel-border: rgba(0, 0, 0, 0.08);
+
+   /* LANDING GRID LIGHT */
+   --grid-card-bg: #ffffff;
+   --grid-card-border: #e5e7eb;
+
+   /* NEWS LIGHT */
+   --news-title: #1a1a1a;
+   --news-text: #333;
+   --news-heading-h1: #1a1a1a;
+   --news-heading-h2: #222;
+   --news-heading-h3: #333;
+   --news-strong: #1a1a1a;
+   --news-content-bg: #f5f5f5;
+
+   /* CONTACT LIGHT */
+   --contact-text: #1a1a1a;
+   --contact-border: rgba(0, 0, 0, 0.2);
+   --contact-border-focus: rgba(0, 0, 0, 0.5);
+   --contact-placeholder: rgba(0, 0, 0, 0.5);
+   --contact-btn-bg: #1a1a1a;
+   --contact-btn-text: #ffffff;
+   --contact-email-hover: #0070f3;
+
+   /* FAMILY LIGHT */
+   --family-text: #1a1a1a;
+   --family-card-bg: rgba(0, 0, 0, 0.05);
+   --family-card-hover-bg: rgba(0, 0, 0, 0.08);
+   --family-image-filter: invert(1) brightness(1.1);
 }
 
 h1,

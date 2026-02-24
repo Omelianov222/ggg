@@ -16,8 +16,8 @@ function resolveUrl(path?: string) {
 }
 
 export default async function AboutUs(params: Props) {
-
    const { locale } = await params
+   console.log(locale)
    const res = await fetchAPI('/api/about-us-content', locale)
 
    const item = res?.data ?? null

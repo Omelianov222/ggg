@@ -8,7 +8,7 @@
 }
 
 .container {
-   max-width: 600px;
+   max-width: 470px;
    margin: 0 auto;
    display: flex;
    flex-direction: column;
@@ -34,8 +34,10 @@
 .textarea {
    background: transparent;
    border: none;
-   border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-   color: white;
+   /* border-bottom: 2px solid rgba(255, 255, 255, 0.3); */
+   border-bottom: 2px solid var(--contact-border);
+   /* color: white; */
+   color: var(--contact-text);
    padding: 12px 0;
    font-size: 16px;
    font-family: inherit;
@@ -44,13 +46,15 @@
 
 .input::placeholder,
 .textarea::placeholder {
-   color: rgba(255, 255, 255, 0.6);
+   /* color: rgba(255, 255, 255, 0.6); */
+   color: var(--contact-placeholder);
 }
 
 .input:focus,
 .textarea:focus {
    outline: none;
-   border-bottom-color: rgba(255, 255, 255, 0.8);
+   /* border-bottom-color: rgba(255, 255, 255, 0.8); */
+   border-bottom-color: var(--contact-border-focus);
 }
 
 .textarea {
@@ -59,20 +63,24 @@
 }
 
 .button {
-   background: white;
-   color: #1a3a4a;
+   /* background: white; */
+   background: var(--contact-btn-bg);
+   /* color: #1a3a4a; */
+   color: var(--contact-btn-text);
    border: none;
-   padding: 16px;
+   padding: 8px;
    font-size: 16px;
    font-weight: 600;
    cursor: pointer;
    transition: all 0.3s;
    text-transform: uppercase;
    letter-spacing: 1px;
+   border-radius: 10px;
 }
 
 .button:hover {
-   background: rgba(255, 255, 255, 0.9);
+   /* background: rgba(255, 255, 255, 0.9); */
+   background: var(--contact-btn-hover);
    transform: translateY(-2px);
 }
 
@@ -89,7 +97,8 @@
 
 .email {
    display: block;
-   color: white;
+   /* color: white; */
+   color: var(--contact-text);
    text-decoration: none;
    font-size: 18px;
    margin: 15px 0;
@@ -97,7 +106,8 @@
 }
 
 .email:hover {
-   color: #4a9fd8;
+   /* color: #4a9fd8; */
+   color: var(--contact-email-hover);
 }
 
 @media (max-width: 768px) {

@@ -4,7 +4,8 @@
 .contact {
    padding: 0 20px;
    text-align: center;
-   color: white;
+   /* color: white; */
+   color: var(--family-text);
    font-family: 'Montserrat', sans-serif;
    font-weight: 600;
 }
@@ -46,11 +47,11 @@
    display: flex;
    flex-direction: column;
    align-items: center;
-   justify-content: flex-start;
-   background: rgba(255, 255, 255, 0.08);
+   justify-content: center;
+   /* background: rgba(255, 255, 255, 0.08); */
+   background: var(--family-card-bg);
    backdrop-filter: blur(5px);
    border-radius: 12px;
-   padding: 40px 20px;
    transition: all 0.3s;
    height: 100%;
 }
@@ -88,9 +89,16 @@
    min-height: 100px;
 }
 
+.card img {
+   /* Інвертування кольорів зображення при світлій темі */
+   filter: var(--family-image-filter, none);
+   transition: filter 0.3s ease;
+}
+
 .card:hover {
    /* transform: translateY(-5px); */
-   background: rgba(255, 255, 255, 0.12);
+   /* background: rgba(255, 255, 255, 0.12); */
+   background: var(--family-card-hover-bg);
 }
 
 .emails {

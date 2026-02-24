@@ -21,7 +21,8 @@
 
 /* Випадаюча панель з навбаром */
 .navbar-dropdown {
-   background: rgba(31, 31, 31, 0.425);
+   /* background: rgba(31, 31, 31, 0.425); */
+   background: var(--navbar-bg);
    backdrop-filter: blur(22px);
    border-radius: 34px;
    padding: 10px 20px;
@@ -50,7 +51,8 @@
 
 .main-navbar li {
    font-size: 1.25em;
-   color: #fff;
+   /* color: #fff; */
+   color: var(--navbar-text);
    letter-spacing: .03em;
    cursor: pointer;
    position: relative;
@@ -64,7 +66,8 @@
    height: 2px;
    bottom: -4px;
    left: 0;
-   background: #fff;
+   /* background: #fff; */
+   background: var(--navbar-text);
    transform: scaleX(0);
    transition: transform .3s;
 }
@@ -85,8 +88,10 @@
 
 .locale-button {
    background: transparent;
-   border: 1px solid rgba(255, 255, 255, 0.2);
-   color: #fff;
+   /* border: 1px solid rgba(255, 255, 255, 0.2); */
+   border: 1px solid var(--navbar-border);
+   /* color: #fff; */
+   color: var(--navbar-text);
    padding: 6px 10px;
    border-radius: 6px;
    cursor: pointer;
@@ -94,7 +99,8 @@
 }
 
 .locale-button:hover {
-   background: rgba(255, 255, 255, 0.03);
+   /* background: rgba(255, 255, 255, 0.03); */
+   background: var(--navbar-hover-bg);
 }
 
 /* Приховуємо мобільні елементи на десктопі */

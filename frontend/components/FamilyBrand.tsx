@@ -160,13 +160,10 @@ export default function FamilyBrand() {
                      <Image
                         src={`/${b.name}.png`}
                         alt={b.name}
-                        width={150}
+                        width={250}
                         height={200}
                         style={{ height: 'auto', objectFit: 'contain' }}
                      />
-                  </div>
-                  <div className={styles.textWrapper}>
-                     <p>{b.desc}</p>
                   </div>
                </div>
             ))}

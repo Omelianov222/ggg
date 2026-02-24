@@ -13,6 +13,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
    return (
       <html>
+         <head>
+            <script
+               dangerouslySetInnerHTML={{
+                  __html: `
+                     (function() {
+                        const saved = localStorage.getItem('theme');
+                        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                        document.documentElement.classList.add(theme + '-theme');
+                     })();
+                  `,
+               }}
+            />
+         </head>
          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             {children}
          </body>

@@ -25,6 +25,7 @@
    position: relative;
    transform-style: preserve-3d;
    transition: transform .7s cubic-bezier(.5, 1.5, .5, 1);
+
 }
 
 
@@ -44,6 +45,24 @@
    /* властивість приховує задню сторону елемента */
 }
 
+:global(.light-theme) .logo-main {
+   background: rgba(100, 100, 100, 0.589);
+   padding: 4px;
+}
+
+:global(.light-theme) .logo-hover {
+   filter: brightness(1) invert(0);
+}
+
 .logo-fixed .logo-hover {
    transform: rotateY(180deg);
+}
+
+/* 
+:global(.light-theme) .logo-hover {
+   filter: brightness(1) invert(0);
+} */
+
+.logo-hover {
+   filter: brightness(0) invert(1);
 }

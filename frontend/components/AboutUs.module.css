@@ -2,7 +2,9 @@
    position: relative;
    background-size: cover;
    background-position: center center;
-   color: #fff;
+   /* color: #fff; */
+   color: var(--hero-text);
+
 }
 
 .overlay {
@@ -28,26 +30,31 @@
 
 .panel {
    backdrop-filter: blur(50px);
-   background: rgba(255, 255, 255, 0.06);
-   border: 1px solid rgba(255, 255, 255, 0.08);
+   /* background: rgba(255, 255, 255, 0.06); */
+   background: var(--hero-panel-bg);
+   /* border: 1px solid rgba(255, 255, 255, 0.08); */
+   border: 1px solid var(--hero-panel-border);
    padding: 1.5rem 3.75rem;
    border-radius: 12px;
 }
 
 .content {
    line-height: 1.7;
-   color: #f3f4f6;
+   /* color: #f3f4f6; */
+   color: var(--hero-text-secondary);
 }
 
 /* make markdown lists and headings readable */
 .content h2,
 .content h3 {
-   color: #fff;
+   /* color: #fff; */
+   color: var(--hero-text);
 }
 
 .content p,
 .content li {
-   color: #eaeef2;
+   /* color: #eaeef2; */
+   color: var(--hero-text-content);
 }
 
 .content ul,

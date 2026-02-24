@@ -4,6 +4,7 @@ import Link from "next/link";
 import styles from "@/components/Gallery.module.css";
 import { SectionHeader } from "@/components/UI/SectionHeader";
 import { PageHeader } from "@/components/UI/PageHeader";
+import FamilyBrand from "@/components/FamilyBrand";
 interface Props {
    params: Promise<{ locale: string }>;
    searchParams?: { [key: string]: string | string[] | undefined };
@@ -75,6 +76,7 @@ export default async function GalleryPage({ params, searchParams }: Props) {
          ) : (
             <Gallery images={images.map((img) => ({ id: img.id, url: img.url, alt: img.alternativeText || img.name || '' }))} />
          )}
+         <FamilyBrand />
       </div>
    );
 }

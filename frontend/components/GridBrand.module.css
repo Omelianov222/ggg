@@ -7,7 +7,8 @@
 */
 
 .wrapper {
-   background: #080808;
+   /* background: #080808; */
+   background: var(--grid-brand-wrapper-bg);
    min-height: 100vh;
    display: flex;
    align-items: center;
@@ -27,7 +28,8 @@
 /* ── Базовий блок ── */
 .block {
    padding: 48px 40px;
-   color: #f0ece2;
+   /* color: #f0ece2; */
+   color: var(--grid-brand-text);
    position: relative;
    display: flex;
    flex-direction: column;
@@ -38,7 +40,8 @@
 /* ── Верхній блок ── */
 .blockTop {
    grid-column: 1 / -1;
-   background: #1a2e20;
+   /* background: #1a2e20; */
+   background: var(--grid-brand-top-bg);
    min-height: 280px;
    clip-path: polygon(0% 0%,
          100% 0%,
@@ -51,7 +54,8 @@
 
 /* ── Нижній лівий — зрізати правий верхній кут ── */
 .blockLeft {
-   background: #16213e;
+   /* background: #16213e; */
+   background: var(--grid-brand-left-bg);
    clip-path: polygon(0% 0%,
          100% 48px,
          100% 100%,
@@ -61,7 +65,8 @@
 
 /* ── Нижній центральний — без зрізів ── */
 .blockCenter {
-   background: #0f3460;
+   /* background: #0f3460; */
+   background: var(--grid-brand-center-bg);
    /* transform: translateY(-19%); */
    z-index: 1;
    max-height: 50%;
@@ -69,7 +74,8 @@
 
 /* ── Нижній правий — зрізати лівий верхній кут ── */
 .blockRight {
-   background: #16213e;
+   /* background: #16213e; */
+   background: var(--grid-brand-right-bg);
    clip-path: polygon(0 48px,
          100% 0%,
          100% 100%,
@@ -85,7 +91,8 @@
    left: 40px;
    width: 48px;
    height: 3px;
-   background: #e94560;
+   /* background: #e94560; */
+   background: var(--grid-brand-accent);
 }
 
 /* ── Тег ── */
@@ -94,7 +101,8 @@
    font-size: 10px;
    letter-spacing: 0.2em;
    text-transform: uppercase;
-   color: #e94560;
+   /* color: #e94560; */
+   color: var(--grid-brand-accent);
    margin-bottom: 12px;
 }
 

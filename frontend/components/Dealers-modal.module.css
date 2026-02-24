@@ -1,11 +1,17 @@
 /* Dealers modal - pure CSS styles */
 :root {
-   --dmBgStart: #0f1724;
+   /* --dmBgStart: #0f1724;
    --dmBgEnd: #0b1220;
    --dmAccent: #60a5fa;
    --dmPanel: rgba(255, 255, 255, 0.04);
    --dmText: #e6eef8;
-   --dmSub: #bcd3ee;
+   --dmSub: #bcd3ee; */
+   --dmBgStart: var(--dm-bg-start);
+   --dmBgEnd: var(--dm-bg-end);
+   --dmAccent: var(--dm-accent);
+   --dmPanel: var(--dm-panel);
+   --dmText: var(--dm-text);
+   --dmSub: var(--dm-sub);
 }
 
 .dmRoot {
@@ -21,7 +27,8 @@
 .dmBackdrop {
    position: absolute;
    inset: 0;
-   background: rgba(0, 0, 0, 0.6);
+   /* background: rgba(0, 0, 0, 0.6); */
+   background: var(--dm-backdrop);
    backdrop-filter: blur(0px) saturate(120%);
 }
 
@@ -51,7 +58,8 @@
    gap: 12px;
    padding: 18px 20px;
    background: linear-gradient(90deg, var(--dmBgStart), var(--dmBgEnd));
-   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+   /* border-bottom: 1px solid rgba(255, 255, 255, 0.04); */
+   border-bottom: 1px solid var(--dm-header-border);
    color: var(--dmText);
 }
 
@@ -80,7 +88,8 @@
 }
 
 .dmCloseBtn:hover {
-   background: rgba(255, 255, 255, 0.03);
+   /* background: rgba(255, 255, 255, 0.03); */
+   background: var(--dm-panel);
 }
 
 .dmBody {
@@ -99,8 +108,10 @@
    align-items: flex-start;
    padding: 12px;
    border-radius: 10px;
-   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
-   border: 1px solid rgba(255, 255, 255, 0.03);
+   /* background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+   border: 1px solid rgba(255, 255, 255, 0.03); */
+   background: var(--dm-card-bg);
+   border: 1px solid var(--dm-card-border);
 }
 
 .dmAvatar {
@@ -110,7 +121,8 @@
    display: flex;
    align-items: center;
    justify-content: center;
-   background: rgba(255, 255, 255, 0.03);
+   /* background: rgba(255, 255, 255, 0.03); */
+   background: var(--dm-avatar-bg);
 }
 
 .dmName {
@@ -127,15 +139,18 @@
 
 .dmFooter {
    padding: 14px 20px;
-   background: rgba(255, 255, 255, 0.01);
-   border-top: 1px solid rgba(255, 255, 255, 0.03);
+   /* background: rgba(255, 255, 255, 0.01);
+   border-top: 1px solid rgba(255, 255, 255, 0.03); */
+   background: var(--dm-footer-bg);
+   border-top: 1px solid var(--dm-footer-border);
    text-align: right;
 }
 
 .dmCloseAction {
    padding: 8px 14px;
    border-radius: 8px;
-   background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+   /* background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)); */
+   background: var(--dm-close-btn-bg);
    color: var(--dmText);
    border: none;
    cursor: pointer;

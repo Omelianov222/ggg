@@ -1,7 +1,11 @@
 :root {
-   --gap: 0px;
+   /* --gap: 0px;
    --card-bg: #f3f4f6;
    --card-border: #e5e7eb;
+   --radius: 0px; */
+   --gap: 0px;
+   --card-bg: var(--grid-card-bg);
+   --card-border: var(--grid-card-border);
    --radius: 0px;
 }
 
@@ -44,11 +48,12 @@
       height: calc(100svh - var(--header-height));
       pointer-events: none;
       z-index: 2;
-      background: radial-gradient(circle at 50% 50%,
+      /* background: radial-gradient(circle at 50% 50%,
             rgba(0, 0, 0, 0.6) 85px,
             rgba(0, 0, 0, 0.36) 15%,
             rgba(0, 0, 0, 0.15) 30%,
-            rgba(0, 0, 0, 0) 40%);
+            rgba(0, 0, 0, 0) 40%); */
+      background: var(--grid-radial-overlay);
    }
 }
 

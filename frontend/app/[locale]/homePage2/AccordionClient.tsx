@@ -178,7 +178,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
                      className={styles.panelRadio}
                      defaultChecked={i === 0}
                   />
-                  <div className={`${styles.panel} ${hasMultiplePanels ? styles.hasSkew : ''}`}>
+                  <div className={`${styles.panel} ${styles.hasSkew}`}>
                      {i === 0 ? (
                         <div className={styles.panelBackground}>
                            <video
@@ -197,6 +197,21 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
                      <div className={styles["panel-content"]}>
 
                      </div>
+                     {/* Scroll indicator arrows on first panel */}
+                     {i === 0 && (
+                        <div className={styles.scrollIndicator} aria-hidden="true">
+                           <span className={styles.scrollArrow}>︾</span>
+
+                        </div>
+                     )}
+                     {/* Pulse click indicator on second panel */}
+                     {i === 1 && (
+                        <div className={styles.pulseIndicator} aria-hidden="true">
+                           <div className={styles.pulseCircle}>
+                              <span style={{ fontSize: '20px' }}></span>
+                           </div>
+                        </div>
+                     )}
                   </div>
                </label>
             ))}

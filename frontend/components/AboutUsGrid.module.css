@@ -55,14 +55,15 @@
    width: 100%;
    height: 3px;
    margin-top: 0.75rem;
-   background: linear-gradient(90deg, #111, #777);
+   /* background: linear-gradient(90deg, #111, #777); */
+   background: var(--about-heading-line);
    border-radius: 2px;
 }
 
 .about-text p {
    font-size: 1.0rem;
    line-height: 1.8;
-   color: #d1d0d0;
+   /* color: #d1d0d0; */
 }
 
 /* ===== IMAGE ===== */
