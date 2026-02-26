@@ -78,7 +78,7 @@ export default function DealersMap({ data }: { data: Dealer[] }) {
       }).setView([20, 0], 2);
       leafletMap.current = map;
 
-      const whiteTiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      const whiteTiles = L.tileLayer("https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}", {
          attribution:
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
          noWrap: true,
@@ -134,7 +134,7 @@ export default function DealersMap({ data }: { data: Dealer[] }) {
    }, [data]);
 
    return (
-      <div>
+      <div style={{ padding: "0 0 80px 0", position: "relative" }}>
          <div ref={mapRef} style={{ height: "70vh", width: "70%", margin: "0 auto", borderRadius: "30px", overflow: "hidden" }} />
          <DealersModal
             open={open}

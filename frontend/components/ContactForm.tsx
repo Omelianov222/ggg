@@ -15,43 +15,45 @@ export default function ContactForm() {
          <div className={styles.container}>
             <PageHeader title="HAVE A QUESTION?" />
 
+            <div className={styles.contactContainer}>
+               <form className={styles.form} onSubmit={handleSubmit}>
+                  <input
+                     type="email"
+                     placeholder="Your e-mail"
+                     className={styles.input}
+                     required
+                  />
 
-            <form className={styles.form} onSubmit={handleSubmit}>
-               <input
-                  type="email"
-                  placeholder="Your e-mail"
-                  className={styles.input}
-                  required
-               />
+                  <input
+                     type="text"
+                     placeholder="Your Name"
+                     className={styles.input}
+                     required
+                  />
 
-               <input
-                  type="text"
-                  placeholder="Your Name"
-                  className={styles.input}
-                  required
-               />
+                  <textarea
+                     placeholder="Your message"
+                     className={styles.textarea}
+                     rows={1}
+                     required
+                  />
 
-               <textarea
-                  placeholder="Your message"
-                  className={styles.textarea}
-                  rows={1}
-                  required
-               />
+                  <button type="submit" className={styles.button}>
+                     Send
+                  </button>
+               </form>
 
-               <button type="submit" className={styles.button}>
-                  Send
-               </button>
-            </form>
-
-            <div className={styles.contactInfo}>
-               <h3 className={styles.contactTitle}>CONTACT US</h3>
-               <a href="mailto:office@gelexglobal.com" className={styles.email}>
-                  office@gelexglobal.com
-               </a>
-               <a href="mailto:pr@gelexglobal.com" className={styles.email}>
-                  pr@gelexglobal.com
-               </a>
+               <div className={styles.contactInfo}>
+                  <h3 className={styles.contactTitle}>CONTACT US</h3>
+                  <a href="mailto:office@gelexglobal.com" className={styles.email}>
+                     office@gelexglobal.com
+                  </a>
+                  <a href="mailto:pr@gelexglobal.com" className={styles.email}>
+                     pr@gelexglobal.com
+                  </a>
+               </div>
             </div>
+
          </div>
       </section>
    );

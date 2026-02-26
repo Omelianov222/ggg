@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import styles from './About.module.css'
 import { PageHeader } from '@/components/UI/PageHeader'
 import AboutUsGrid from '@/components/AboutUsGrid'
+import FamilyBrand from '@/components/FamilyBrand'
 
 type Props = {
    params: Promise<{ locale: string }>
@@ -51,6 +52,7 @@ export default async function AboutPage({ params }: Props) {
          </div>
 
          <AboutUsGrid data={aboutUsGrid} />
+         <FamilyBrand />
       </>
    )
 }
