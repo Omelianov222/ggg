@@ -1,11 +1,6 @@
 /* Dealers modal - pure CSS styles */
 :root {
-   /* --dmBgStart: #0f1724;
-   --dmBgEnd: #0b1220;
-   --dmAccent: #60a5fa;
-   --dmPanel: rgba(255, 255, 255, 0.04);
-   --dmText: #e6eef8;
-   --dmSub: #bcd3ee; */
+
    --dmBgStart: var(--dm-bg-start);
    --dmBgEnd: var(--dm-bg-end);
    --dmAccent: var(--dm-accent);
