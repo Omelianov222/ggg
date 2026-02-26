@@ -3,15 +3,15 @@ import DealersMap from "../../../components/DealersMap";
 import dealers from '../../../data/dealers';
 import { PageHeader } from "@/components/UI/PageHeader";
 import FamilyBrand from "@/components/FamilyBrand";
-
+import style from "./Dealers.module.css"
 export default function DealersPage() {
    const data = dealers;
 
    return (
-      <div >
+      <section className={style.dealerContainer}>
          <PageHeader title="Our Dealers" />
          <DealersMap data={data} />
          <FamilyBrand />
-      </div>
+      </section>
    );
 }

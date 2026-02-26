@@ -1,0 +1,8 @@
+.dealerContainer {
+   background: var(--dealer-bg);
+   padding: .1rem;
+}
+
+.dealerContainer h1 {
+   color: var(--dm-text);
+}

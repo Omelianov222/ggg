@@ -39,8 +39,13 @@ export default function LogoFixed() {
       >
          <div className={styles['logo-fixed']} ref={logoFixedRef}>
             <div className={styles['logo-flip-fixed']}>
-               <img className={styles['logo-main']} src="/logo3.svg" alt="Logo" />
+               <span>
+
+                  <img className={styles['logo-main']} src="/logo3.svg" alt="Logo" />
+               </span>
+
                <img className={styles['logo-hover']} src="/ecoLogo.png" alt="Eco Logo" />
+
             </div>
          </div>
       </Link>

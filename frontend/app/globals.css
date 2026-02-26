@@ -69,11 +69,12 @@
    --news-notfound: #6b7280;
 
    /* === DEALERS MODAL COLORS === */
+   --dealer-bg: rgb(255, 255, 255);
    --dm-bg-start: #0f1724;
    --dm-bg-end: #0b1220;
    --dm-accent: #60a5fa;
    --dm-panel: rgba(255, 255, 255, 0.04);
-   --dm-text: #e6eef8;
+   --dm-text: #000000;
    --dm-sub: #bcd3ee;
    --dm-backdrop: rgba(0, 0, 0, 0.6);
    --dm-header-border: rgba(255, 255, 255, 0.04);
@@ -124,7 +125,7 @@ html.light-theme {
    --foreground: #ffffff;
 
 
-
+   --logo-bg: #1b1b1ba2;
 
    /* === NAVBAR COLORS === */
    --navbar-bg: rgba(31, 31, 31, 0.425);
