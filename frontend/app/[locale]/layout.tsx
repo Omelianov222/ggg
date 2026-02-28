@@ -19,6 +19,7 @@ export const metadata: Metadata = {
    title: "Site Title",
    description: "Site description",
 };
+export const revalidate = 3600; // ISR for layout-level data
 
 export default async function LocaleLayout({
    children,

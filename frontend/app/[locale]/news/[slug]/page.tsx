@@ -2,6 +2,7 @@ import styles from '@/components/NewsItem.module.css';
 import { fetchAPI } from "@/app/lib/api";
 import ReactMarkdown from "react-markdown";
 import Image from 'next/image';
+export const revalidate = 3600; // ISR: 60 minutes
 
 export default async function NewsItemPage({
    params,

@@ -5,6 +5,7 @@ import styles from './About.module.css'
 import { PageHeader } from '@/components/UI/PageHeader'
 import AboutUsGrid from '@/components/AboutUsGrid'
 import FamilyBrand from '@/components/FamilyBrand'
+export const revalidate = 3600; // ISR: 60 minutes
 
 type Props = {
    params: Promise<{ locale: string }>

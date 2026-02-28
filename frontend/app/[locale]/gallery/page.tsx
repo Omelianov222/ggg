@@ -5,6 +5,7 @@ import styles from "@/components/Gallery.module.css";
 import { SectionHeader } from "@/components/UI/SectionHeader";
 import { PageHeader } from "@/components/UI/PageHeader";
 import FamilyBrand from "@/components/FamilyBrand";
+export const revalidate = 3600; // ISR: 60 minutes
 interface Props {
    params: Promise<{ locale: string }>;
    searchParams?: { [key: string]: string | string[] | undefined };
