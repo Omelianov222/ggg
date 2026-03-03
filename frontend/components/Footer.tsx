@@ -90,7 +90,7 @@ export default function Footer({ locale }: FooterProps) {
             <div className={styles.col}>
                <div style={{ display: "flex", alignItems: "center", position: "relative" }}>
                   <div style={{ flex: "0 0 30%", minHeight: "100%", }}>
-                     <Logo />
+                     <Logo disableInvert />
                   </div>
                   <div style={{ flex: "0 0 70%" }}>
 

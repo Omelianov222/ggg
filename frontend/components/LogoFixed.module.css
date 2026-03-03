@@ -19,6 +19,13 @@
    /* background: rgba(68, 68, 68, 0.212); */
 }
 
+.logo-wrapper {
+   width: 100%;
+   height: 100%;
+}
+
+
+
 .logo-flip-fixed {
    width: 100%;
    height: 100%;

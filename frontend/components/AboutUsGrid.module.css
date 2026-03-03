@@ -61,7 +61,7 @@
 }
 
 .about-text p {
-   font-size: 1.0rem;
+   font-weight: 500;
    line-height: 1.8;
    /* color: #d1d0d0; */
 }
