@@ -135,7 +135,7 @@ export default function DealersMap({ data }: { data: Dealer[] }) {
 
    return (
       <div style={{ padding: "0 0 50px 0", position: "relative" }}>
-         <div ref={mapRef} style={{ height: "70vh", width: "70%", margin: "0 auto", borderRadius: "30px", overflow: "hidden" }} />
+         <div ref={mapRef} style={{ height: "70vh", width: "min(1200px, 95vw)", margin: "0 auto", borderRadius: "30px", overflow: "hidden" }} />
          <DealersModal
             open={open}
             onClose={() => setOpen(false)}

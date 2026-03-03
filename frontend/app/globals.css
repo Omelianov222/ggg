@@ -70,11 +70,11 @@
 
    /* === DEALERS MODAL COLORS === */
    --dealer-bg: rgb(255, 255, 255);
-   --dm-bg-start: #0f1724;
-   --dm-bg-end: #0b1220;
+   --dm-bg-start: #1b1b1b;
+   --dm-bg-end: #1b1b1b;
    --dm-accent: #60a5fa;
    --dm-panel: rgba(255, 255, 255, 0.04);
-   --dm-text: #000000;
+   --dm-text: #1b1b1b;
    --dm-sub: #bcd3ee;
    --dm-backdrop: rgba(0, 0, 0, 0.6);
    --dm-header-border: rgba(255, 255, 255, 0.04);
@@ -121,8 +121,8 @@ html.dark-theme {
 
 /* === LIGHT THEME === */
 html.light-theme {
-   --background: #1a1a1a;
-   --foreground: #ffffff;
+   --background: #1b1b1b;
+   --foreground: #fff;
 
 
    --logo-bg: #1b1b1ba2;
@@ -135,7 +135,7 @@ html.light-theme {
 
    /* NAVBAR LIGHT
    --navbar-bg: rgba(240, 240, 240, 0.849);
-   --navbar-text: #1a1a1a;
+   --navbar-text: #1b1b1b;
    --navbar-border: rgba(0, 0, 0, 0.1);
    --navbar-hover-bg: rgba(0, 0, 0, 0.05); */
 
@@ -156,24 +156,25 @@ html.light-theme {
          rgb(27, 27, 27) 85%,
          rgba(24, 24, 24, 0.13) 100%);
 
+
    /* HERO LIGHT */
-   --hero-text: #ffffff;
-   --hero-text-secondary: #ffffff;
-   --hero-text-content: #444;
-   --hero-panel-bg: rgba(0, 0, 0, 0.04);
-   --hero-panel-border: rgba(216, 216, 216, 0.911);
+   --hero-text: #1b1b1b;
+   --hero-text-secondary: #1b1b1b;
+   --hero-text-content: #1b1b1b;
+   --hero-panel-bg: rgb(255, 255, 255);
+   --hero-panel-border: rgba(27, 27, 27, 0.911);
 
    /* LANDING GRID LIGHT */
    --grid-card-bg: #ffffff;
    --grid-card-border: #e5e7eb;
 
    /* NEWS LIGHT */
-   --news-title: #1a1a1a;
-   --news-text: #333;
-   --news-heading-h1: #1a1a1a;
-   --news-heading-h2: #222;
-   --news-heading-h3: #333;
-   --news-strong: #1a1a1a;
+   --news-title: #1b1b1b;
+   --news-text: #1b1b1b;
+   --news-heading-h1: #fff;
+   --news-heading-h2: #1b1b1b;
+   --news-heading-h3: #1b1b1b;
+   --news-strong: #1b1b1b;
    --news-content-bg: #f5f5f5;
 
    /* CONTACT LIGHT */
@@ -181,12 +182,12 @@ html.light-theme {
    --contact-border: rgba(0, 0, 0, 0.2);
    --contact-border-focus: rgba(0, 0, 0, 0.5);
    --contact-placeholder: rgba(255, 253, 253, 0.856);
-   --contact-btn-bg: #1a1a1a;
+   --contact-btn-bg: #1b1b1b;
    --contact-btn-text: #ffffff;
    --contact-email-hover: #0070f3;
 
    /* FAMILY LIGHT */
-   --family-text: #1a1a1a;
+   --family-text: #1b1b1b;
    --family-card-bg: rgba(0, 0, 0, 0.05);
    --family-card-hover-bg: rgba(0, 0, 0, 0.08);
    --family-image-filter: invert(0.6) brightness(0.5);

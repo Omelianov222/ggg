@@ -15,8 +15,8 @@ export default function NewsList({
 }) {
    console.log("items", JSON.stringify(items));
    return (
-      <>
-         <PageHeader title="Latest News" />
+      <section className={styles.newsSection}>
+         <PageHeader title="Latest News" colorVar="--news-heading-h1" />
          <div className={styles.newsGrid}>
             {items.map((item) => (
                <article key={item.id} className={styles.newsCard}>
@@ -36,7 +36,7 @@ export default function NewsList({
                </article>
             ))}
          </div>
-      </>
+      </section>
 
    );
 }

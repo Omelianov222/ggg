@@ -11,7 +11,11 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
 
    return (
       <>
+
          <NewsList items={data.data} locale={resolvedParams.locale} />
+         <div style={{ background: "#fff", color: "var(--family-text)", padding: "2rem 0 0 0" }}>
+            <p style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}> Lorem ipsum dolor sit amet consectetur adipisicing elit. Error accusantium iure tenetur, corporis officia adipisci voluptatibus ullam architecto voluptas illum quasi quia asperiores rerum provident ea mollitia a molestias numquam?</p>
+         </div>
          <FamilyBrand />
       </>
 

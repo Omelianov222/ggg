@@ -4,6 +4,7 @@ import ContactForm from "./ContactForm";
 import AboutUs from "./AboutUs";
 import SectionDivider from "./SectionDivider";
 import MailInfo from "./MailInfo";
+import { Divider } from "./UI/Divider";
 
 export default function HomeHero({ data, locale }: { data: any; locale: string }) {
    // Expect `data` to be the Strapi response node; pass attributes to LandingGrid

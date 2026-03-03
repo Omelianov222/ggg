@@ -350,9 +350,9 @@
 /* Scroll down indicator arrows */
 .scrollIndicator {
    position: absolute;
-   bottom: 0px;
-   left: 50vw;
-   transform: translateX(-50%);
+   bottom: 50%;
+   right: 0%;
+   transform: translateY(50%) rotate(-90deg);
    display: flex;
    gap: 8px;
    z-index: 10;
