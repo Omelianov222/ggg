@@ -12,7 +12,7 @@ export default function DealersPage() {
          <PageHeader title="Our Dealers" />
          <DealersMap data={data} />
          <div style={{ background: "#fff", color: "var(--family-text)", padding: "2rem 0 0 0" }}>
-            <p style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}> Lorem ipsum dolor sit amet consectetur adipisicing elit. Error accusantium iure tenetur, corporis officia adipisci voluptatibus ullam architecto voluptas illum quasi quia asperiores rerum provident ea mollitia a molestias numquam?</p>
+            <p style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center", fontWeight: "500" }}> Lorem ipsum dolor sit amet consectetur adipisicing elit. Error accusantium iure tenetur, corporis officia adipisci voluptatibus ullam architecto voluptas illum quasi quia asperiores rerum provident ea mollitia a molestias numquam?</p>
          </div>
          <FamilyBrand />
       </section>

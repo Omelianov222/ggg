@@ -2,6 +2,7 @@ import styles from '@/components/NewsItem.module.css';
 import { fetchAPI } from "@/app/lib/api";
 import ReactMarkdown from "react-markdown";
 import Image from 'next/image';
+import { PageHeader } from '@/components/UI/PageHeader';
 export const revalidate = 3600; // ISR: 60 minutes
 
 export default async function NewsItemPage({
@@ -24,9 +25,8 @@ export default async function NewsItemPage({
 
    return (
       <div className={styles.container}>
-         <header className={styles.header}>
-            <h1 className={styles.title}>{item.Title}</h1>
-         </header>
+         <PageHeader title={item.Title} />
+
 
          {item.Cover?.url && (
             <div className={styles.coverWrapper}>
