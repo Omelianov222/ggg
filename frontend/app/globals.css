@@ -103,7 +103,7 @@
 
    /* === ABOUT US COLORS === */
    --about-heading: inherit;
-   --about-heading-line: linear-gradient(90deg, #111, #777);
+   --about-heading-line: #282828;
 }
 
 /* === DARK THEME === */
