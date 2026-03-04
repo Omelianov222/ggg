@@ -16,29 +16,32 @@ type Props = {
 export default function AboutUsGrid({ data }: Props) {
 
    return (
-      <section className={styles['about-grid']}>
-         {data.map((item, index) => {
-            const isEven = index % 2 === 0;
-            const imageUrl = item.Photo?.[0]?.url;
+      <div style={{ background: 'var(--aboutUsGrid-bg)' }}>
+         <section className={styles['about-grid']}>
+            {data.map((item, index) => {
+               const isEven = index % 2 === 0;
+               const imageUrl = item.Photo?.[0]?.url;
 
-            return (
-               <div
-                  key={item.id}
-                  className={`${styles['about-row']} ${isEven ? styles['normal'] : styles['reverse']}`}
-               >
+               return (
+                  <div
+                     key={item.id}
+                     className={`${styles['about-row']} ${isEven ? styles['normal'] : styles['reverse']}`}
+                  >
 
-                  <div className={styles['about-text']}>
-                     <ReactMarkdown>{item.Paragraph}</ReactMarkdown>
-                  </div>
-
-                  {imageUrl && (
-                     <div className={styles['about-image']}>
-                        <img src={imageUrl} alt="" />
+                     <div className={styles['about-text']}>
+                        <ReactMarkdown>{item.Paragraph}</ReactMarkdown>
                      </div>
-                  )}
-               </div>
-            );
-         })}
-      </section>
+
+                     {imageUrl && (
+                        <div className={styles['about-image']}>
+                           <img src={imageUrl} alt="" />
+                        </div>
+                     )}
+                  </div>
+               );
+            })}
+         </section>
+      </div>
+
    );
 }

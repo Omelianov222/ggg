@@ -177,6 +177,11 @@ html.light-theme {
    --news-strong: #282828;
    --news-content-bg: #f5f5f5;
 
+
+   --aboutUsGrid-bg: #ffffff;
+   --aboutUsGrid-border: #e5e7eb;
+   --aboutUsGrid-text: #282828;
+
    /* CONTACT LIGHT */
    --contact-text: #ffffff;
    --contact-border: rgba(0, 0, 0, 0.2);
