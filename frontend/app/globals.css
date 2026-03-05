@@ -110,6 +110,9 @@
    /* === ABOUT US COLORS === */
    --about-heading: inherit;
    --about-heading-line: #202020;
+   --aboutUsGrid-bg: #ffffff;
+   --aboutUsGrid-border: #e5e7eb;
+   --aboutUsGrid-text: #202020;
 }
 
 /* === DARK THEME === */
