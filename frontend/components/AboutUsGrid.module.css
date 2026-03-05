@@ -10,16 +10,7 @@
    position: relative;
 }
 
-.about-grid::after {
-   content: "";
-   display: block;
-   position: absolute;
-   left: 0;
-   bottom: 0;
-   height: 2px;
-   width: 100%;
-   background: var(--about-heading-line);
-}
+
 
 .about-row {
    display: grid;

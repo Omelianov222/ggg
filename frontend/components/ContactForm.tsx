@@ -17,30 +17,39 @@ export default function ContactForm() {
 
             <div className={styles.contactContainer}>
                <form className={styles.form} onSubmit={handleSubmit}>
-                  <input
-                     type="email"
-                     placeholder="Your e-mail"
-                     className={styles.input}
-                     required
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                     <input
+                        type="email"
+                        placeholder="Your e-mail"
+                        className={styles.input}
+                        required
+                     />
 
-                  <input
-                     type="text"
-                     placeholder="Your Name"
-                     className={styles.input}
-                     required
-                  />
+                     <input
+                        type="text"
+                        placeholder="Your Name"
+                        className={styles.input}
+                        required
+                     />
 
-                  <textarea
-                     placeholder="Your message"
-                     className={styles.textarea}
-                     rows={1}
-                     required
-                  />
+                     <textarea
+                        placeholder="Your message"
+                        className={styles.textarea}
+                        rows={1}
+                        required
+                     />
 
-                  <button type="submit" className={styles.button}>
-                     Send
-                  </button>
+                  </div>
+
+                  <div style={{
+                     display: 'flex', justifyContent: 'center', flex: "1 1 100%", margin: " 50px 0px"
+                  }}>
+
+                     <button type="submit" className={styles.button
+                     } >
+                        Send
+                     </button>
+                  </div>
                </form>
 
                <div className={styles.contactInfo}>
@@ -54,7 +63,7 @@ export default function ContactForm() {
                </div>
             </div>
 
-         </div>
-      </section>
+         </div >
+      </section >
    );
 }

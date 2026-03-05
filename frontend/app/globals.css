@@ -70,11 +70,11 @@
 
    /* === DEALERS MODAL COLORS === */
    --dealer-bg: rgb(255, 255, 255);
-   --dm-bg-start: #282828;
-   --dm-bg-end: #282828;
+   --dm-bg-start: #202020;
+   --dm-bg-end: #202020;
    --dm-accent: #60a5fa;
    --dm-panel: rgba(255, 255, 255, 0.04);
-   --dm-text: #282828;
+   --dm-text: #202020;
    --dm-sub: #bcd3ee;
    --dm-backdrop: rgba(0, 0, 0, 0.6);
    --dm-header-border: rgba(255, 255, 255, 0.04);
@@ -103,44 +103,31 @@
 
    /* === ABOUT US COLORS === */
    --about-heading: inherit;
-   --about-heading-line: #282828;
+   --about-heading-line: #202020;
 }
 
 /* === DARK THEME === */
 html.dark-theme {
-   --background: #0a0a0a;
-   --foreground: #ededed;
-   /* === HERO/LANDING COLORS === */
-   --hero-text: #fff;
-   --hero-text-secondary: #f3f4f6;
-   --hero-text-content: #eaeef2;
-   --hero-panel-bg: rgba(255, 255, 255, 0.06);
-   --hero-panel-border: rgba(255, 255, 255, 0.08);
-   --hero-text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
-}
-
-/* === LIGHT THEME === */
-html.light-theme {
-   --background: #282828;
+   --background: #202020;
    --foreground: #fff;
 
 
-   --logo-bg: #282828a2;
+   --logo-bg: #202020a2;
 
    /* === NAVBAR COLORS === */
-   --navbar-bg: rgba(31, 31, 31, 0.425);
+   --navbar-bg: rgba(70, 70, 70, 0.425);
    --navbar-text: #fff;
    --navbar-border: rgba(255, 255, 255, 0.2);
    --navbar-hover-bg: rgba(255, 255, 255, 0.03);
 
    /* NAVBAR LIGHT
    --navbar-bg: rgba(240, 240, 240, 0.849);
-   --navbar-text: #282828;
+   --navbar-text: #202020;
    --navbar-border: rgba(0, 0, 0, 0.1);
    --navbar-hover-bg: rgba(0, 0, 0, 0.05); */
 
    /* FOOTER LIGHT */
-   --footer-bg: #282828;
+   --footer-bg: #202020;
    --footer-text: #ffffff;
    --footer-border-top: rgba(0, 0, 0, 0.1);
    --footer-divider: #00000033;
@@ -158,9 +145,9 @@ html.light-theme {
 
 
    /* HERO LIGHT */
-   --hero-text: #282828;
-   --hero-text-secondary: #282828;
-   --hero-text-content: #282828;
+   --hero-text: #202020;
+   --hero-text-secondary: #202020;
+   --hero-text-content: #202020;
    --hero-panel-bg: rgb(255, 255, 255);
    --hero-panel-border: rgba(27, 27, 27, 0.911);
 
@@ -170,29 +157,109 @@ html.light-theme {
 
    /* NEWS LIGHT */
    --news-title: #ffffff;
-   --news-text: #282828;
+   --news-text: #202020;
    --news-heading-h1: #fff;
-   --news-heading-h2: #282828;
-   --news-heading-h3: #282828;
-   --news-strong: #282828;
+   --news-heading-h2: #202020;
+   --news-heading-h3: #202020;
+   --news-strong: #202020;
    --news-content-bg: #f5f5f5;
 
 
    --aboutUsGrid-bg: #ffffff;
    --aboutUsGrid-border: #e5e7eb;
-   --aboutUsGrid-text: #282828;
+   --aboutUsGrid-text: #202020;
 
    /* CONTACT LIGHT */
    --contact-text: #ffffff;
    --contact-border: rgba(0, 0, 0, 0.2);
    --contact-border-focus: rgba(0, 0, 0, 0.5);
    --contact-placeholder: rgba(255, 253, 253, 0.856);
-   --contact-btn-bg: #282828;
+   --contact-btn-bg: #202020;
    --contact-btn-text: #ffffff;
    --contact-email-hover: #0070f3;
 
    /* FAMILY LIGHT */
-   --family-text: #282828;
+   --family-text: #202020;
+   --family-card-bg: rgba(0, 0, 0, 0.05);
+   --family-card-hover-bg: rgba(0, 0, 0, 0.08);
+   --family-image-filter: invert(0.6) brightness(0.5);
+   --family-background: rgb(255, 253, 253);
+}
+
+/* === LIGHT THEME === */
+html.light-theme {
+   --background: #202020;
+   --foreground: #fff;
+
+
+   --logo-bg: #202020a2;
+
+   /* === NAVBAR COLORS === */
+   --navbar-bg: rgba(70, 70, 70, 0.425);
+   --navbar-text: #fff;
+   --navbar-border: rgba(255, 255, 255, 0.2);
+   --navbar-hover-bg: rgba(255, 255, 255, 0.03);
+
+   /* NAVBAR LIGHT
+   --navbar-bg: rgba(240, 240, 240, 0.849);
+   --navbar-text: #202020;
+   --navbar-border: rgba(0, 0, 0, 0.1);
+   --navbar-hover-bg: rgba(0, 0, 0, 0.05); */
+
+   /* FOOTER LIGHT */
+   --footer-bg: #202020;
+   --footer-text: #ffffff;
+   --footer-border-top: rgba(0, 0, 0, 0.1);
+   --footer-divider: #00000033;
+   --footer-desc-text: rgba(255, 255, 255, 0.7);
+
+   /* GALLERY LIGHT */
+   --gallery-btn-border: #999;
+   --gallery-btn-hover-text: #0070f3;
+   --gallery-dots-text: #666;
+   --gallery-gradient: linear-gradient(to bottom,
+         rgba(20, 20, 20, 0.034) 0%,
+         rgba(27, 27, 27, 0.904) 50%,
+         rgb(27, 27, 27) 85%,
+         rgba(24, 24, 24, 0.13) 100%);
+
+
+   /* HERO LIGHT */
+   --hero-text: #202020;
+   --hero-text-secondary: #202020;
+   --hero-text-content: #202020;
+   --hero-panel-bg: rgb(255, 255, 255);
+   --hero-panel-border: rgba(27, 27, 27, 0.911);
+
+   /* LANDING GRID LIGHT */
+   --grid-card-bg: #ffffff;
+   --grid-card-border: #e5e7eb;
+
+   /* NEWS LIGHT */
+   --news-title: #ffffff;
+   --news-text: #202020;
+   --news-heading-h1: #fff;
+   --news-heading-h2: #202020;
+   --news-heading-h3: #202020;
+   --news-strong: #202020;
+   --news-content-bg: #f5f5f5;
+
+
+   --aboutUsGrid-bg: #ffffff;
+   --aboutUsGrid-border: #e5e7eb;
+   --aboutUsGrid-text: #202020;
+
+   /* CONTACT LIGHT */
+   --contact-text: #ffffff;
+   --contact-border: rgba(0, 0, 0, 0.2);
+   --contact-border-focus: rgba(0, 0, 0, 0.5);
+   --contact-placeholder: rgba(255, 253, 253, 0.856);
+   --contact-btn-bg: #202020;
+   --contact-btn-text: #ffffff;
+   --contact-email-hover: #0070f3;
+
+   /* FAMILY LIGHT */
+   --family-text: #202020;
    --family-card-bg: rgba(0, 0, 0, 0.05);
    --family-card-hover-bg: rgba(0, 0, 0, 0.08);
    --family-image-filter: invert(0.6) brightness(0.5);

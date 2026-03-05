@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import styles from './Footer.module.css'
 import Logo from './Logo'
-import ThemeToggle from './ThemeToggle'
+// import ThemeToggle from './ThemeToggle'
 import { fetchAPI } from '@/app/lib/api'
 import Image from 'next/image'
 
@@ -115,7 +115,7 @@ export default function Footer({ locale }: FooterProps) {
             <div className={styles.col}>
                <h4 className={styles.heading}>Social</h4>
                <div className={styles.social}>
-                  <ThemeToggle />
+                  {/* <ThemeToggle /> */}
                   {socials.map(s => {
                      const name = (s.SocialName || '').toLowerCase()
                      const href = s.link || '#'
