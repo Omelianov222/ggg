@@ -62,10 +62,14 @@ export default function Gallery({ images }: GalleryProps) {
       const row = index % 4;
       const isFirstInColumn = row === 0;
       const isEvenColumn = col % 2 === 0;
-
+      if (displayImages.length < 8) {
+         if (index % 2 !== 0 && index < 4) return { paddingBottom: '47%' }; // 16:9
+      }
       return (isFirstInColumn && !isEvenColumn)
          ? { paddingBottom: '46.62%' } // 16:9
          : { paddingBottom: '57%' }; // 1.91:1
+
+
    };
 
    const getPaginationRange = () => {
