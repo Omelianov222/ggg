@@ -5,6 +5,7 @@
    transition: all 0.3s ease-in-out;
    margin-bottom: 100px;
    position: relative;
+
 }
 
 .masonry::after {
@@ -30,10 +31,29 @@
    width: 100%;
 }
 
+/* Desktop explicit flex columns */
+.masonryDesktop {
+   display: flex;
+   gap: 1rem;
+   padding: 0 1rem;
+   margin-bottom: 100px;
+}
+
+.masonryColumn {
+   flex: 1 1 0;
+   display: flex;
+   flex-direction: column;
+}
+
+.masonryColumn .masonry-item {
+   width: 100%;
+}
+
 .masonry-item img {
    width: 100%;
    height: 100%;
    object-fit: cover;
+   border-radius: 5px;
 }
 
 
@@ -47,6 +67,11 @@
 @media (max-width: 900px) {
    .masonry {
       column-count: 2;
+   }
+
+   .masonryDesktop {
+      display: block;
+      /* fall back to column-count masonry on tablet */
    }
 }
 

@@ -1,180 +1,66 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
-import styles from "./Gallery.module.css";
+import { useEffect, useState, useCallback } from 'react';
+import GalleryGrid from './GalleryGrid';
+import Pagination from './Pagination';
+import Lightbox from './Lightbox';
 
 interface GalleryProps {
    images: { id: string | number; url: string; alt?: string }[];
 }
 
+const ITEMS_PER_PAGE = 16;
+
 export default function Gallery({ images }: GalleryProps) {
-   const ITEMS_PER_PAGE = 16;
-   const totalPages = Math.ceil(images.length / ITEMS_PER_PAGE);
+   const totalPages = Math.max(1, Math.ceil(images.length / ITEMS_PER_PAGE));
 
    const [page, setPage] = useState(1);
    const [loadedItems, setLoadedItems] = useState<Set<number>>(new Set());
-   const [isOpen, setIsOpen] = useState(false);
+
    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
-   const [isLoading, setIsLoading] = useState(false);
-
-   const start = (page - 1) * ITEMS_PER_PAGE;
-   const end = start + ITEMS_PER_PAGE;
-   const displayImages = images.slice(start, end);
-
-   const handlePageChange = (newPage: number) => {
-      setIsLoading(true);
-      setPage(newPage);
-      setTimeout(() => setIsLoading(false), 300);
-   };
-
-   const openAt = (index: number) => {
-      setCurrentIndex(start + index);
-      setIsOpen(true);
-   };
-
-   const close = () => {
-      setIsOpen(false);
-      setCurrentIndex(null);
-   };
-
-   const showNext = useCallback(() => {
-      setCurrentIndex((ci) => (ci === null ? null : (ci + 1) % images.length));
-   }, [images.length]);
-
-   const showPrev = useCallback(() => {
-      setCurrentIndex((ci) => (ci === null ? null : (ci - 1 + images.length) % images.length));
-   }, [images.length]);
 
    useEffect(() => {
-      if (!isOpen) return;
-      const onKey = (e: KeyboardEvent) => {
-         if (e.key === 'Escape') close();
-         if (e.key === 'ArrowRight') showNext();
-         if (e.key === 'ArrowLeft') showPrev();
-      };
-      window.addEventListener('keydown', onKey);
-      return () => window.removeEventListener('keydown', onKey);
-   }, [isOpen, showNext, showPrev]);
+      // reset when images change — defer to avoid cascading renders
+      const t = setTimeout(() => {
+         setPage(1);
+         setLoadedItems(new Set());
+      }, 0);
+      return () => clearTimeout(t);
+   }, [images]);
 
-   const getAspectRatio = (index: number) => {
-      const col = index / 4;
-      const row = index % 4;
-      const isFirstInColumn = row === 0;
-      const isEvenColumn = col % 2 === 0;
-      if (displayImages.length < 8) {
-         if (index % 2 !== 0 && index < 4) return { paddingBottom: '47%' }; // 16:9
-      }
-      return (isFirstInColumn && !isEvenColumn)
-         ? { paddingBottom: '46.62%' } // 16:9
-         : { paddingBottom: '57%' }; // 1.91:1
-
-
+   const handlePageChange = (newPage: number) => {
+      setLoadedItems(new Set());
+      setPage(newPage);
    };
 
-   const getPaginationRange = () => {
-      const delta = 2;
-      const range = [];
-      const rangeWithDots = [];
+   const handleItemLoad = useCallback((index: number) => {
+      setLoadedItems(prev => {
+         const next = new Set(prev);
+         next.add(index);
+         return next;
+      });
+   }, []);
 
-      for (let i = 1; i <= totalPages; i++) {
-         if (i === 1 || i === totalPages || (i >= page - delta && i <= page + delta)) {
-            range.push(i);
-         }
-      }
+   useEffect(() => {
+      // no-op: we keep loadedItems for potential UI hooks, derivations can be added later
+   }, [loadedItems, page, images.length]);
 
-      let prev = 0;
-      for (const i of range) {
-         if (i - prev > 1) rangeWithDots.push('...');
-         rangeWithDots.push(i);
-         prev = i;
-      }
-
-      return rangeWithDots;
+   const openAt = (indexInPage: number) => {
+      setCurrentIndex((page - 1) * ITEMS_PER_PAGE + indexInPage);
    };
+
+   const close = () => setCurrentIndex(null);
+
+   const showNext = useCallback(() => setCurrentIndex(ci => (ci === null ? null : (ci + 1) % images.length)), [images.length]);
+   const showPrev = useCallback(() => setCurrentIndex(ci => (ci === null ? null : (ci - 1 + images.length) % images.length)), [images.length]);
 
    return (
       <>
-         <div className={`${styles.masonry} ${isLoading ? styles.loading : ''}`}>
-            {displayImages.map((img, index) => (
-               <div
-                  key={index}
-                  className={`${styles['masonry-item']} ${loadedItems.has(index) ? styles.loaded : ''}`}
-                  onClick={() => openAt(index)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                     if (e.key === 'Enter' || e.key === ' ') openAt(index);
-                  }}
-               >
-                  <div style={{ ...getAspectRatio(index), position: 'relative', overflow: 'hidden' }}>
-                     <Image
-                        src={img.url}
-                        alt={img.alt || "Gallery image"}
-                        fill
-                        sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1400px) 33vw, 25vw"
-                        style={{ objectFit: 'cover', cursor: 'zoom-in' }}
-                        placeholder="blur"
-                        blurDataURL="/placeholder.png"
-                        onLoad={() => setLoadedItems(prev => new Set(prev).add(index))}
-                     />
-                  </div>
-               </div>
-            ))}
-         </div>
+         <GalleryGrid images={images} onItemLoad={handleItemLoad} onOpen={openAt} page={page} itemsPerPage={ITEMS_PER_PAGE} />
 
-         <div className={styles.pagination}>
-            <button
-               className={styles.pageBtn}
-               disabled={page === 1}
-               onClick={() => handlePageChange(page - 1)}
-               aria-label="Previous page"
-            >
-               ‹
-            </button>
+         <Pagination page={page} totalPages={totalPages} onChange={handlePageChange} />
 
-            {getPaginationRange().map((item, idx) => (
-               item === '...' ? (
-                  <span key={`dots-${idx}`} className={styles.dots}>…</span>
-               ) : (
-                  <button
-                     key={item}
-                     className={`${styles.pageBtn} ${page === item ? styles.active : ''}`}
-                     onClick={() => handlePageChange(item as number)}
-                  >
-                     {item}
-                  </button>
-               )
-            ))}
-
-            <button
-               className={styles.pageBtn}
-               disabled={page === totalPages}
-               onClick={() => handlePageChange(page + 1)}
-               aria-label="Next page"
-            >
-               ›
-            </button>
-         </div>
-
-         {isOpen && currentIndex !== null && (
-            <div className={styles.modalOverlay} onClick={close} role="dialog" aria-modal="true">
-               <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                  <button className={styles.closeBtn} onClick={close} aria-label="Close">✕</button>
-                  <button className={styles.prevBtn} onClick={showPrev} aria-label="Previous">‹</button>
-                  <div className={styles.modalImageWrapper}>
-                     <Image
-                        src={images[currentIndex].url}
-                        alt={images[currentIndex].alt || 'Gallery image'}
-                        width={1200}
-                        height={800}
-                        style={{ width: '100%', height: 'auto' }}
-                     />
-                  </div>
-                  <button className={styles.nextBtn} onClick={showNext} aria-label="Next">›</button>
-               </div>
-            </div>
-         )}
+         <Lightbox images={images} currentIndex={currentIndex} onClose={close} onNext={showNext} onPrev={showPrev} />
       </>
    );
 }
