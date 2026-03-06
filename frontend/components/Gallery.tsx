@@ -20,9 +20,10 @@ export default function Gallery({ images }: GalleryProps) {
    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
    useEffect(() => {
-      // reset when images change — defer to avoid cascading renders
+      // ensure current page is valid when images change and clear loaded items
+      const newTotal = Math.max(1, Math.ceil(images.length / ITEMS_PER_PAGE));
       const t = setTimeout(() => {
-         setPage(1);
+         setPage(prev => Math.min(Math.max(1, prev), newTotal));
          setLoadedItems(new Set());
       }, 0);
       return () => clearTimeout(t);

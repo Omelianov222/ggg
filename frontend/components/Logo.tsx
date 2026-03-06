@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import styles from './LogoFixed.module.css'
 
-const PAGES_WITH_GRAY_LOGO = ['dealers']
+const PAGES_WITH_GRAY_LOGO = ["idle"]
 
 type Props = {
    disableInvert?: boolean

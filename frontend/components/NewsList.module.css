@@ -11,7 +11,7 @@
 .newsCard {
    display: flex;
    flex-direction: column;
-   background: rgba(255, 255, 255, 0.171);
+   background: rgba(97, 97, 97, 0.171);
    backdrop-filter: blur(12px);
    border: 1px solid rgba(255, 255, 255, 0.082);
    border-radius: 16px;
@@ -23,9 +23,10 @@
 }
 
 .newsCard:hover {
-   transform: translateY(-6px) scale(1.02);
+
    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
-   background: rgba(255, 255, 255, 0.45);
+   /* use per-card preview color when available, fallback to semi-opaque white */
+   background: var(--preview-color, rgba(180, 180, 180, 0.26));
 }
 
 .newsCard img {
@@ -37,7 +38,7 @@
 }
 
 .newsCard img:hover {
-   transform: scale(1.03);
+   transform: scale(1.01);
 }
 
 .newsCard h2 {

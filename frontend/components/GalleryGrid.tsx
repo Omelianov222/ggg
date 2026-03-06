@@ -24,8 +24,10 @@ export default function GalleryGrid({ images, onItemLoad, onOpen, page, itemsPer
       return () => window.removeEventListener('resize', onResize);
    }, []);
 
-   const start = (page - 1) * itemsPerPage;
-   const displayImages = images.slice(start, start + itemsPerPage);
+   // enforce maximum of 16 images per page
+   const maxPerPage = Math.max(1, Math.min(16, itemsPerPage));
+   const start = (page - 1) * maxPerPage;
+   const displayImages = images.slice(start, start + maxPerPage);
 
    const getAspectRatio = (localIndex: number) => {
       const total = displayImages.length;
@@ -50,13 +52,13 @@ export default function GalleryGrid({ images, onItemLoad, onOpen, page, itemsPer
       return (
          <div className={styles.masonryDesktop}>
             {cols.map((colItems, colIdx) => (
-               <div key={colIdx} className={styles.masonryColumn}>
+               <div key={`col-${page}-${colIdx}`} className={styles.masonryColumn}>
                   {colItems.map((img, idx) => {
                      // compute index within current page (0-based)
                      const localIndex = colIdx + idx * columnsCount;
                      return (
                         <GalleryItem
-                           key={img.id}
+                           key={`item-${page}-${img.id}`}
                            img={img}
                            index={localIndex}
                            onLoad={onItemLoad}

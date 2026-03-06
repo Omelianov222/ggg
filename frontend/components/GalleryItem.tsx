@@ -14,7 +14,6 @@ interface Props {
 export default function GalleryItem({ img, index, onLoad, onOpen, aspectStyle }: Props) {
    return (
       <div
-         key={img.id}
          className={`${styles['masonry-item']}`}
          onClick={() => onOpen(index)}
          role="button"
