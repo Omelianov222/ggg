@@ -154,7 +154,12 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
       }
    }, [introFinished])
 
-
+   useEffect(() => {
+      document.body.style.overflow = (introFinished && imagesLoaded) ? '' : 'hidden';
+      return () => {
+         document.body.style.overflow = '';
+      };
+   }, [introFinished, imagesLoaded]);
 
    return (
       <div className={styles.accordionWrapper}>
@@ -204,14 +209,7 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
 
                         </div>
                      )}
-                     {/* Pulse click indicator on second panel */}
-                     {i === 1 && (
-                        <div className={styles.pulseIndicator} aria-hidden="true">
-                           <div className={styles.pulseCircle}>
-                              <span style={{ fontSize: '20px' }}></span>
-                           </div>
-                        </div>
-                     )}
+
                   </div>
                </label>
             ))}
