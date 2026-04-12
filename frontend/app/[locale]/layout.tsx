@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { fetchAPI, getSectionBackgrounds } from "../lib/api";
+import { fetchNavItems, fetchSocials, getSectionBackgrounds } from "../lib/api";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
    title: "Site Title",
    description: "Site description",
 };
-export const revalidate = 3600; // ISR for layout-level data
+export const revalidate = 86400; // 1 day
 
 export default async function LocaleLayout({
    children,
@@ -30,21 +30,12 @@ export default async function LocaleLayout({
 }) {
    const { locale } = await params;
 
-   const sectionBackgrounds = await getSectionBackgrounds(locale);
+   const [sectionBackgrounds, navItems, socials] = await Promise.all([
+      getSectionBackgrounds(locale),
+      fetchNavItems(locale),
+      fetchSocials(locale),
+   ]);
 
-   console.log("Section Backgrounds:", JSON.stringify(sectionBackgrounds))
-   const res = await fetchAPI('/api/navbars', locale)
-   const data = res.data || []
-
-   const items = data.map((item: any) => {
-      if (item.locale === locale) {
-         return { label: item.Label, link: item.Link }
-      }
-      const loc = item.localizations?.find((l: any) => l.locale === locale)
-      return loc ? { label: loc.Label, link: loc.Link } : { label: item.Label, link: item.Link }
-   })
-   // Do not render <html> or <body> here — those must be rendered once in the root layout.
-   // Apply the font variables and other body-level classes on a top-level wrapper instead.
    return (
       <div
          data-locale={locale}
@@ -62,11 +53,11 @@ export default async function LocaleLayout({
             ),
          }}
       >
-         <Navbar locale={locale} initialItems={items} />
+         <Navbar locale={locale} initialItems={navItems} />
          <main style={{ flex: 1 }}>
             {children}
          </main>
-         <Footer locale={locale} />
+         <Footer locale={locale} navItems={navItems} socials={socials} />
       </div>
    );
 }

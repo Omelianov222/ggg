@@ -3,7 +3,7 @@ import { fetchAPI } from "@/app/lib/api";
 import ReactMarkdown from "react-markdown";
 import Image from 'next/image';
 import { PageHeader } from '@/components/UI/PageHeader';
-export const revalidate = 3600; // ISR: 60 minutes
+export const revalidate = 86400; // 1 day
 
 export default async function NewsItemPage({
    params,

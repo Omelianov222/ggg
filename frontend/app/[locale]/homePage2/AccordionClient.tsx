@@ -1,181 +1,114 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./AccordionClient.module.css";
-import { fetchAPI } from "@/app/lib/api";
 
 type BrandItem = {
-   id?: number;
-   BrandLabel?: string;
-   Brand?: { url?: string; formats?: { large?: { url?: string } } };
+   title: string;
+   image?: string;
 };
 
-function resolveUrl(path?: string) {
-   if (!path) return undefined;
-   if (path.startsWith("http")) return path;
-   const base = process.env.NEXT_PUBLIC_API_URL ?? "";
-   return base.replace(/\/$/, "") + path;
-}
+const FALLBACK_ITEMS: BrandItem[] = Array.from({ length: 5 }, (_, i) => ({
+   title: `Gala${i + 1}`,
+}));
 
-export default function AccordionClient({ locale }: { locale: Promise<string> | string }) {
-   const [items, setItems] = useState<{ title: string; desc: string; image?: string }[]>([]);
-   const [resolvedLocale, setResolvedLocale] = useState<string | null>(null);
+type Props = {
+   brands?: BrandItem[];
+};
+
+export default function AccordionClient({ brands }: Props) {
+   const displayItems = brands ?? FALLBACK_ITEMS;
+
    const [imagesLoaded, setImagesLoaded] = useState(false);
    const [introFinished, setIntroFinished] = useState(false);
    const accordionRef = useRef<HTMLDivElement>(null);
    const introRef = useRef<HTMLDivElement | null>(null);
    const introStartedRef = useRef(false);
 
-
-
+   // Preload images client-side — only async setState allowed in effects
    useEffect(() => {
-      (async () => {
-         const resolved = typeof locale === "string" ? locale : await locale;
-         setResolvedLocale(resolved);
-      })();
-   }, [locale]);
+      const imageUrls = displayItems
+         .map((b) => b.image)
+         .filter((url): url is string => !!url);
 
-   useEffect(() => {
-      if (!resolvedLocale) return;
+      if (imageUrls.length === 0) {
+         setImagesLoaded(true);
+         return;
+      }
+
       let cancelled = false;
+      Promise.all(
+         imageUrls.map(
+            (url) =>
+               new Promise<void>((resolve) => {
+                  const img = new Image();
+                  img.onload = () => resolve();
+                  img.onerror = () => resolve();
+                  img.src = url;
+               })
+         )
+      ).then(() => {
+         if (!cancelled) setImagesLoaded(true);
+      });
 
-      (async () => {
-         try {
-            const res = await fetchAPI("/api/main-page-brands", resolvedLocale);
-            if (res instanceof Error || cancelled) return;
-            console.log("API Response:", res);
-            const data = (res?.data ?? []) as BrandItem[];
+      return () => { cancelled = true; };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []); // run once — brands come from server and don't change
 
-            if (data.length === 0) {
-               const defaultItems = Array.from({ length: 4 }, (_, i) => ({
-                  title: `Gala${i + 1}`,
-                  desc: `${i + 1}`,
-               }));
-               setItems(defaultItems);
-               setImagesLoaded(true);
-               return;
-            }
-
-            const itemsWithImages = data.map((b, i) => ({
-               title: b.BrandLabel || `Gala${i + 1}`,
-               desc: `${i + 1}`,
-               image: resolveUrl(b?.Brand?.url),
-            })).sort((a, b) => {
-               if (a.title === "Video") return -1;
-               if (b.title === "Video") return 1;
-               return 0;
-            });
-            ;
-
-            setItems(itemsWithImages.splice(0, 6));
-
-            const imageUrls = itemsWithImages
-               .map(item => item.image)
-               .filter((url): url is string => !!url);
-
-            if (imageUrls.length === 0) {
-               setImagesLoaded(true);
-               return;
-            }
-
-            const imagePromises = imageUrls.map(
-               url =>
-                  new Promise((resolve) => {
-                     const img = new Image();
-                     img.onload = resolve;
-                     img.onerror = resolve;
-                     img.src = url;
-                  })
-            );
-
-            await Promise.all(imagePromises);
-
-            if (!cancelled) {
-               setImagesLoaded(true);
-            }
-         } catch {
-            if (!cancelled) {
-               const defaultItems = Array.from({ length: 7 }, (_, i) => ({
-                  title: `Gala${i + 1}`,
-                  desc: `${i + 1}`,
-               }));
-               setItems(defaultItems);
-               setImagesLoaded(true);
-            }
-         }
-      })();
-
-      return () => {
-         cancelled = true;
-      };
-   }, [resolvedLocale]);
-
-
+   // Trigger panel entrance animation after both intro and images are ready
    useEffect(() => {
-      if (!imagesLoaded || items.length === 0 || !introFinished) return;
+      if (!imagesLoaded || !introFinished) return;
 
       const panels = accordionRef.current?.querySelectorAll(`.${styles.panel}`);
       panels?.forEach((panel, index) => {
-         setTimeout(() => {
-            panel.classList.add(styles.animate);
-         }, index * 100);
+         setTimeout(() => panel.classList.add(styles.animate), index * 100);
       });
-   }, [imagesLoaded, items.length, introFinished]);
+   }, [imagesLoaded, introFinished]);
 
-   // Run intro animation once on mount and always let it finish (~4.4s)
+   // Intro logo animation — runs once on mount
    useEffect(() => {
       if (introStartedRef.current) return;
-      const el = introRef.current
-      if (!el) return
-      introStartedRef.current = true
+      const el = introRef.current;
+      if (!el) return;
+      introStartedRef.current = true;
 
-      const logoBlock = el.querySelector(`.${styles['logo-block']}`)
-      if (logoBlock) {
-         logoBlock.classList.add(styles['logo-anim'])
-      }
+      const logoBlock = el.querySelector(`.${styles["logo-block"]}`);
+      if (logoBlock) logoBlock.classList.add(styles["logo-anim"]);
 
-      const timer = setTimeout(() => {
-         setIntroFinished(true)
-      }, 3400)
+      const timer = setTimeout(() => setIntroFinished(true), 3400);
+      return () => clearTimeout(timer);
+   }, []);
 
-      return () => clearTimeout(timer)
-   }, [])
-
-   const hasMultiplePanels = items.length > 1;
-
-   // Notify other parts of the app when intro finished so they can reveal UI (e.g. Navbar)
+   // Notify Navbar (and others) when intro is done
    useEffect(() => {
       if (!introFinished) return;
       try {
-         // set a global flag for late listeners and dispatch an event for subscribers
-         ; (window as any).__introFinished = true;
-         window.dispatchEvent(new CustomEvent('introFinished'))
-      } catch (e) {
+         (window as any).__introFinished = true;
+         window.dispatchEvent(new CustomEvent("introFinished"));
+      } catch {
          // ignore in non-browser contexts
       }
-   }, [introFinished])
+   }, [introFinished]);
 
+   // Block scroll while intro or images are loading
    useEffect(() => {
-      document.body.style.overflow = (introFinished && imagesLoaded) ? '' : 'hidden';
-      return () => {
-         document.body.style.overflow = '';
-      };
+      document.body.style.overflow = introFinished && imagesLoaded ? "" : "hidden";
+      return () => { document.body.style.overflow = ""; };
    }, [introFinished, imagesLoaded]);
 
    return (
       <div className={styles.accordionWrapper}>
-         {/* Intro overlay: show until introFinished — independent from image loading */}
          {!introFinished && (
-            <div className={styles['intro-overlay']} ref={introRef} aria-hidden="true">
-               <div className={styles['logo-block']}>
-                  <div className={styles['logo-flip']}>
-                     <img className={styles['logo-front']} src="/logo3.svg" alt="Logo" />
-                     <img className={styles['logo-back']} src="/ecoLogo.png" alt="Eco Logo" />
+            <div className={styles["intro-overlay"]} ref={introRef} aria-hidden="true">
+               <div className={styles["logo-block"]}>
+                  <div className={styles["logo-flip"]}>
+                     <img className={styles["logo-front"]} src="/logo3.svg" alt="Logo" />
+                     <img className={styles["logo-back"]} src="/ecoLogo.png" alt="Eco Logo" />
                   </div>
                </div>
             </div>
          )}
          <div className={styles.accordion} ref={accordionRef}>
-            {items.map((item, i) => (
+            {displayItems.map((item, i) => (
                <label key={i} className={styles.panelLabel} style={{ zIndex: 100 - i }}>
                   <input
                      type="radio"
@@ -197,24 +130,21 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
                            />
                         </div>
                      ) : item.image ? (
-                        <div className={styles.panelBackground} style={{ backgroundImage: `url(${item.image})` }} />
+                        <div
+                           className={styles.panelBackground}
+                           style={{ backgroundImage: `url(${item.image})` }}
+                        />
                      ) : null}
-                     <div className={styles["panel-content"]}>
-
-                     </div>
-                     {/* Scroll indicator arrows on first panel */}
+                     <div className={styles["panel-content"]} />
                      {i === 0 && (
                         <div className={styles.scrollIndicator} aria-hidden="true">
                            <span className={styles.scrollArrow}>︾</span>
-
                         </div>
                      )}
-
                   </div>
                </label>
             ))}
          </div>
-
       </div>
    );
 }
