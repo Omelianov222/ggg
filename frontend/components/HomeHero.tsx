@@ -5,9 +5,9 @@ import AboutUs from "./AboutUs";
 import SectionDivider from "./SectionDivider";
 import MailInfo from "./MailInfo";
 
-export default function HomeHero({ data, locale }: { data: any; locale: string }) {
-   // Expect `data` to be the Strapi response node; pass attributes to LandingGrid
-   const attrs = data?.attributes ?? {};
+type StrapiNode = { attributes?: Record<string, unknown> } | null | undefined;
+
+export default function HomeHero({ locale }: { data?: StrapiNode; locale: string }) {
    return (
       <>
          <section>
