@@ -1,36 +1,42 @@
 // lib/api.ts
+import { unstable_cache } from 'next/cache';
+
 const API_URL = process.env.API_URL;
 
 export const REVALIDATE = 86400; // 1 day (seconds)
-// export const REVALIDATE = 0; // 1 day (seconds)
+
+function buildUrl(path: string, locale: string): string {
+   return `${API_URL}${path}${path.includes("?") ? "&" : "?"}locale=${locale}${/populate/.test(path) ? "" : "&populate=*"}`;
+}
+
+/**
+ * Internal fetcher wrapped in unstable_cache.
+ * ONLY successful responses are cached — any throw (network error, non-2xx,
+ * invalid JSON) is NOT stored in cache, so the next request retries fresh.
+ */
+const _fetchAndParse = unstable_cache(
+   async (url: string) => {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return res.json() as Promise<any>; // throws on invalid JSON
+   },
+   ['api-fetch'],
+   { revalidate: REVALIDATE }
+);
 
 export async function fetchAPI(path: string, locale: string) {
-   console.log("API_URL:", API_URL); // ← додай це
-   console.log("Fetching:", `${API_URL}${path}`);
    if (!API_URL) {
       return new Error("API_URL is not defined");
    }
 
-   const url = `${API_URL}${path}${path.includes("?") ? "&" : "?"}locale=${locale}${/populate/.test(path) ? "" : "&populate=*"}`
-
-   let res;
-   try {
-      res = await fetch(url, { next: { revalidate: REVALIDATE } })
-   } catch {
-      console.error("Network failure when fetching", { path });
-      return new Error("Failed to reach API");
-   }
-
-   if (!res.ok) {
-      console.error("API returned non-OK status", { status: res.status, path });
-      return new Error("API request failed");
-   }
+   const url = buildUrl(path, locale);
 
    try {
-      return await res.json();
-   } catch {
-      console.error("Failed to parse JSON", { path });
-      return new Error("Invalid API response");
+      return await _fetchAndParse(url);
+   } catch (err) {
+      console.error("API error", { path, error: String(err) });
+      return err instanceof Error ? err : new Error("API request failed");
    }
 }
 
