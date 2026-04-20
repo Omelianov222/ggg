@@ -1,13 +1,14 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./AccordionClient.module.css";
-import { fetchAPI } from "@/app/lib/api";
 
 type BrandItem = {
    id?: number;
    BrandLabel?: string;
    Brand?: { url?: string; formats?: { large?: { url?: string } } };
 };
+
+type DisplayItem = { title: string; desc: string; image?: string };
 
 function resolveUrl(path?: string) {
    if (!path) return undefined;
@@ -16,99 +17,55 @@ function resolveUrl(path?: string) {
    return base.replace(/\/$/, "") + path;
 }
 
-export default function AccordionClient({ locale }: { locale: Promise<string> | string }) {
-   const [items, setItems] = useState<{ title: string; desc: string; image?: string }[]>([]);
-   const [resolvedLocale, setResolvedLocale] = useState<string | null>(null);
+export default function AccordionClient({ initialData }: { initialData: BrandItem[] }) {
+   const [items, setItems] = useState<DisplayItem[]>([]);
    const [imagesLoaded, setImagesLoaded] = useState(false);
    const [introFinished, setIntroFinished] = useState(false);
    const accordionRef = useRef<HTMLDivElement>(null);
    const introRef = useRef<HTMLDivElement | null>(null);
    const introStartedRef = useRef(false);
 
-
-
+   // Обробка даних і передзавантаження зображень
    useEffect(() => {
-      (async () => {
-         const resolved = typeof locale === "string" ? locale : await locale;
-         setResolvedLocale(resolved);
-      })();
-   }, [locale]);
+      if (initialData.length === 0) {
+         setItems(Array.from({ length: 4 }, (_, i) => ({ title: `Gala${i + 1}`, desc: `${i + 1}` })));
+         setImagesLoaded(true);
+         return;
+      }
 
-   useEffect(() => {
-      if (!resolvedLocale) return;
-      let cancelled = false;
+      const mapped: DisplayItem[] = initialData
+         .map((b, i) => ({
+            title: b.BrandLabel || `Gala${i + 1}`,
+            desc: `${i + 1}`,
+            image: resolveUrl(b?.Brand?.url),
+         }))
+         .sort((a, b) => {
+            if (a.title === "Video") return -1;
+            if (b.title === "Video") return 1;
+            return 0;
+         });
 
-      (async () => {
-         try {
-            const res = await fetchAPI("/api/main-page-brands", resolvedLocale);
-            if (res instanceof Error || cancelled) return;
-            console.log("API Response:", res);
-            const data = (res?.data ?? []) as BrandItem[];
+      const displayItems = mapped.slice(0, 6);
+      setItems(displayItems);
 
-            if (data.length === 0) {
-               const defaultItems = Array.from({ length: 4 }, (_, i) => ({
-                  title: `Gala${i + 1}`,
-                  desc: `${i + 1}`,
-               }));
-               setItems(defaultItems);
-               setImagesLoaded(true);
-               return;
-            }
+      const imageUrls = displayItems.map(item => item.image).filter((url): url is string => !!url);
 
-            const itemsWithImages = data.map((b, i) => ({
-               title: b.BrandLabel || `Gala${i + 1}`,
-               desc: `${i + 1}`,
-               image: resolveUrl(b?.Brand?.url),
-            })).sort((a, b) => {
-               if (a.title === "Video") return -1;
-               if (b.title === "Video") return 1;
-               return 0;
-            });
-            ;
+      if (imageUrls.length === 0) {
+         setImagesLoaded(true);
+         return;
+      }
 
-            setItems(itemsWithImages.splice(0, 6));
-
-            const imageUrls = itemsWithImages
-               .map(item => item.image)
-               .filter((url): url is string => !!url);
-
-            if (imageUrls.length === 0) {
-               setImagesLoaded(true);
-               return;
-            }
-
-            const imagePromises = imageUrls.map(
-               url =>
-                  new Promise((resolve) => {
-                     const img = new Image();
-                     img.onload = resolve;
-                     img.onerror = resolve;
-                     img.src = url;
-                  })
-            );
-
-            await Promise.all(imagePromises);
-
-            if (!cancelled) {
-               setImagesLoaded(true);
-            }
-         } catch {
-            if (!cancelled) {
-               const defaultItems = Array.from({ length: 7 }, (_, i) => ({
-                  title: `Gala${i + 1}`,
-                  desc: `${i + 1}`,
-               }));
-               setItems(defaultItems);
-               setImagesLoaded(true);
-            }
-         }
-      })();
-
-      return () => {
-         cancelled = true;
-      };
-   }, [resolvedLocale]);
-
+      Promise.all(
+         imageUrls.map(
+            url => new Promise<void>(resolve => {
+               const img = new Image();
+               img.onload = () => resolve();
+               img.onerror = () => resolve();
+               img.src = url;
+            })
+         )
+      ).then(() => setImagesLoaded(true));
+   }, []);
 
    useEffect(() => {
       if (!imagesLoaded || items.length === 0 || !introFinished) return;
@@ -121,49 +78,36 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
       });
    }, [imagesLoaded, items.length, introFinished]);
 
-   // Run intro animation once on mount and always let it finish (~4.4s)
    useEffect(() => {
       if (introStartedRef.current) return;
-      const el = introRef.current
-      if (!el) return
-      introStartedRef.current = true
+      const el = introRef.current;
+      if (!el) return;
+      introStartedRef.current = true;
 
-      const logoBlock = el.querySelector(`.${styles['logo-block']}`)
-      if (logoBlock) {
-         logoBlock.classList.add(styles['logo-anim'])
-      }
+      const logoBlock = el.querySelector(`.${styles['logo-block']}`);
+      if (logoBlock) logoBlock.classList.add(styles['logo-anim']);
 
-      const timer = setTimeout(() => {
-         setIntroFinished(true)
-      }, 3400)
+      const timer = setTimeout(() => setIntroFinished(true), 3400);
+      return () => clearTimeout(timer);
+   }, []);
 
-      return () => clearTimeout(timer)
-   }, [])
-
-   const hasMultiplePanels = items.length > 1;
-
-   // Notify other parts of the app when intro finished so they can reveal UI (e.g. Navbar)
    useEffect(() => {
       if (!introFinished) return;
       try {
-         // set a global flag for late listeners and dispatch an event for subscribers
-         ; (window as any).__introFinished = true;
-         window.dispatchEvent(new CustomEvent('introFinished'))
-      } catch (e) {
+         (window as any).__introFinished = true;
+         window.dispatchEvent(new CustomEvent('introFinished'));
+      } catch {
          // ignore in non-browser contexts
       }
-   }, [introFinished])
+   }, [introFinished]);
 
    useEffect(() => {
       document.body.style.overflow = (introFinished && imagesLoaded) ? '' : 'hidden';
-      return () => {
-         document.body.style.overflow = '';
-      };
+      return () => { document.body.style.overflow = ''; };
    }, [introFinished, imagesLoaded]);
 
    return (
       <div className={styles.accordionWrapper}>
-         {/* Intro overlay: show until introFinished — independent from image loading */}
          {!introFinished && (
             <div className={styles['intro-overlay']} ref={introRef} aria-hidden="true">
                <div className={styles['logo-block']}>
@@ -177,44 +121,26 @@ export default function AccordionClient({ locale }: { locale: Promise<string> | 
          <div className={styles.accordion} ref={accordionRef}>
             {items.map((item, i) => (
                <label key={i} className={styles.panelLabel} style={{ zIndex: 100 - i }}>
-                  <input
-                     type="radio"
-                     name="accordion"
-                     className={styles.panelRadio}
-                     defaultChecked={i === 0}
-                  />
+                  <input type="radio" name="accordion" className={styles.panelRadio} defaultChecked={i === 0} />
                   <div className={`${styles.panel} ${styles.hasSkew}`}>
                      {i === 0 ? (
                         <div className={styles.panelBackground}>
-                           <video
-                              src="/sait.mp4"
-                              autoPlay
-                              muted
-                              loop
-                              playsInline
-                              aria-hidden="true"
-                              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                           />
+                           <video src="/sait.mp4" autoPlay muted loop playsInline aria-hidden="true"
+                              style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         </div>
                      ) : item.image ? (
                         <div className={styles.panelBackground} style={{ backgroundImage: `url(${item.image})` }} />
                      ) : null}
-                     <div className={styles["panel-content"]}>
-
-                     </div>
-                     {/* Scroll indicator arrows on first panel */}
+                     <div className={styles["panel-content"]} />
                      {i === 0 && (
                         <div className={styles.scrollIndicator} aria-hidden="true">
                            <span className={styles.scrollArrow}>︾</span>
-
                         </div>
                      )}
-
                   </div>
                </label>
             ))}
          </div>
-
       </div>
    );
 }

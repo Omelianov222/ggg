@@ -1,25 +1,26 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function fetchAPI(path: string, locale: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchAPI(path: string, locale: string): Promise<any> {
    if (!API_URL) {
       return new Error("API_URL is not defined");
    }
 
-   const url = `${API_URL}${path}${path.includes("?") ? "&" : "?"}locale=${locale}${/populate/.test(path) ? "" : "&populate=*"}`
+   const url = `${API_URL}${path}${path.includes("?") ? "&" : "?"}locale=${locale}${/populate/.test(path) ? "" : "&populate=*"}`;
 
-   console.log("Built API URL:", url); // Лог лише на сервер
-   let res;
+   console.log("Built API URL:", url);
+   let res: Response;
    try {
-      res = await fetch(url, { next: { revalidate: 60 } }) // кеш 60 секунд
-      console.log("Fetching URL:", url, "Response:", res); // Лог лише на сервер
+      // force-cache: Next.js/Vercel Data Cache кешує відповідь на основі Cache-Control від Strapi.
+      // Non-2xx відповіді (503 cold start тощо) не кешуються — наступний запит піде до Strapi знову.
+      res = await fetch(url, { cache: 'force-cache' });
+      console.log("Fetching URL:", url, "Status:", res.status);
    } catch {
-      // Лог лише на сервер
       console.error("Network failure when fetching", { path });
       return new Error("Failed to reach API");
    }
 
    if (!res.ok) {
-      // Лог на сервер, без URL, без locale
       console.error("API returned non-OK status", { status: res.status, path });
       return new Error("API request failed");
    }
@@ -35,14 +36,13 @@ export async function fetchAPI(path: string, locale: string) {
 
 
 
-
 export async function getSectionBackgrounds(locale: string) {
    const data = await fetchAPI(
       '/api/section-backgrounds?populate[Background][fields][0]=url',
       locale
    );
    console.log("Section Backgrounds API Response:", data);
-   return mapSectionNameToUrl(data);
+   return mapSectionNameToUrl(data as ApiResponse);
 }
 
 type BackgroundItem = {

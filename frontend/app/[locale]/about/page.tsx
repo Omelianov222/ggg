@@ -24,15 +24,15 @@ export default async function AboutPage({ params }: Props) {
    const aboutUsGridResponse = await fetchAPI('/api/about-us-sections?fields[0]=Paragraph&populate[Photo][fields][0]=url', locale)
    const aboutUsTextResponse = await fetchAPI('/api/about-us-content', locale)
 
-   const aboutUsGrid = aboutUsGridResponse?.data ?? null
-   const aboutUsText = aboutUsTextResponse?.data ?? null
+   const aboutUsGrid = aboutUsGridResponse instanceof Error ? null : (aboutUsGridResponse?.data ?? null)
+   const aboutUsText = aboutUsTextResponse instanceof Error ? null : (aboutUsTextResponse?.data ?? null)
    console.log("ITEMMMM", aboutUsText)
    if (!aboutUsGrid) {
       return <div style={{ padding: '2rem' }}>No content</div>
    }
 
-   const title = aboutUsText.Title ?? ''
-   const paragraph = aboutUsText.AboutUsPageText ?? ''
+   const title = aboutUsText?.Title ?? ''
+   const paragraph = aboutUsText?.AboutUsPageText ?? ''
    // prefer original (highest quality) `url` from API, then fall back to formats
 
 

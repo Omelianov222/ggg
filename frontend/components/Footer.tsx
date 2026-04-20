@@ -1,11 +1,7 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import styles from './Footer.module.css'
 import Logo from './Logo'
-// import ThemeToggle from './ThemeToggle'
-import { fetchAPI } from '@/app/lib/api'
 import Image from 'next/image'
+import { fetchAPI } from '@/app/lib/api'
 
 interface NavItem {
    link: string
@@ -31,57 +27,26 @@ interface NavResponseItem {
    localizations?: NavLocalization[]
 }
 
-interface FooterProps {
-   locale: string
+const COPYRIGHT_TEXT: Record<string, string> = {
+   en: "All rights reserved",
+   uk: "Всі права захищені",
+   fr: "Tous droits réservés"
 }
 
-export default function Footer({ locale }: FooterProps) {
-   const [items, setItems] = useState<NavItem[]>([])
-   const [socials, setSocials] = useState<SocialItem[]>([])
-   const COPYRIGHT_TEXT = {
-      en: "All rights reserved",
-      uk: "Всі права захищені",
-      fr: "Tous droits réservés"
-   };
+export default async function Footer({ locale }: { locale: string }) {
+   const [navRes, socialsRes] = await Promise.all([
+      fetchAPI('/api/navbars', locale),
+      fetchAPI('/api/socials', locale),
+   ])
 
-   useEffect(() => {
-      let mounted = true
-      async function loadNav() {
-         try {
-            const res = await fetchAPI('/api/navbars', locale)
-            const data = res.data || []
-            const localizedItems: NavItem[] = (data as NavResponseItem[]).map((item) => {
-               if (item.locale === locale) {
-                  return { label: item.Label, link: item.Link }
-               }
-               const loc = item.localizations?.find((l) => l.locale === locale)
-               return loc ? { label: loc.Label, link: loc.Link } : { label: item.Label, link: item.Link }
-            })
-            if (mounted) setItems(localizedItems)
-         } catch (err) {
-            console.error(err)
-         }
-      }
-      loadNav()
-      return () => { mounted = false }
-   }, [locale])
+   const navData: NavResponseItem[] = navRes instanceof Error ? [] : (navRes.data ?? [])
+   const items: NavItem[] = navData.map((item) => {
+      if (item.locale === locale) return { label: item.Label, link: item.Link }
+      const loc = item.localizations?.find((l) => l.locale === locale)
+      return loc ? { label: loc.Label, link: loc.Link } : { label: item.Label, link: item.Link }
+   })
 
-   useEffect(() => {
-      let mounted = true
-      async function loadSocials() {
-         try {
-            const res = await fetchAPI('/api/socials', locale)
-            console.log(res)
-            const data = res.data || []
-            if (mounted) setSocials(data)
-         } catch (err) {
-            console.error(err)
-         }
-      }
-      loadSocials()
-      return () => { mounted = false }
-   }, [locale])
-
+   const socials: SocialItem[] = socialsRes instanceof Error ? [] : (socialsRes.data ?? [])
    const year = new Date().getFullYear()
 
    return (
@@ -89,18 +54,17 @@ export default function Footer({ locale }: FooterProps) {
          <div className={styles.container}>
             <div className={styles.col}>
                <div style={{ display: "flex", alignItems: "center", position: "relative" }}>
-                  <div style={{ flex: "0 0 30%", minHeight: "100%", }}>
+                  <div style={{ flex: "0 0 30%", minHeight: "100%" }}>
                      <Logo disableInvert />
                   </div>
                   <div style={{ flex: "0 0 70%" }}>
-
-                     <Image src={`/GELEX-GLOBAL-GROUP-LOGO.png`} alt={`GELEX`} objectFit="cover" width={125} height={64} style={{ height: "auto" }} />
+                     <Image src="/GELEX-GLOBAL-GROUP-LOGO.png" alt="GELEX" objectFit="cover" width={125} height={64} style={{ height: "auto" }} />
                   </div>
                </div>
-
-
                <p className={styles.description}>
-                  {locale === 'uk' ? 'Місце для короткого опису компанії.' : 'GALA boats have been produced since 2015 and represent a combination of aesthetics, comfort, and unique technologies, providing excellent maneuverability, high-speed performance, and safety'}
+                  {locale === 'uk'
+                     ? 'Місце для короткого опису компанії.'
+                     : 'GALA boats have been produced since 2015 and represent a combination of aesthetics, comfort, and unique technologies, providing excellent maneuverability, high-speed performance, and safety'}
                </p>
             </div>
 
@@ -115,7 +79,6 @@ export default function Footer({ locale }: FooterProps) {
             <div className={styles.col}>
                <h4 className={styles.heading}>Social</h4>
                <div className={styles.social}>
-                  {/* <ThemeToggle /> */}
                   {socials.map(s => {
                      const name = (s.SocialName || '').toLowerCase()
                      const href = s.link || '#'
@@ -144,18 +107,7 @@ export default function Footer({ locale }: FooterProps) {
                               </svg>
                            )}
                            {name.includes('gmail') && (
-                              <svg
-                                 width="20"
-                                 height="20"
-                                 viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 strokeWidth={1.5}
-                                 strokeLinecap="round"
-                                 strokeLinejoin="round"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 aria-hidden="true"
-                              >
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                                  <path d="M3 8.5v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8" />
                                  <path d="M21 7l-9 7-9-7" />
                                  <path d="M3 7h18" />
@@ -166,12 +118,11 @@ export default function Footer({ locale }: FooterProps) {
                   })}
                </div>
             </div>
+
             <div className={styles.copyright}>
-               {year} {COPYRIGHT_TEXT[locale as keyof typeof COPYRIGHT_TEXT]}
+               {year} {COPYRIGHT_TEXT[locale] ?? COPYRIGHT_TEXT.en}
             </div>
          </div>
-
-
       </footer>
    )
 }
