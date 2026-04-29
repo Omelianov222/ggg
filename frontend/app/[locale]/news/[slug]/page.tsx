@@ -3,7 +3,20 @@ import { fetchAPI } from "@/app/lib/api";
 import ReactMarkdown from "react-markdown";
 import Image from 'next/image';
 import { PageHeader } from '@/components/UI/PageHeader';
-export const revalidate = 3600; // ISR: 60 minutes
+
+export async function generateStaticParams() {
+   const locales = ['en', 'pl'];
+   const params: { locale: string; slug: string }[] = [];
+   for (const locale of locales) {
+      const data = await fetchAPI('/api/news', locale);
+      if (data?.data) {
+         for (const item of data.data) {
+            if (item.Slug) params.push({ locale, slug: item.Slug });
+         }
+      }
+   }
+   return params;
+}
 
 export default async function NewsItemPage({
    params,

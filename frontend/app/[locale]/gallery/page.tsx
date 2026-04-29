@@ -1,15 +1,6 @@
 import { fetchAPI } from "@/app/lib/api";
-import Gallery from "@/components/Gallery";
-import Link from "next/link";
-import styles from "@/components/Gallery.module.css";
-import { SectionHeader } from "@/components/UI/SectionHeader";
-import { PageHeader } from "@/components/UI/PageHeader";
-import FamilyBrand from "@/components/FamilyBrand";
-export const revalidate = 3600; // ISR: 60 minutes
-interface Props {
-   params: Promise<{ locale: string }>;
-   searchParams?: { [key: string]: string | string[] | undefined };
-}
+import { Suspense } from "react";
+import GalleryClient from "./GalleryClient";
 
 type MediaItem = {
    id: number | string;
@@ -24,60 +15,21 @@ type GalleryType = {
    Images?: MediaItem[];
 };
 
-export default async function GalleryPage({ params, searchParams }: Props) {
+export default async function GalleryPage({ params }: { params: Promise<{ locale: string }> }) {
    const { locale } = await params;
 
    const data = await fetchAPI("/api/galleries", locale);
 
-   if (!data || !data.data || !data.data.length) {
+   if (!data?.data?.length) {
       return <div>No gallery found</div>;
    }
 
-   // Build categories from returned galleries
    const galleries = data.data as GalleryType[];
-   const categories = Array.from(new Set(galleries.map(g => g.Category).filter(Boolean))) as string[];
+   const categories = Array.from(new Set(galleries.map((g: GalleryType) => g.Category).filter(Boolean))) as string[];
 
-   // `searchParams` may be a Promise in Next.js — await/unpack it before use
-   const _searchParams = (await searchParams) as { [key: string]: string | string[] | undefined } | undefined;
-   const selectedCategory = typeof _searchParams?.category === 'string' ? _searchParams.category : 'All';
-
-   // Determine images to show: if 'All' -> concat all Images, else find gallery with matching category
-   let images: MediaItem[] = [];
-   if (selectedCategory === 'All') {
-      images = galleries.flatMap(g => g.Images || []);
-   } else {
-      const found = galleries.find(g => g.Category === selectedCategory);
-      images = found ? (found.Images || []) : [];
-   }
-
-   // Simple UI: category links with animated styles
    return (
-      <div >
-         <PageHeader title="Gallery" />
-         <div className={styles.categoriesRow}>
-            <Link
-               href={`/${locale}/gallery`}
-               className={`${styles.categoryLink} ${selectedCategory === 'All' ? styles.active : ''}`}
-            >
-               All
-            </Link>
-            {categories.map(cat => (
-               <Link
-                  key={cat}
-                  href={{ pathname: `/${locale}/gallery`, query: { category: cat } }}
-                  className={`${styles.categoryLink} ${selectedCategory === cat ? styles.active : ''}`}
-               >
-                  {cat}
-               </Link>
-            ))}
-         </div>
-
-         {images.length === 0 ? (
-            <div style={{ padding: '0 1rem' }}>No images for this category</div>
-         ) : (
-            <Gallery images={images.map((img) => ({ id: img.id, url: img.url, alt: img.alternativeText || img.name || '' }))} />
-         )}
-         <FamilyBrand />
-      </div>
+      <Suspense>
+         <GalleryClient locale={locale} galleries={galleries} categories={categories} />
+      </Suspense>
    );
 }
